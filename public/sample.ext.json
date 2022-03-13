@@ -1,13 +1,13 @@
 {
-  "identifier": "org.standardnotes.editor-template-cra-typescript",
-  "name": "Editor Template CRA Typescript",
+  "identifier": "org.standardnotes.task-editor-dev",
+  "name": "Task editor - Dev",
   "content_type": "SN|Component",
   "area": "editor-editor",
   "version": "0.1.0",
-  "description": "Template for building editors for Standard Notes using Create React App and TypeScript",
+  "description": "A great way to manage short-term and long-term to-do's. You can mark tasks as completed, change their order, and edit the text naturally in place.",
   "url": "http://localhost:3000/index.html",
   "download_url": "",
   "latest_url": "",
-  "marketing_url": "https://github.com/standardnotes/editor-template-cra-typescript",
+  "marketing_url": "https://github.com/standardnotes/task-editor",
   "thumbnail_url": ""
 }

@@ -1,6 +1,6 @@
 {
-  "short_name": "Editor Template",
-  "name": "Editor Template CRA TypeScript",
+  "short_name": "Task editor",
+  "name": "Task editor",
   "icons": [
     {
       "src": "favicon.ico",
