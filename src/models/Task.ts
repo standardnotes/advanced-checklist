@@ -49,7 +49,7 @@ class Task {
     }
   }
 
-  public updateRawString(): void {
+  private updateRawString(): void {
     if (this.completed) {
       this.rawString = this.rawString.replace(OPEN_PREFIX, COMPLETED_PREFIX);
     } else {
