@@ -1,36 +1,36 @@
-import React, { ChangeEvent, Component, KeyboardEvent } from 'react';
+import { ChangeEvent, Component, KeyboardEvent } from 'react';
 
 type Props = {
-  unSavedTask: string;
+  taskDraft: string;
   isMobile: boolean;
   showTutorial: boolean;
   spellCheckEnabled: boolean;
-  onUpdate: (string: string) => void;
+  onUpdate: (string: string, save: boolean) => void;
   onSubmit: (string: string) => void;
 };
 
 type State = {
-  rawString: string;
+  taskDraft: string;
 };
 
-export default class CreateTask extends Component<Props, State> {
+class CreateTask extends Component<Props, State> {
   private inputElement: HTMLInputElement | null = null;
 
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      rawString: props.unSavedTask,
+      taskDraft: props.taskDraft,
     };
   }
 
-  shouldComponentUpdate({ unSavedTask }: Props) {
-    return unSavedTask !== this.state.rawString;
+  shouldComponentUpdate({ taskDraft }: Props) {
+    return taskDraft !== this.state.taskDraft;
   }
 
-  componentDidUpdate({ unSavedTask }: Props) {
+  componentDidUpdate({ taskDraft }: Props) {
     this.setState({
-      rawString: unSavedTask,
+      taskDraft,
     });
   }
 
@@ -41,28 +41,28 @@ export default class CreateTask extends Component<Props, State> {
     }
   }
 
-  private onTextChange(event: ChangeEvent<HTMLInputElement>) {
+  private onTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     /**
-     * Save this as the current 'unsaved' task if while we're not
+     * Save this as the current 'un-saved' task if while we're not
      * officially saving it as an actual task yet.
      */
     const rawString = event.target.value;
-    this.props.onUpdate(rawString);
-  }
+    this.props.onUpdate(rawString, true);
+  };
 
-  private handleKeyPress(event: KeyboardEvent<HTMLInputElement>) {
+  private handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       const rawString = (event.target as HTMLInputElement).value;
       this.submitTask(rawString);
     }
-  }
+  };
 
   private submitTask(value: string) {
     this.props.onSubmit(value);
   }
 
   render() {
-    const { showTutorial, spellCheckEnabled, unSavedTask } = this.props;
+    const { showTutorial, spellCheckEnabled, taskDraft } = this.props;
 
     return (
       <input
@@ -74,8 +74,10 @@ export default class CreateTask extends Component<Props, State> {
         ref={(ref) => (this.inputElement = ref)}
         spellCheck={spellCheckEnabled}
         type="text"
-        value={unSavedTask}
+        value={taskDraft}
       />
     );
   }
 }
+
+export default CreateTask;

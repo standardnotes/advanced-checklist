@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component, KeyboardEvent } from 'react';
+import { ChangeEvent, Component, KeyboardEvent } from 'react';
 import Task from '../models/Task';
 
 type Props = {
@@ -42,7 +42,7 @@ class TaskRow extends Component<Props, State> {
     }, 1);
   }
 
-  private toggleCheckboxChange() {
+  private toggleCheckboxChange = () => {
     const { handleCheckboxChange } = this.props;
 
     this.setState(({ isChecked }) => ({
@@ -50,17 +50,17 @@ class TaskRow extends Component<Props, State> {
     }));
 
     handleCheckboxChange(this.props.task);
-  }
+  };
 
-  private onTextChange(event: ChangeEvent<HTMLTextAreaElement>) {
+  private onTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const text = event.target.value;
     this.props.task.setContentString(text);
     this.props.handleTextChange(this.props.task, text);
 
     this.forceUpdate();
-  }
+  };
 
-  private onKeyUp(event: KeyboardEvent<HTMLTextAreaElement>) {
+  private onKeyUp = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     // Delete task if empty and enter pressed
     if (event.key === 'Enter') {
       if (this.props.task.isEmpty()) {
@@ -71,7 +71,7 @@ class TaskRow extends Component<Props, State> {
 
     const element = event.target as HTMLTextAreaElement;
     this.resizeTextArea(element);
-  }
+  };
 
   private onKeyPress(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === 'Enter') {
