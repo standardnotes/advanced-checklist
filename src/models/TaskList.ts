@@ -1,10 +1,11 @@
+import { arrayMoveImmutable } from 'array-move';
+
 import Task from './Task';
-import ExtendedArray from './ExtendedArray';
 
 const TASK_DELIMITER = '\n';
 
 class TaskList {
-  private store: ExtendedArray<Task>;
+  private store: Task[];
 
   constructor(rawString: string) {
     this.store = this.parseRawString(rawString);
@@ -15,18 +16,12 @@ class TaskList {
       rawString = '';
     }
 
-    const allTasks = rawString
+    return rawString
       .split(TASK_DELIMITER)
       .filter((s) => s.replace(/ /g, '').length > 0)
       .map((rawString) => {
         return this.createTask(rawString);
       });
-
-    return new ExtendedArray<Task>(...allTasks);
-  }
-
-  public keyForTask(task: Task): string {
-    return this.store.indexOf(task) + task.rawString;
   }
 
   public getTasks(): Task[] {
@@ -57,9 +52,7 @@ class TaskList {
   }
 
   public removeTasks(tasks: Task[]): void {
-    this.store = this.store.filter(
-      (task) => !tasks.includes(task)
-    ) as ExtendedArray<Task>;
+    this.store = this.store.filter((task) => !tasks.includes(task));
   }
 
   /**
@@ -94,10 +87,18 @@ class TaskList {
     task: Task,
     taskOccupyingTargetLocation: Task
   ): void {
-    /*const from = this.store.indexOf(task);
+    const from = this.store.indexOf(task);
     const to = this.store.indexOf(taskOccupyingTargetLocation);
+    this.store = arrayMoveImmutable(this.store, from, to);
+  }
 
-    this.store = this.store.move(from, to);*/
+  public taskAtIndex(isOpen: boolean, relativeIndex: number) {
+    const tasks = this.splitTasks();
+    if (isOpen) {
+      return tasks.openTasks[relativeIndex];
+    } else {
+      return tasks.completedTasks[relativeIndex];
+    }
   }
 
   public reOpenCompleted(): void {

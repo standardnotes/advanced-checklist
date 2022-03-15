@@ -1,23 +1,27 @@
-import { ChangeEvent, Component, KeyboardEvent } from 'react';
-import Task from '../models/Task';
+import { ChangeEvent, Component, KeyboardEvent, LegacyRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
 
-type Props = {
+import Task from './../models/Task';
+
+export type TaskRowProps = {
   task: Task;
   spellCheckEnabled: boolean;
   handleCheckboxChange: (task: Task) => void;
   handleTextChange: (task: Task, text: string) => void;
-  deleteTask: (task: Task) => void;
+  handleDeleteTask: (task: Task) => void;
+  innerRef: LegacyRef<HTMLDivElement>;
 };
 
-type State = {
+type TaskRowState = {
   task: Task;
   isChecked: boolean;
 };
 
-class TaskRow extends Component<Props, State> {
+class TaskRow extends Component<TaskRowProps, TaskRowState> {
   private textAreaElement: HTMLTextAreaElement | null = null;
 
-  constructor(props: Props) {
+  constructor(props: TaskRowProps) {
     super(props);
 
     this.state = {
@@ -30,7 +34,7 @@ class TaskRow extends Component<Props, State> {
     this.resizeTextArea(this.textAreaElement);
   }
 
-  UNSAFE_componentWillReceiveProps(newProps: Props) {
+  UNSAFE_componentWillReceiveProps(newProps: TaskRowProps) {
     this.setState({
       task: newProps.task,
       isChecked: newProps.task.completed,
@@ -42,7 +46,7 @@ class TaskRow extends Component<Props, State> {
     }, 1);
   }
 
-  private toggleCheckboxChange = () => {
+  toggleCheckboxChange = () => {
     const { handleCheckboxChange } = this.props;
 
     this.setState(({ isChecked }) => ({
@@ -52,7 +56,7 @@ class TaskRow extends Component<Props, State> {
     handleCheckboxChange(this.props.task);
   };
 
-  private onTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  onTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const text = event.target.value;
     this.props.task.setContentString(text);
     this.props.handleTextChange(this.props.task, text);
@@ -60,11 +64,11 @@ class TaskRow extends Component<Props, State> {
     this.forceUpdate();
   };
 
-  private onKeyUp = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+  onKeyUp = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     // Delete task if empty and enter pressed
     if (event.key === 'Enter') {
       if (this.props.task.isEmpty()) {
-        this.props.deleteTask(this.props.task);
+        this.props.handleDeleteTask(this.props.task);
         event.preventDefault();
       }
     }
@@ -73,7 +77,7 @@ class TaskRow extends Component<Props, State> {
     this.resizeTextArea(element);
   };
 
-  private onKeyPress(event: KeyboardEvent<HTMLTextAreaElement>) {
+  onKeyPress(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === 'Enter') {
       /**
        * We want to disable any action on enter, since newlines are reserved
@@ -83,7 +87,7 @@ class TaskRow extends Component<Props, State> {
     }
   }
 
-  private resizeTextArea(textarea: HTMLTextAreaElement | null): void {
+  resizeTextArea(textarea: HTMLTextAreaElement | null): void {
     if (!textarea) {
       return;
     }
@@ -97,10 +101,25 @@ class TaskRow extends Component<Props, State> {
 
   render() {
     const { isChecked } = this.state;
-    const { task, spellCheckEnabled } = this.props;
+    const {
+      task,
+      spellCheckEnabled,
+      innerRef,
+      handleCheckboxChange,
+      handleTextChange,
+      handleDeleteTask,
+      ...rest
+    } = this.props;
 
     return (
-      <div className={`task ${task.completed ? 'completed' : ''}`}>
+      <div
+        className={`task ${task.completed ? 'completed' : ''}`}
+        ref={innerRef}
+        {...rest}
+      >
+        <span className="drag-grip-container">
+          <FontAwesomeIcon icon={faGripVertical} style={{}} />
+        </span>
         <label className="checkbox-container">
           <input
             checked={isChecked}
@@ -108,7 +127,6 @@ class TaskRow extends Component<Props, State> {
             onChange={this.toggleCheckboxChange}
             spellCheck={spellCheckEnabled}
             type="checkbox"
-            value={task.content}
           />
           <span className="checkmark" />
         </label>

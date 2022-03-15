@@ -3,8 +3,8 @@ import './stylesheets/main.scss';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import TaskRow from './components/TaskRow';
 import CreateTask from './components/CreateTask';
+import TasksContainer from './components/TasksContainer';
 
 import Task from './models/Task';
 import TaskList from './models/TaskList';
@@ -98,11 +98,11 @@ class TaskEditor extends Component<Props, State> {
     });
   }
 
-  deleteTask(task: Task) {
+  deleteTask = (task: Task) => {
     this.taskList!.deleteTask(task);
     this.updateTasks();
     this.save();
-  }
+  };
 
   toggleTaskStatus = (task: Task) => {
     task.toggleStatus();
@@ -118,7 +118,11 @@ class TaskEditor extends Component<Props, State> {
     }, 300);
   };
 
-  private createTask = (rawString: string) => {
+  createTask = (rawString: string) => {
+    if (rawString.length === 0) {
+      return;
+    }
+
     const task = this.taskList!.createTask(rawString);
     this.taskList!.addTask(task);
     this.updateTaskDraft('');
@@ -126,14 +130,14 @@ class TaskEditor extends Component<Props, State> {
     this.save();
   };
 
-  private updateTaskDraft = (rawString: string, save: boolean = false) => {
+  updateTaskDraft = (rawString: string, save: boolean = false) => {
     this.setState({
       taskDraft: rawString,
     });
     save && this.save();
   };
 
-  private onReOpenCompleted = () => {
+  onReOpenCompleted = () => {
     if (window.confirm('Are you sure you want to reopen completed tasks?')) {
       this.taskList!.reOpenCompleted();
       this.updateTasks();
@@ -141,7 +145,7 @@ class TaskEditor extends Component<Props, State> {
     }
   };
 
-  private onDeleteCompleted = () => {
+  onDeleteCompleted = () => {
     if (window.confirm('Are you sure you want to delete completed tasks?')) {
       this.taskList!.deleteCompleted();
       this.updateTasks();
@@ -149,21 +153,26 @@ class TaskEditor extends Component<Props, State> {
     }
   };
 
-  private taskRowForTask(task: Task, index: number) {
-    const { spellCheckEnabled } = this.state;
-    return (
-      <TaskRow
-        deleteTask={this.deleteTask}
-        handleCheckboxChange={this.toggleTaskStatus}
-        handleTextChange={() => this.save()}
-        key={`${index}-${task.rawString}`}
-        spellCheckEnabled={spellCheckEnabled}
-        task={task}
-      />
-    );
-  }
+  reOrderTasks = (containerId: string, source: number, destination: number) => {
+    const isSourceOpen = containerId === 'open-tasks';
+    const isDestinationCompleted = containerId === 'completed-tasks';
+    const isDestinationOpen = !isDestinationCompleted;
 
-  private save() {
+    const fromTask = this.taskList!.taskAtIndex(isSourceOpen, source);
+    const toTask = this.taskList!.taskAtIndex(isDestinationOpen, destination);
+
+    this.taskList!.changeTaskPosition(fromTask, toTask);
+    if (isDestinationCompleted) {
+      fromTask.markCompleted();
+    } else {
+      fromTask.markOpen();
+    }
+
+    this.updateTasks();
+    this.save();
+  };
+
+  save = () => {
     const note = this.note;
 
     this.editorKit!.saveItemWithPresave(note, () => {
@@ -176,11 +185,16 @@ class TaskEditor extends Component<Props, State> {
     if (this.showTutorial) {
       this.editorKit!.setComponentDataValueForKey('showTutorial', false);
     }
-  }
+  };
 
   render() {
-    const { spellCheckEnabled, openTasks, completedTasks, taskDraft } =
-      this.state;
+    const {
+      editable,
+      spellCheckEnabled,
+      openTasks,
+      completedTasks,
+      taskDraft,
+    } = this.state;
 
     return (
       <>
@@ -197,34 +211,40 @@ class TaskEditor extends Component<Props, State> {
           </div>
         )}
 
-        <div className="task-section">
-          <h3>Open Tasks</h3>
-          <div id="completed-tasks">
-            {openTasks.map((task, index) => {
-              return this.taskRowForTask(task, index);
-            })}
-          </div>
-        </div>
+        <TasksContainer
+          id="open-tasks"
+          description={'Open Tasks'}
+          tasks={openTasks}
+          canEdit={editable}
+          handleCheckboxChange={this.toggleTaskStatus}
+          handleDeleteTask={this.deleteTask}
+          handleTasksReOrder={this.reOrderTasks}
+          handleTextChange={this.save}
+          spellCheckEnabled={spellCheckEnabled}
+        />
 
-        <div className="task-section">
-          <h3>Completed Tasks</h3>
-          <div id="completed-tasks">
-            {completedTasks.map((task, index) => {
-              return this.taskRowForTask(task, index);
-            })}
-          </div>
-
+        <TasksContainer
+          id="completed-tasks"
+          description={'Completed Tasks'}
+          tasks={completedTasks}
+          canEdit={editable}
+          handleCheckboxChange={this.toggleTaskStatus}
+          handleDeleteTask={this.deleteTask}
+          handleTasksReOrder={this.reOrderTasks}
+          handleTextChange={this.save}
+          spellCheckEnabled={spellCheckEnabled}
+        >
           {completedTasks.length > 0 && (
             <div>
-              <button className="clear-button" onClick={this.onReOpenCompleted}>
+              <button className="link-button" onClick={this.onReOpenCompleted}>
                 Reopen Completed
               </button>
-              <button className="clear-button" onClick={this.onDeleteCompleted}>
+              <button className="link-button" onClick={this.onDeleteCompleted}>
                 Delete Completed
               </button>
             </div>
           )}
-        </div>
+        </TasksContainer>
       </>
     );
   }
