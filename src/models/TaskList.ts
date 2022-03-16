@@ -1,36 +1,37 @@
 import { arrayMoveImmutable } from 'array-move';
 
-import Task from './Task';
+import Task, { TaskPayload } from './Task';
 
-const TASK_DELIMITER = '\n';
 const TASK_HTML_PREVIEW_LIMIT = 3;
 
 class TaskList {
   private store: Task[];
 
   constructor(rawString: string) {
-    this.store = this.parseRawString(rawString);
+    this.store = this.initializeStore(rawString);
   }
 
-  private parseRawString(rawString: string) {
+  private initializeStore(rawString: string) {
     if (!rawString) {
       rawString = '';
     }
 
-    return rawString
-      .split(TASK_DELIMITER)
-      .filter((s) => s.replace(/ /g, '').length > 0)
-      .map((rawString) => {
-        return this.createTask(rawString);
+    try {
+      const tasks = JSON.parse(rawString) as TaskPayload[];
+      return tasks.map((task) => {
+        return this.createTask(task);
       });
+    } catch (e) {
+      return [];
+    }
   }
 
   public getTasks(): Task[] {
     return this.store;
   }
 
-  public createTask(rawString: string): Task {
-    return new Task(rawString);
+  public createTask(data: any): Task {
+    return new Task(data);
   }
 
   public addTask(task: Task): void {
@@ -41,9 +42,9 @@ class TaskList {
     return this.store.filter((task) => task.completed);
   }
 
-  public getDataString(): string {
+  public getStoreAsString(): string {
     const tasks = this.getTasks();
-    return tasks.map((task) => task.rawString).join(TASK_DELIMITER);
+    return JSON.stringify(tasks, null, 2);
   }
 
   public openTasks(tasks: Task[]): void {
@@ -138,7 +139,7 @@ class TaskList {
     if (totalTasksToPreview > 0) {
       htmlPreview += '<ul style="padding-left: 19px; margin-top: 10px;">';
       tasksToPreview.forEach((task) => {
-        htmlPreview += `<li style="margin-bottom: 6px;">${task.content}</li>`;
+        htmlPreview += `<li style="margin-bottom: 6px;">${task.description}</li>`;
       });
       htmlPreview += '</ul>';
     }

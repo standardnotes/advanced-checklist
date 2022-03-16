@@ -84,7 +84,7 @@ class TaskEditor extends Component<Props, State> {
     };
 
     this.editorKit = new EditorKit(editorKitDelegate, {
-      mode: 'plaintext',
+      mode: 'json',
       supportsFileSafe: false,
     });
   }
@@ -118,12 +118,12 @@ class TaskEditor extends Component<Props, State> {
     }, 300);
   };
 
-  createTask = (rawString: string) => {
-    if (rawString.length === 0) {
+  createTask = (description: string) => {
+    if (description.length === 0) {
       return;
     }
 
-    const task = this.taskList!.createTask(rawString);
+    const task = this.taskList!.createTask({ description });
     this.taskList!.addTask(task);
     this.updateTaskDraft('');
     this.updateTasks();
@@ -176,7 +176,7 @@ class TaskEditor extends Component<Props, State> {
     const note = this.note;
 
     this.editorKit!.saveItemWithPresave(note, () => {
-      note.content.text = this.taskList!.getDataString();
+      note.content.text = this.taskList!.getStoreAsString();
       note.content.taskDraft = this.state.taskDraft;
       note.content.preview_html = this.taskList!.buildHtmlPreview();
       note.content.preview_plain = this.taskList!.buildPlainPreview();

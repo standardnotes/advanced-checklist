@@ -58,7 +58,7 @@ class TaskRow extends Component<TaskRowProps, TaskRowState> {
 
   onTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const text = event.target.value;
-    this.props.task.setContentString(text);
+    this.props.task.description = text;
     this.props.handleTextChange(this.props.task, text);
 
     this.forceUpdate();
@@ -138,7 +138,7 @@ class TaskRow extends Component<TaskRowProps, TaskRowState> {
           onKeyUp={this.onKeyUp}
           ref={(textarea) => (this.textAreaElement = textarea)}
           spellCheck={spellCheckEnabled}
-          value={task.content}
+          value={task.description}
         />
       </div>
     );

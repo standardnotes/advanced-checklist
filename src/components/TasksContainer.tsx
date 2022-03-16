@@ -49,7 +49,7 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
             <h3>{description}</h3>
             <div {...provided.droppableProps} ref={provided.innerRef} id={id}>
               {tasks.map((task, index) => {
-                const identifier = `${index}-${task.content}`;
+                const identifier = `${index}-${task.description}`;
                 return (
                   <Draggable
                     key={identifier}
