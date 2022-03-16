@@ -45,7 +45,7 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable" isDropDisabled={!canEdit}>
         {(provided) => (
-          <div className="task-section">
+          <div className="tasks-container">
             <h3>{description}</h3>
             <div {...provided.droppableProps} ref={provided.innerRef} id={id}>
               {tasks.map((task, index) => {
