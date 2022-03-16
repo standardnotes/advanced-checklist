@@ -3,6 +3,7 @@ import { arrayMoveImmutable } from 'array-move';
 import Task from './Task';
 
 const TASK_DELIMITER = '\n';
+const TASK_HTML_PREVIEW_LIMIT = 3;
 
 class TaskList {
   private store: Task[];
@@ -117,35 +118,40 @@ class TaskList {
 
   public buildHtmlPreview(): string {
     const { openTasks, completedTasks } = this.splitTasks();
-    const totalLength = openTasks.length + completedTasks.length;
 
-    const taskPreviewLimit = 3;
-    const tasksToPreview = Math.min(openTasks.length, taskPreviewLimit);
+    const totalOpenTasks = openTasks.length;
+    const totalCompletedTasks = completedTasks.length;
+    const totalTasks = totalOpenTasks + totalCompletedTasks;
+    const totalTasksToPreview = Math.min(
+      totalOpenTasks,
+      TASK_HTML_PREVIEW_LIMIT
+    );
 
-    let html = '<div>';
-    html += `<div style="margin-top: 8px;"><strong>${completedTasks.length}/${totalLength} tasks completed</strong></div>`;
-    html += `<progress max="100" style="margin-top: 10px; width: 100%;" value="${
-      (completedTasks.length / totalLength) * 100
+    const diff = totalOpenTasks - totalTasksToPreview;
+    const tasksToPreview = openTasks.slice(0, totalTasksToPreview);
+
+    let htmlPreview = `<div><div style="margin-top: 8px;"><strong>${totalCompletedTasks}/${totalTasks} tasks completed</strong></div>
+<progress max="100" style="margin-top: 10px; width: 100%;" value="${
+      (totalCompletedTasks / totalTasks) * 100
     }"></progress>`;
 
-    if (tasksToPreview > 0) {
-      html += "<ul style='padding-left: 19px; margin-top: 10px;'>";
-      for (let i = 0; i < tasksToPreview; i++) {
-        const task = openTasks[i];
-        html += `<li style='margin-bottom: 6px;'>${task.content}</li>`;
-      }
-      html += '</ul>';
-
-      if (openTasks.length > tasksToPreview) {
-        const diff = openTasks.length - tasksToPreview;
-        const noun = diff === 1 ? 'task' : 'tasks';
-        html += `<div><strong>And ${diff} other open ${noun}.</strong></div>`;
-      }
+    if (totalTasksToPreview > 0) {
+      htmlPreview += '<ul style="padding-left: 19px; margin-top: 10px;">';
+      tasksToPreview.forEach((task) => {
+        htmlPreview += `<li style="margin-bottom: 6px;">${task.content}</li>`;
+      });
+      htmlPreview += '</ul>';
     }
 
-    html += '</div>';
+    if (totalOpenTasks > totalTasksToPreview) {
+      htmlPreview += `<div><strong>And ${diff} other open ${
+        diff > 1 ? 'tasks' : 'task'
+      }.</strong></div>`;
+    }
 
-    return html;
+    htmlPreview += '</div>';
+
+    return htmlPreview;
   }
 
   public buildPlainPreview(): string {
