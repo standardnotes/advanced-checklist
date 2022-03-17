@@ -7,7 +7,7 @@ import CreateTask from './components/CreateTask';
 import TasksContainer from './components/TasksContainer';
 
 import Task from './models/Task';
-import TaskList from './models/TaskList';
+import TaskManager from './models/TaskManager';
 
 import EditorKit, { EditorKitDelegate } from '@standardnotes/editor-kit';
 
@@ -22,7 +22,7 @@ type State = {
 
 class TaskEditor extends Component<Props, State> {
   private editorKit?: EditorKit;
-  private taskList?: TaskList;
+  private taskManager?: TaskManager;
   private note?: any;
 
   constructor(props: Props) {
@@ -58,7 +58,7 @@ class TaskEditor extends Component<Props, State> {
   private configureEditorKit() {
     const editorKitDelegate: EditorKitDelegate = {
       setEditorRawText: (rawString: string) => {
-        this.taskList = new TaskList(rawString);
+        this.taskManager = new TaskManager(rawString);
         this.updateTasks();
       },
       onNoteValueChange: async (note: any) => {
@@ -90,7 +90,7 @@ class TaskEditor extends Component<Props, State> {
   }
 
   updateTasks() {
-    const { openTasks, completedTasks } = this.taskList!.splitTasks();
+    const { openTasks, completedTasks } = this.taskManager!.splitTasks();
 
     this.setState({
       openTasks,
@@ -99,7 +99,7 @@ class TaskEditor extends Component<Props, State> {
   }
 
   deleteTask = (task: Task) => {
-    this.taskList!.deleteTask(task);
+    this.taskManager!.deleteTask(task);
     this.updateTasks();
     this.save();
   };
@@ -108,7 +108,7 @@ class TaskEditor extends Component<Props, State> {
     task.toggleStatus();
 
     if (!task.completed) {
-      this.taskList!.moveTaskToTop(task);
+      this.taskManager!.moveTaskToTop(task);
     }
 
     setTimeout(() => {
@@ -123,8 +123,8 @@ class TaskEditor extends Component<Props, State> {
       return;
     }
 
-    const task = this.taskList!.createTask({ description });
-    this.taskList!.addTask(task);
+    const task = this.taskManager!.createTask({ description });
+    this.taskManager!.addTask(task);
     this.updateTaskDraft('');
     this.updateTasks();
     this.save();
@@ -139,7 +139,7 @@ class TaskEditor extends Component<Props, State> {
 
   onReOpenCompleted = () => {
     if (window.confirm('Are you sure you want to reopen completed tasks?')) {
-      this.taskList!.reOpenCompleted();
+      this.taskManager!.reOpenCompleted();
       this.updateTasks();
       this.save();
     }
@@ -147,7 +147,7 @@ class TaskEditor extends Component<Props, State> {
 
   onDeleteCompleted = () => {
     if (window.confirm('Are you sure you want to delete completed tasks?')) {
-      this.taskList!.deleteCompleted();
+      this.taskManager!.deleteCompleted();
       this.updateTasks();
       this.save();
     }
@@ -158,10 +158,13 @@ class TaskEditor extends Component<Props, State> {
     const isDestinationCompleted = containerId === 'completed-tasks';
     const isDestinationOpen = !isDestinationCompleted;
 
-    const fromTask = this.taskList!.taskAtIndex(isSourceOpen, source);
-    const toTask = this.taskList!.taskAtIndex(isDestinationOpen, destination);
+    const fromTask = this.taskManager!.taskAtIndex(isSourceOpen, source);
+    const toTask = this.taskManager!.taskAtIndex(
+      isDestinationOpen,
+      destination
+    );
 
-    this.taskList!.changeTaskPosition(fromTask, toTask);
+    this.taskManager!.changeTaskPosition(fromTask, toTask);
     if (isDestinationCompleted) {
       fromTask.markCompleted();
     } else {
@@ -176,10 +179,10 @@ class TaskEditor extends Component<Props, State> {
     const note = this.note;
 
     this.editorKit!.saveItemWithPresave(note, () => {
-      note.content.text = this.taskList!.getStoreAsString();
+      note.content.text = this.taskManager!.getStoreAsString();
       note.content.taskDraft = this.state.taskDraft;
-      note.content.preview_html = this.taskList!.buildHtmlPreview();
-      note.content.preview_plain = this.taskList!.buildPlainPreview();
+      note.content.preview_html = this.taskManager!.buildHtmlPreview();
+      note.content.preview_plain = this.taskManager!.buildPlainPreview();
     });
 
     if (this.showTutorial) {

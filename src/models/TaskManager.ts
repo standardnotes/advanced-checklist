@@ -4,16 +4,16 @@ import Task, { TaskPayload } from './Task';
 
 const TASK_HTML_PREVIEW_LIMIT = 3;
 
-class TaskList {
-  private store: Task[];
+class TaskManager {
+  private storage: Task[];
 
   constructor(rawString: string) {
-    this.store = this.initializeStore(rawString);
+    this.storage = this.initializeStore(rawString);
   }
 
   private initializeStore(rawString: string) {
     if (!rawString) {
-      rawString = '';
+      return [];
     }
 
     try {
@@ -27,7 +27,7 @@ class TaskList {
   }
 
   public getTasks(): Task[] {
-    return this.store;
+    return this.storage;
   }
 
   public createTask(data: any): Task {
@@ -35,11 +35,11 @@ class TaskList {
   }
 
   public addTask(task: Task): void {
-    this.store.unshift(task);
+    this.storage.unshift(task);
   }
 
   public getCompletedTasks(): Task[] {
-    return this.store.filter((task) => task.completed);
+    return this.storage.filter((task) => task.completed);
   }
 
   public getStoreAsString(): string {
@@ -54,7 +54,7 @@ class TaskList {
   }
 
   public removeTasks(tasks: Task[]): void {
-    this.store = this.store.filter((task) => !tasks.includes(task));
+    this.storage = this.storage.filter((task) => !tasks.includes(task));
   }
 
   /**
@@ -81,17 +81,17 @@ class TaskList {
   }
 
   public moveTaskToTop(task: Task): void {
-    this.store.splice(this.store.indexOf(task), 1);
-    this.store.unshift(task);
+    this.storage.splice(this.storage.indexOf(task), 1);
+    this.storage.unshift(task);
   }
 
   public changeTaskPosition(
     task: Task,
     taskOccupyingTargetLocation: Task
   ): void {
-    const from = this.store.indexOf(task);
-    const to = this.store.indexOf(taskOccupyingTargetLocation);
-    this.store = arrayMoveImmutable(this.store, from, to);
+    const from = this.storage.indexOf(task);
+    const to = this.storage.indexOf(taskOccupyingTargetLocation);
+    this.storage = arrayMoveImmutable(this.storage, from, to);
   }
 
   public taskAtIndex(isOpen: boolean, relativeIndex: number) {
@@ -163,4 +163,4 @@ class TaskList {
   }
 }
 
-export default TaskList;
+export default TaskManager;
