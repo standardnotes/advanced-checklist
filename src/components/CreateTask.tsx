@@ -5,8 +5,8 @@ type Props = {
   isMobile: boolean;
   showTutorial: boolean;
   spellCheckEnabled: boolean;
-  onUpdate: (string: string, save: boolean) => void;
-  onSubmit: (string: string) => void;
+  onUpdate: (value: string, save: boolean) => void;
+  onSubmit: (value: string) => void;
 };
 
 type State = {
