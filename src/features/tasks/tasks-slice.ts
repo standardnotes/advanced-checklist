@@ -33,7 +33,7 @@ const tasksSlice = createSlice({
         state.storage[group] = [];
       }
 
-      state.storage[group].push({
+      state.storage[group].unshift({
         ...task,
         completed: false,
       });

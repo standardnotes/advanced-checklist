@@ -92,13 +92,13 @@ it('should handle a task being added to the existing tasks store', () => {
     storage: {
       Test: [
         {
-          id: 'some-id',
-          description: 'A simple task',
+          id: 'another-id',
+          description: 'Another simple task',
           completed: false,
         },
         {
-          id: 'another-id',
-          description: 'Another simple task',
+          id: 'some-id',
+          description: 'A simple task',
           completed: false,
         },
       ],
