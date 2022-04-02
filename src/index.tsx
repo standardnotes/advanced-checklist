@@ -1,6 +1,6 @@
 import './stylesheets/main.scss';
 
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 import CreateGroup from './features/tasks/CreateGroup';
@@ -24,21 +24,20 @@ const TaskEditor: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  function configureEditorKit() {
+  const configureEditorKit = useCallback(() => {
+    // EditorKit setup goes here...
     dispatch(setCanEdit(true));
     dispatch(setSpellCheckerEnabled(true));
     dispatch(setIsMobile(false));
     dispatch(setShowTutorial(true));
-  }
 
-  useEffect(() => {
-    configureEditorKit();
-  });
-
-  useEffect(() => {
     const serialized = JSON.stringify(mockData);
     dispatch(tasksLoaded(serialized));
   }, [dispatch]);
+
+  useEffect(() => {
+    configureEditorKit();
+  }, [configureEditorKit]);
 
   return (
     <>
