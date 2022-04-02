@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import CreateTask from './CreateTask';
 import TaskList from './TaskList';
 import { TaskPayload } from './tasks-slice';
@@ -9,31 +8,25 @@ type TaskGroupProps = {
   isLast: boolean;
 };
 
-type TaskGroupState = {};
+const TaskGroup: React.FC<TaskGroupProps> = ({ group, tasks, isLast }) => {
+  const completedTasks = tasks.filter((task) => task.completed).length;
+  const totalTasks = tasks.length;
 
-class TaskGroup extends Component<TaskGroupProps, TaskGroupState> {
-  render() {
-    const { group, tasks, isLast } = this.props;
-
-    const completedTasks = tasks.filter((task) => task.completed).length;
-    const totalTasks = tasks.length;
-
-    return (
-      <div className="task-group-container">
-        <div className="task-group">
-          <h1 className="group-name">{group}</h1>
-          <span className="stats">
-            {completedTasks}/{totalTasks}
-          </span>
-        </div>
-
-        <CreateTask group={group} />
-        <TaskList group={group} tasks={tasks} />
-
-        {!isLast && <hr />}
+  return (
+    <div className="task-group-container">
+      <div className="task-group">
+        <h1 className="group-name">{group}</h1>
+        <span className="stats">
+          {completedTasks}/{totalTasks}
+        </span>
       </div>
-    );
-  }
-}
+
+      <CreateTask group={group} />
+      <TaskList group={group} tasks={tasks} />
+
+      {!isLast && <hr />}
+    </div>
+  );
+};
 
 export default TaskGroup;

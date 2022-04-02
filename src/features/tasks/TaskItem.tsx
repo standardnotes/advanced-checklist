@@ -15,7 +15,7 @@ export type TaskItemProps = {
   innerRef: LegacyRef<HTMLDivElement>;
 };
 
-const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...rest }) => {
+const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
   let textAreaElement: HTMLTextAreaElement | null = null;
 
   const canEdit = useAppSelector((state) => state.settings.canEdit);
@@ -25,7 +25,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...rest }) => {
 
   const dispatch = useAppDispatch();
 
-  const [task, setTask] = useState(rest.task);
+  const [task, setTask] = useState(props.task);
 
   function resizeTextArea(textarea: HTMLTextAreaElement | null): void {
     if (!textarea) {
@@ -48,10 +48,10 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...rest }) => {
   }
 
   function onTextChange(event: ChangeEvent<HTMLTextAreaElement>) {
-    const text = event.target.value;
+    const description = event.target.value;
     setTask({
       ...task,
-      description: text,
+      description,
     });
   }
 
@@ -59,7 +59,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...rest }) => {
     // Delete task if empty and enter pressed
     if (event.key === 'Enter') {
       if (task.description.length === 0) {
-        dispatch(taskDeleted({ id: task.id, group: '' }));
+        dispatch(taskDeleted({ id: task.id, group }));
         event.preventDefault();
       }
     }
@@ -79,7 +79,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...rest }) => {
     <div
       className={`task ${task.completed ? 'completed' : ''}`}
       ref={innerRef}
-      {...rest}
+      {...props}
     >
       <label className="checkbox-container">
         <input
