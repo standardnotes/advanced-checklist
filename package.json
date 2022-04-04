@@ -30,7 +30,7 @@
     "deploy-dev": "yarn run predeploy && gh-pages -b dev -d build",
     "deploy-stable": "yarn run predeploy && gh-pages -b gh-pages -d build",
     "test": "react-scripts test",
-    "test:coverage": "npm run test -- --coverage",
+    "test:coverage": "npm run test -- --coverage --watchAll",
     "eject": "react-scripts eject",
     "serve": "serve -s -p 3000 build",
     "server-public": "http-server -p 3000 --cors",
