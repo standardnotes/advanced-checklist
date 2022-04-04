@@ -70,6 +70,11 @@
       "src/**/*.{js,jsx,ts,tsx}",
       "!<rootDir>/node_modules/"
     ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/mockData.ts",
+      "<rootDir>/src/app/hooks.ts",
+      "<rootDir>/src/app/store.ts"
+    ],
     "coverageReporters": [
       "text",
       "html"
