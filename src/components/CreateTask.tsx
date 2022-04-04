@@ -13,7 +13,9 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
 
   const dispatch = useAppDispatch();
 
-  const isMobile = useAppSelector((state) => state.settings.isMobile);
+  const isRunningOnMobile = useAppSelector(
+    (state) => state.settings.isRunningOnMobile
+  );
   const showTutorial = useAppSelector((state) => state.settings.showTutorial);
   const spellCheckerEnabled = useAppSelector(
     (state) => state.settings.spellCheckerEnabled
@@ -22,7 +24,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
   const [taskDraft, setTaskDraft] = useState('');
 
   useEffect(() => {
-    if (isMobile) {
+    if (isRunningOnMobile) {
       inputElement!.focus();
     }
   });

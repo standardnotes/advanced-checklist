@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type SettingsState = {
   canEdit: boolean;
-  isMobile: boolean;
+  isRunningOnMobile: boolean;
   showTutorial: boolean;
   spellCheckerEnabled: boolean;
 };
 
 const initialState: SettingsState = {
   canEdit: true,
-  isMobile: false,
+  isRunningOnMobile: false,
   showTutorial: true,
   spellCheckerEnabled: true,
 };
@@ -21,8 +21,8 @@ const settingsSlice = createSlice({
     setCanEdit(state, action: PayloadAction<boolean>) {
       state.canEdit = action.payload;
     },
-    setIsMobile(state, action: PayloadAction<boolean>) {
-      state.isMobile = action.payload;
+    setIsRunningOnMobile(state, action: PayloadAction<boolean>) {
+      state.isRunningOnMobile = action.payload;
     },
     setShowTutorial(state, action: PayloadAction<boolean>) {
       state.showTutorial = action.payload;
@@ -35,7 +35,7 @@ const settingsSlice = createSlice({
 
 export const {
   setCanEdit,
-  setIsMobile,
+  setIsRunningOnMobile,
   setShowTutorial,
   setSpellCheckerEnabled,
 } = settingsSlice.actions;
