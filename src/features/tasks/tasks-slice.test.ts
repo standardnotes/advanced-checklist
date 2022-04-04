@@ -404,6 +404,7 @@ it('should handle loading tasks into the tasks store, with a valid payload', () 
 
   const serializedPayload = JSON.stringify(tasksPayload);
   expect(reducer(previousState, tasksLoaded(serializedPayload))).toEqual({
+    initialized: true,
     storage: {
       Test: [
         {
@@ -484,7 +485,7 @@ it('should handle reordering tasks from the same section', () => {
         group: 'Test',
         swapTaskIndex: 0,
         withTaskIndex: 1,
-        sameSection: true,
+        isSameSection: true,
       })
     )
   ).toEqual({
@@ -540,7 +541,7 @@ it('should handle reordering tasks from different sections', () => {
         group: 'Test',
         swapTaskIndex: 0,
         withTaskIndex: 1,
-        sameSection: false,
+        isSameSection: false,
       })
     )
   ).toEqual({

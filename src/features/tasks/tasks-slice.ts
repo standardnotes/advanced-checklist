@@ -3,6 +3,7 @@ import { arrayMoveImmutable } from '../../common/utils';
 
 export type TasksState = {
   storage: GroupedTaskPayload;
+  initialized?: boolean;
 };
 
 const initialState: TasksState = {
@@ -78,29 +79,6 @@ const tasksSlice = createSlice({
       );
       state.storage[group] = tasks;
     },
-    tasksLoaded(state, action: PayloadAction<string>) {
-      if (!action.payload) {
-        return;
-      }
-
-      try {
-        const newState: TasksState = {
-          storage: {},
-        };
-        const tasksPayloads = JSON.parse(action.payload) as GroupedTaskPayload;
-
-        Object.keys(tasksPayloads).forEach((group) => {
-          newState.storage[group] = [];
-          Object.values(tasksPayloads[group]).forEach((task) => {
-            newState.storage[group].push(task);
-          });
-        });
-
-        newState !== initialState && (state.storage = newState.storage);
-      } catch (e) {
-        return;
-      }
-    },
     tasksGroupAdded(state, action: PayloadAction<string>) {
       if (!state.storage[action.payload]) {
         state.storage[action.payload] = [];
@@ -112,12 +90,12 @@ const tasksSlice = createSlice({
         group: string;
         swapTaskIndex: number;
         withTaskIndex: number;
-        sameSection: boolean;
+        isSameSection: boolean;
       }>
     ) {
-      const { group, swapTaskIndex, withTaskIndex, sameSection } =
+      const { group, swapTaskIndex, withTaskIndex, isSameSection } =
         action.payload;
-      if (!sameSection) {
+      if (!isSameSection) {
         const task = state.storage[group][swapTaskIndex];
         task.completed = !task.completed;
         return;
@@ -127,6 +105,33 @@ const tasksSlice = createSlice({
         swapTaskIndex,
         withTaskIndex
       );
+    },
+    tasksLoaded(state, action: PayloadAction<string>) {
+      if (!action.payload) {
+        return;
+      }
+
+      try {
+        const newState: TasksState = {
+          storage: {},
+          initialized: true,
+        };
+        const tasksPayloads = JSON.parse(action.payload) as GroupedTaskPayload;
+
+        Object.keys(tasksPayloads).forEach((group) => {
+          newState.storage[group] = [];
+          Object.values(tasksPayloads[group]).forEach((task) => {
+            newState.storage[group].push(task);
+          });
+        });
+
+        if (newState !== initialState) {
+          state.storage = newState.storage;
+          state.initialized = true;
+        }
+      } catch (e) {
+        return;
+      }
     },
   },
 });

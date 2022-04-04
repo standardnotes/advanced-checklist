@@ -33,7 +33,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, group }) => {
         group,
         swapTaskIndex: source.index,
         withTaskIndex: destination.index,
-        sameSection: source.droppableId === destination.droppableId,
+        isSameSection: source.droppableId === destination.droppableId,
       })
     );
   }

@@ -11,16 +11,17 @@ import { store } from './app/store';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import {
   setCanEdit,
-  setIsMobile,
+  setIsRunningOnMobile,
   setShowTutorial,
   setSpellCheckerEnabled,
 } from './features/settings/settings-slice';
 import { tasksLoaded } from './features/tasks/tasks-slice';
 
 const TaskEditor: React.FC = () => {
-  const currentNote = useRef<any>();
+  const note = useRef<any>();
   const editorKit = useRef<EditorKit>();
 
+  const initialized = useAppSelector((state) => state.tasks.initialized);
   const groupedTasks = useAppSelector((state) => state.tasks.storage);
   const canEdit = useAppSelector((state) => state.settings.canEdit);
 
@@ -38,39 +39,21 @@ const TaskEditor: React.FC = () => {
     // return editorKit.current!.isRunningInMobileApplication();
   }
 
-  const saveNote = useCallback(() => {
-    const note = currentNote.current;
-    if (!note) {
-      return;
-    }
-
-    editorKit.current!.saveItemWithPresave(note, () => {
-      const groupedTasks = store.getState().tasks.storage;
-      note.content.text = JSON.stringify(groupedTasks);
-      note.content.preview_html = '<span>WIP</span>';
-      note.content.preview_plain = 'WIP';
-    });
-
-    if (showTutorial()) {
-      // editorKit.current!.setComponentDataValueForKey('showTutorial', false);
-    }
-  }, []);
-
   const configureEditorKit = useCallback(() => {
     const editorKitDelegate: EditorKitDelegate = {
       setEditorRawText: (rawString: string) => {
         dispatch(tasksLoaded(rawString));
       },
-      onNoteValueChange: async (note: any) => {
-        currentNote.current = note;
+      onNoteValueChange: async (currentNote: any) => {
+        note.current = currentNote;
 
         const editable =
-          !note.content.appData['org.standardnotes.sn'].locked ?? true;
-        const spellCheckEnabled = note.content.spellcheck;
+          !currentNote.content.appData['org.standardnotes.sn'].locked ?? true;
+        const spellCheckEnabled = currentNote.content.spellcheck;
 
         dispatch(setCanEdit(editable));
         dispatch(setSpellCheckerEnabled(spellCheckEnabled));
-        dispatch(setIsMobile(isRunningOnMobile()));
+        dispatch(setIsRunningOnMobile(isRunningOnMobile()));
         dispatch(setShowTutorial(showTutorial()));
       },
       onNoteLockToggle: (locked: boolean) => {
@@ -88,9 +71,24 @@ const TaskEditor: React.FC = () => {
     configureEditorKit();
   }, [configureEditorKit]);
 
-  useEffect(() => {
-    return store.subscribe(saveNote);
-  }, [saveNote]);
+  const saveNote = useCallback(() => {
+    const currentNote = note.current;
+    if (!currentNote || !initialized) {
+      return;
+    }
+
+    editorKit.current!.saveItemWithPresave(currentNote, () => {
+      currentNote.content.text = JSON.stringify(groupedTasks);
+      currentNote.content.preview_html = '<span>WIP</span>';
+      currentNote.content.preview_plain = 'WIP';
+    });
+
+    if (showTutorial()) {
+      // editorKit.current!.setComponentDataValueForKey('showTutorial', false);
+    }
+  }, [initialized, groupedTasks]);
+
+  useEffect(() => saveNote);
 
   return (
     <>
