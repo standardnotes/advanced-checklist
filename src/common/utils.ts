@@ -4,7 +4,6 @@ export function arrayMoveMutable(
   toIndex: number
 ) {
   const startIndex = fromIndex < 0 ? array.length + fromIndex : fromIndex;
-
   if (startIndex >= 0 && startIndex < array.length) {
     const endIndex = toIndex < 0 ? array.length + toIndex : toIndex;
 
