@@ -1,6 +1,6 @@
 import { useAppDispatch } from '../app/hooks';
 import {
-  reOpenAllCompleted,
+  openAllCompleted,
   deleteAllCompleted,
 } from '../features/tasks/tasks-slice';
 
@@ -15,7 +15,7 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
 
   function handleReOpenCompleted() {
     if (window.confirm('Are you sure you want to reopen completed tasks?')) {
-      dispatch(reOpenAllCompleted({ group }));
+      dispatch(openAllCompleted({ group }));
     }
   }
 

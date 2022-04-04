@@ -65,7 +65,7 @@ const tasksSlice = createSlice({
       const task = state.storage[group].find((task) => task.id === id);
       task && (task.completed = !task.completed);
     },
-    reOpenAllCompleted(state, action: PayloadAction<{ group: string }>) {
+    openAllCompleted(state, action: PayloadAction<{ group: string }>) {
       const { group } = action.payload;
       Object.values(state.storage[group]).forEach(
         (task) => (task.completed = false)
@@ -136,7 +136,7 @@ export const {
   taskModified,
   taskToggled,
   taskDeleted,
-  reOpenAllCompleted,
+  openAllCompleted,
   deleteAllCompleted,
   tasksLoaded,
   tasksGroupAdded,

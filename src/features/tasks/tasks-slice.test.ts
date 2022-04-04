@@ -1,5 +1,5 @@
 import reducer, {
-  reOpenAllCompleted,
+  openAllCompleted,
   deleteAllCompleted,
   taskAdded,
   taskDeleted,
@@ -273,7 +273,7 @@ it('should handle an existing task being deleted', () => {
   });
 });
 
-it('should handle all tasks being marked as completed', () => {
+it('should handle opening all tasks that are marked as completed', () => {
   const previousState: TasksState = {
     storage: {
       Test: [
@@ -296,29 +296,27 @@ it('should handle all tasks being marked as completed', () => {
     },
   };
 
-  expect(reducer(previousState, reOpenAllCompleted({ group: 'Test' }))).toEqual(
-    {
-      storage: {
-        Test: [
-          {
-            id: 'some-id',
-            description: 'A simple task',
-            completed: false,
-          },
-          {
-            id: 'another-id',
-            description: 'Another simple task',
-            completed: false,
-          },
-          {
-            id: 'yet-another-id',
-            description: 'Yet another simple task',
-            completed: false,
-          },
-        ],
-      },
-    }
-  );
+  expect(reducer(previousState, openAllCompleted({ group: 'Test' }))).toEqual({
+    storage: {
+      Test: [
+        {
+          id: 'some-id',
+          description: 'A simple task',
+          completed: false,
+        },
+        {
+          id: 'another-id',
+          description: 'Another simple task',
+          completed: false,
+        },
+        {
+          id: 'yet-another-id',
+          description: 'Yet another simple task',
+          completed: false,
+        },
+      ],
+    },
+  });
 });
 
 it('should handle clear all completed tasks', () => {
