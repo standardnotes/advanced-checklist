@@ -1,6 +1,7 @@
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+
 import { useAppSelector } from '../app/hooks';
-import TaskItem from '../features/tasks/TaskItem';
+import TaskItem from './TaskItem';
 import { TaskPayload } from '../features/tasks/tasks-slice';
 
 type DroppableContainerProps = {

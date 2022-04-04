@@ -1,9 +1,10 @@
 import React from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { useAppDispatch } from '../../app/hooks';
-import DroppableContainer from '../../components/DroppableContainer';
+
+import { useAppDispatch } from '../app/hooks';
+import DroppableContainer from '../components/DroppableContainer';
 import CompletedTasksActions from './CompletedTasksActions';
-import { TaskPayload, tasksReordered } from './tasks-slice';
+import { TaskPayload, tasksReordered } from '../features/tasks/tasks-slice';
 
 type TaskListProps = {
   group: string;

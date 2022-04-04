@@ -1,6 +1,7 @@
 import { ChangeEvent, KeyboardEvent, useState } from 'react';
-import { useAppDispatch } from '../../app/hooks';
-import { tasksGroupAdded } from './tasks-slice';
+
+import { useAppDispatch } from '../app/hooks';
+import { tasksGroupAdded } from './../features/tasks/tasks-slice';
 
 const CreateGroup: React.FC<{}> = () => {
   const dispatch = useAppDispatch();

@@ -2,10 +2,12 @@ import './stylesheets/main.scss';
 
 import React, { useCallback, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import EditorKit, { EditorKitDelegate } from '@standardnotes/editor-kit';
 
-import CreateGroup from './features/tasks/CreateGroup';
-import TaskGroup from './features/tasks/TaskGroup';
-
+import CreateGroup from './components/CreateGroup';
+import TaskGroup from './components/TaskGroup';
+import { store } from './app/store';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import {
   setCanEdit,
@@ -13,10 +15,7 @@ import {
   setShowTutorial,
   setSpellCheckerEnabled,
 } from './features/settings/settings-slice';
-import { store } from './app/store';
-import { Provider } from 'react-redux';
 import { tasksLoaded } from './features/tasks/tasks-slice';
-import EditorKit, { EditorKitDelegate } from '@standardnotes/editor-kit';
 
 const TaskEditor: React.FC = () => {
   const currentNote = useRef<any>();

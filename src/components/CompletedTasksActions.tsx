@@ -1,5 +1,8 @@
-import { useAppDispatch } from '../../app/hooks';
-import { reOpenAllCompleted, deleteAllCompleted } from './tasks-slice';
+import { useAppDispatch } from '../app/hooks';
+import {
+  reOpenAllCompleted,
+  deleteAllCompleted,
+} from '../features/tasks/tasks-slice';
 
 type CompletedTasksActionsProps = {
   group: string;

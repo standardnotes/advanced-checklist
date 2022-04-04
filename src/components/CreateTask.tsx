@@ -1,7 +1,8 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { taskAdded } from './tasks-slice';
 import { v4 as uuidv4 } from 'uuid';
+
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { taskAdded } from '../features/tasks/tasks-slice';
 
 type CreateTaskProps = {
   group: string;

@@ -1,6 +1,6 @@
 import CreateTask from './CreateTask';
 import TaskList from './TaskList';
-import { TaskPayload } from './tasks-slice';
+import { TaskPayload } from './../features/tasks/tasks-slice';
 
 type TaskGroupProps = {
   group: string;
