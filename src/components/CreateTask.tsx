@@ -16,7 +16,6 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
   const isRunningOnMobile = useAppSelector(
     (state) => state.settings.isRunningOnMobile
   );
-  const showTutorial = useAppSelector((state) => state.settings.showTutorial);
   const spellCheckerEnabled = useAppSelector(
     (state) => state.settings.spellCheckerEnabled
   );
@@ -55,7 +54,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
         dir="auto"
         onChange={onTextChange}
         onKeyPress={handleKeyPress}
-        placeholder={showTutorial ? 'Type in your task, then press enter' : ''}
+        placeholder={'Type in your task, then press enter'}
         ref={(ref) => (inputElement = ref)}
         spellCheck={spellCheckerEnabled}
         type="text"

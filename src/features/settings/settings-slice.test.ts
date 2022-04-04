@@ -1,7 +1,6 @@
 import reducer, {
   setCanEdit,
   setIsRunningOnMobile,
-  setShowTutorial,
   setSpellCheckerEnabled,
 } from './settings-slice';
 import type { SettingsState } from './settings-slice';
@@ -23,7 +22,6 @@ it('should handle setting canEdit property', () => {
   const previousState: SettingsState = {
     canEdit: false,
     isRunningOnMobile: false,
-    showTutorial: false,
     spellCheckerEnabled: false,
   };
 
@@ -37,7 +35,6 @@ it('should handle setting isRunningOnMobile property', () => {
   const previousState: SettingsState = {
     canEdit: false,
     isRunningOnMobile: false,
-    showTutorial: false,
     spellCheckerEnabled: false,
   };
 
@@ -47,25 +44,10 @@ it('should handle setting isRunningOnMobile property', () => {
   });
 });
 
-it('should handle setting showTutorial property', () => {
-  const previousState: SettingsState = {
-    canEdit: false,
-    isRunningOnMobile: false,
-    showTutorial: false,
-    spellCheckerEnabled: false,
-  };
-
-  expect(reducer(previousState, setShowTutorial(true))).toEqual({
-    ...previousState,
-    showTutorial: true,
-  });
-});
-
 it('should handle setting spellCheckerEnabled property', () => {
   const previousState: SettingsState = {
     canEdit: false,
     isRunningOnMobile: false,
-    showTutorial: false,
     spellCheckerEnabled: false,
   };
 
