@@ -12,7 +12,6 @@ import { useAppDispatch, useAppSelector } from './app/hooks';
 import {
   setCanEdit,
   setIsRunningOnMobile,
-  setShowTutorial,
   setSpellCheckerEnabled,
 } from './features/settings/settings-slice';
 import { tasksLoaded } from './features/tasks/tasks-slice';
@@ -23,20 +22,11 @@ const TaskEditor: React.FC = () => {
 
   const initialized = useAppSelector((state) => state.tasks.initialized);
   const groupedTasks = useAppSelector((state) => state.tasks.storage);
-  const canEdit = useAppSelector((state) => state.settings.canEdit);
 
   const dispatch = useAppDispatch();
 
-  function showTutorial(): boolean {
-    return true;
-    // return (
-    //   editorKit.current!.getComponentDataValueForKey('showTutorial') === undefined
-    // );
-  }
-
   function isRunningOnMobile(): boolean {
-    return false;
-    // return editorKit.current!.isRunningInMobileApplication();
+    return editorKit.current!.isRunningInMobileApplication();
   }
 
   const configureEditorKit = useCallback(() => {
@@ -54,7 +44,6 @@ const TaskEditor: React.FC = () => {
         dispatch(setCanEdit(editable));
         dispatch(setSpellCheckerEnabled(spellCheckEnabled));
         dispatch(setIsRunningOnMobile(isRunningOnMobile()));
-        dispatch(setShowTutorial(showTutorial()));
       },
       onNoteLockToggle: (locked: boolean) => {
         dispatch(setCanEdit(!locked));
@@ -77,16 +66,18 @@ const TaskEditor: React.FC = () => {
       return;
     }
 
+    const canEdit = store.getState().settings.canEdit;
+    if (!canEdit) {
+      return;
+    }
+
     editorKit.current!.saveItemWithPresave(currentNote, () => {
+      const groupedTasks = store.getState().tasks.storage;
       currentNote.content.text = JSON.stringify(groupedTasks);
       currentNote.content.preview_html = '<span>WIP</span>';
       currentNote.content.preview_plain = 'WIP';
     });
-
-    if (showTutorial()) {
-      // editorKit.current!.setComponentDataValueForKey('showTutorial', false);
-    }
-  }, [initialized, groupedTasks]);
+  }, [initialized]);
 
   useEffect(() => saveNote);
 
@@ -104,7 +95,7 @@ const TaskEditor: React.FC = () => {
         );
       })}
 
-      {canEdit && <CreateGroup />}
+      <CreateGroup />
     </>
   );
 };
