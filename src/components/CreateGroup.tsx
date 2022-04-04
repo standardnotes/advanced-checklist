@@ -1,6 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useState } from 'react';
 
-import { useAppDispatch } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { tasksGroupAdded } from './../features/tasks/tasks-slice';
 
 const CreateGroup: React.FC<{}> = () => {
@@ -8,6 +8,8 @@ const CreateGroup: React.FC<{}> = () => {
 
   const [group, setGroup] = useState('');
   const [mode, setMode] = useState<'read' | 'insert'>('read');
+
+  const canEdit = useAppSelector((state) => state.settings.canEdit);
 
   function toggleMode() {
     setMode(mode === 'read' ? 'insert' : 'read');
@@ -27,6 +29,10 @@ const CreateGroup: React.FC<{}> = () => {
       setMode('read');
       setGroup('');
     }
+  }
+
+  if (!canEdit) {
+    return <></>;
   }
 
   return (
