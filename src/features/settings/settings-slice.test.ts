@@ -13,7 +13,6 @@ it('should return the initial state', () => {
   ).toEqual({
     canEdit: true,
     isRunningOnMobile: false,
-    showTutorial: true,
     spellCheckerEnabled: true,
   });
 });
