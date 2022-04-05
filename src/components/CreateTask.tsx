@@ -48,7 +48,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
   }
 
   return (
-    <div className="create-task-container">
+    <div className="create-task-container" data-testid="create-task">
       <input
         className="create-task-input"
         dir="auto"

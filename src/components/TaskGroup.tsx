@@ -15,8 +15,10 @@ const TaskGroup: React.FC<TaskGroupProps> = ({ group, tasks, isLast }) => {
   return (
     <div className="task-group-container">
       <div className="task-group">
-        <h1 className="group-name">{group}</h1>
-        <span className="stats">
+        <h1 className="group-name" data-testid="task-group-name">
+          {group}
+        </h1>
+        <span className="stats" data-testid="task-group-stats">
           {completedTasks}/{totalTasks}
         </span>
       </div>
@@ -24,7 +26,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({ group, tasks, isLast }) => {
       <CreateTask group={group} />
       <TaskList group={group} tasks={tasks} />
 
-      {!isLast && <hr />}
+      {!isLast && <hr data-testid="task-group-separator" />}
     </div>
   );
 };

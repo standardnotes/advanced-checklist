@@ -39,23 +39,25 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, group }) => {
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <DroppableContainer
-        droppableId="open-tasks"
-        title="Open tasks"
-        tasks={openTasks}
-        group={group}
-      />
+    <div data-testid="task-list">
+      <DragDropContext onDragEnd={onDragEnd}>
+        <DroppableContainer
+          droppableId="open-tasks"
+          title="Open tasks"
+          tasks={openTasks}
+          group={group}
+        />
 
-      <DroppableContainer
-        droppableId="completed-tasks"
-        title="Completed tasks"
-        tasks={completedTasks}
-        group={group}
-      >
-        {completedTasks.length > 0 && <CompletedTasksActions group={group} />}
-      </DroppableContainer>
-    </DragDropContext>
+        <DroppableContainer
+          droppableId="completed-tasks"
+          title="Completed tasks"
+          tasks={completedTasks}
+          group={group}
+        >
+          {completedTasks.length > 0 && <CompletedTasksActions group={group} />}
+        </DroppableContainer>
+      </DragDropContext>
+    </div>
   );
 };
 
