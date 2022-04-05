@@ -35,6 +35,12 @@ it('renders the number of completed tasks and total tasks', () => {
   );
 });
 
+it('renders the circular progress bar', () => {
+  testRender(<TaskGroup group={group} tasks={tasks} isLast={false} />);
+
+  expect(screen.getByTestId('circular-progress-bar')).toBeInTheDocument();
+});
+
 it('renders a thematic break element', () => {
   testRender(<TaskGroup group={group} tasks={tasks} isLast={false} />);
 

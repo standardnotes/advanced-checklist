@@ -245,9 +245,18 @@ hr {
 
 .task-group-container {
   .task-group {
+    align-items: center;
+    display: flex;
+
     .group-name {
-      margin-right: 10px;
       display: inline;
+      margin-right: 10px;
+    }
+
+    .stats {
+      color: #72767e;
+      font-size: 14px;
+      margin: 0 10px;
     }
   }
 }
