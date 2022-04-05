@@ -3,15 +3,11 @@ import React, { useEffect, useState } from 'react';
 type CircularProgressBarProps = {
   size: number;
   percentage: number;
-  bgColor?: string;
-  color?: string;
 };
 
 const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   size,
   percentage,
-  color = '#fde',
-  bgColor = '#ccc',
 }) => {
   const [progress, setProgress] = useState(0);
 
@@ -27,14 +23,15 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
 
   return (
     <svg
-      width={size}
+      className="circular-progress-bar"
       height={size}
       viewBox={viewBox}
+      width={size}
       data-testid="circular-progress-bar"
     >
       <circle
         fill="none"
-        stroke={bgColor}
+        className="background"
         cx={size / 2}
         cy={size / 2}
         r={radius}
@@ -42,7 +39,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
       />
       <circle
         fill="none"
-        stroke={color}
+        className="stroke"
         cx={size / 2}
         cy={size / 2}
         r={radius}

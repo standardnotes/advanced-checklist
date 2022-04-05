@@ -21,11 +21,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({ group, tasks, isLast }) => {
         <h1 className="group-name" data-testid="task-group-name">
           {group}
         </h1>
-        <CircularProgressBar
-          size={22}
-          percentage={percentageCompleted}
-          color="#086DD6"
-        />
+        <CircularProgressBar size={22} percentage={percentageCompleted} />
         <span className="stats" data-testid="task-group-stats">
           {completedTasks}/{totalTasks}
         </span>

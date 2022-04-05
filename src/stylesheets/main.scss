@@ -277,3 +277,13 @@ hr {
     font-size: var(--sn-stylekit-font-size-h1);
   }
 }
+
+.circular-progress-bar {
+  .background {
+    stroke: var(--sn-stylekit-contrast-background-color);
+  }
+
+  .stroke {
+    stroke: var(--sn-stylekit-info-color);
+  }
+}
