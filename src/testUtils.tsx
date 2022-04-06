@@ -1,7 +1,7 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { render as rtlRender, RenderOptions } from '@testing-library/react';
-import configureStore from 'redux-mock-store';
+import React from 'react'
+import { Provider } from 'react-redux'
+import { render as rtlRender, RenderOptions } from '@testing-library/react'
+import configureStore from 'redux-mock-store'
 
 const mockStore = configureStore()({
   tasks: {
@@ -12,20 +12,17 @@ const mockStore = configureStore()({
     isRunningOnMobile: false,
     spellCheckerEnabled: true,
   },
-});
+})
 
 function testRender(ui: React.ReactElement, renderOptions?: RenderOptions) {
   function Wrapper({
     children,
   }: {
-    children: React.ReactElement<
-      any,
-      string | React.JSXElementConstructor<any>
-    >;
+    children: React.ReactElement<any, string | React.JSXElementConstructor<any>>
   }) {
-    return <Provider store={mockStore}>{children}</Provider>;
+    return <Provider store={mockStore}>{children}</Provider>
   }
-  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
+  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
 }
 
-export { testRender };
+export { testRender }

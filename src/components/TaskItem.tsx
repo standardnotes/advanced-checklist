@@ -4,78 +4,78 @@ import {
   LegacyRef,
   useEffect,
   useState,
-} from 'react';
+} from 'react'
 
 import {
   taskDeleted,
   TaskPayload,
   taskToggled,
-} from '../features/tasks/tasks-slice';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+} from '../features/tasks/tasks-slice'
+import { useAppDispatch, useAppSelector } from '../app/hooks'
 
 export type TaskItemProps = {
-  task: TaskPayload;
-  group: string;
-  innerRef: LegacyRef<HTMLDivElement>;
-};
+  task: TaskPayload
+  group: string
+  innerRef: LegacyRef<HTMLDivElement>
+}
 
 const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
-  let textAreaElement: HTMLTextAreaElement | null = null;
+  let textAreaElement: HTMLTextAreaElement | null = null
 
-  const canEdit = useAppSelector((state) => state.settings.canEdit);
+  const canEdit = useAppSelector((state) => state.settings.canEdit)
   const spellCheckEnabled = useAppSelector(
     (state) => state.settings.spellCheckerEnabled
-  );
+  )
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const [task, setTask] = useState(props.task);
+  const [task, setTask] = useState(props.task)
 
   function resizeTextArea(textarea: HTMLTextAreaElement | null): void {
     if (!textarea) {
-      return;
+      return
     }
 
     /**
      * Set to 1px first to reset scroll height in case it shrunk.
      */
-    textarea.style.height = '1px';
-    textarea.style.height = textarea.scrollHeight + 'px';
+    textarea.style.height = '1px'
+    textarea.style.height = textarea.scrollHeight + 'px'
   }
 
   useEffect(() => {
-    resizeTextArea(textAreaElement);
-  });
+    resizeTextArea(textAreaElement)
+  })
 
   function toggleCheckboxChange() {
-    dispatch(taskToggled({ id: task.id, group }));
+    dispatch(taskToggled({ id: task.id, group }))
   }
 
   function onTextChange(event: ChangeEvent<HTMLTextAreaElement>) {
-    const description = event.target.value;
+    const description = event.target.value
     setTask({
       ...task,
       description,
-    });
+    })
   }
 
   function onKeyUp(event: KeyboardEvent<HTMLTextAreaElement>) {
     // Delete task if empty and enter pressed
     if (event.key === 'Enter') {
       if (task.description.length === 0) {
-        dispatch(taskDeleted({ id: task.id, group }));
-        event.preventDefault();
+        dispatch(taskDeleted({ id: task.id, group }))
+        event.preventDefault()
       }
     }
 
-    const element = event.target as HTMLTextAreaElement;
-    resizeTextArea(element);
+    const element = event.target as HTMLTextAreaElement
+    resizeTextArea(element)
   }
 
   function onKeyPress(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === 'Enter') {
       // We want to disable any action on enter.
-      event.preventDefault();
+      event.preventDefault()
     }
   }
 
@@ -108,7 +108,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
         value={task.description}
       />
     </div>
-  );
-};
+  )
+}
 
-export default TaskItem;
+export default TaskItem

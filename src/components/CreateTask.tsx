@@ -1,49 +1,49 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { taskAdded } from '../features/tasks/tasks-slice';
+import { useAppDispatch, useAppSelector } from '../app/hooks'
+import { taskAdded } from '../features/tasks/tasks-slice'
 
 type CreateTaskProps = {
-  group: string;
-};
+  group: string
+}
 
 const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
-  let inputElement: HTMLInputElement | null = null;
+  let inputElement: HTMLInputElement | null = null
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   const isRunningOnMobile = useAppSelector(
     (state) => state.settings.isRunningOnMobile
-  );
+  )
   const spellCheckerEnabled = useAppSelector(
     (state) => state.settings.spellCheckerEnabled
-  );
+  )
 
-  const [taskDraft, setTaskDraft] = useState('');
+  const [taskDraft, setTaskDraft] = useState('')
 
   useEffect(() => {
     if (isRunningOnMobile) {
-      inputElement!.focus();
+      inputElement!.focus()
     }
-  });
+  })
 
   function onTextChange(event: ChangeEvent<HTMLInputElement>) {
     /**
      * Save this as the current 'un-saved' task if while we're not
      * officially saving it as an actual task yet.
      */
-    const rawString = event.target.value;
-    setTaskDraft(rawString);
+    const rawString = event.target.value
+    setTaskDraft(rawString)
   }
 
   function handleKeyPress(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
-      const rawString = (event.target as HTMLInputElement).value;
+      const rawString = (event.target as HTMLInputElement).value
       dispatch(
         taskAdded({ task: { id: uuidv4(), description: rawString }, group })
-      );
-      setTaskDraft('');
+      )
+      setTaskDraft('')
     }
   }
 
@@ -61,7 +61,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
         value={taskDraft}
       />
     </div>
-  );
-};
+  )
+}
 
-export default CreateTask;
+export default CreateTask

@@ -1,17 +1,17 @@
-import { useAppDispatch } from '../app/hooks';
+import { useAppDispatch } from '../app/hooks'
 import {
   openAllCompleted,
   deleteAllCompleted,
-} from '../features/tasks/tasks-slice';
+} from '../features/tasks/tasks-slice'
 
 type CompletedTasksActionsProps = {
-  group: string;
-};
+  group: string
+}
 
 const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
   group,
 }) => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   function handleReOpenCompleted() {
     if (
@@ -19,7 +19,7 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
         `Are you sure you want to reopen completed tasks on the '${group}' group?`
       )
     ) {
-      dispatch(openAllCompleted({ group }));
+      dispatch(openAllCompleted({ group }))
     }
   }
 
@@ -29,7 +29,7 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
         `Are you sure you want to delete completed tasks on the '${group}' group?`
       )
     ) {
-      dispatch(deleteAllCompleted({ group }));
+      dispatch(deleteAllCompleted({ group }))
     }
   }
 
@@ -50,7 +50,7 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
         Delete Completed
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default CompletedTasksActions;
+export default CompletedTasksActions

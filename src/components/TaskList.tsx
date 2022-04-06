@@ -1,31 +1,31 @@
-import React from 'react';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import React from 'react'
+import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 
-import { useAppDispatch } from '../app/hooks';
-import DroppableContainer from '../components/DroppableContainer';
-import CompletedTasksActions from './CompletedTasksActions';
-import { TaskPayload, tasksReordered } from '../features/tasks/tasks-slice';
+import { useAppDispatch } from '../app/hooks'
+import DroppableContainer from '../components/DroppableContainer'
+import CompletedTasksActions from './CompletedTasksActions'
+import { TaskPayload, tasksReordered } from '../features/tasks/tasks-slice'
 
 type TaskListProps = {
-  group: string;
-  tasks: TaskPayload[];
-};
+  group: string
+  tasks: TaskPayload[]
+}
 
 const TaskList: React.FC<TaskListProps> = ({ tasks, group }) => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const openTasks = tasks.filter((task) => !task.completed);
-  const completedTasks = tasks.filter((task) => task.completed);
+  const openTasks = tasks.filter((task) => !task.completed)
+  const completedTasks = tasks.filter((task) => task.completed)
 
   function onDragEnd(result: DropResult) {
-    const droppedOutsideList = !result.destination;
+    const droppedOutsideList = !result.destination
     if (droppedOutsideList) {
-      return;
+      return
     }
 
-    const { source, destination } = result;
+    const { source, destination } = result
     if (!destination) {
-      return;
+      return
     }
 
     dispatch(
@@ -35,7 +35,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, group }) => {
         withTaskIndex: destination.index,
         isSameSection: source.droppableId === destination.droppableId,
       })
-    );
+    )
   }
 
   return (
@@ -58,7 +58,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, group }) => {
         </DroppableContainer>
       </DragDropContext>
     </div>
-  );
-};
+  )
+}
 
-export default TaskList;
+export default TaskList

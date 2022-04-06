@@ -1,4 +1,4 @@
-import { GroupedTaskPayload } from './features/tasks/tasks-slice';
+import { GroupedTaskPayload } from './features/tasks/tasks-slice'
 
 const personalTasks = [
   {
@@ -19,7 +19,7 @@ const personalTasks = [
     description: 'Do the dishes',
     completed: true,
   },
-];
+]
 
 const workTasks = [
   {
@@ -31,7 +31,7 @@ const workTasks = [
     description: 'Test #2',
     completed: true,
   },
-];
+]
 
 const standardNotesTasks = [
   {
@@ -43,13 +43,13 @@ const standardNotesTasks = [
     description: 'Test #4',
     completed: true,
   },
-];
+]
 
 const mockData: GroupedTaskPayload = {
   Personal: personalTasks,
   Work: workTasks,
   'Standard Notes': standardNotesTasks,
   Test: [],
-};
+}
 
-export default mockData;
+export default mockData

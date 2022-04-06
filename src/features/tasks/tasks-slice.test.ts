@@ -8,19 +8,19 @@ import reducer, {
   taskToggled,
   tasksGroupAdded,
   tasksReordered,
-} from './tasks-slice';
-import type { TasksState, GroupedTaskPayload } from './tasks-slice';
+} from './tasks-slice'
+import type { TasksState, GroupedTaskPayload } from './tasks-slice'
 
 it('should return the initial state', () => {
   return expect(
     reducer(undefined, {
       type: undefined,
     })
-  ).toEqual({ storage: {} });
-});
+  ).toEqual({ storage: {} })
+})
 
 it('should handle a task being added', () => {
-  const previousState: TasksState = { storage: {} };
+  const previousState: TasksState = { storage: {} }
 
   expect(
     reducer(
@@ -40,11 +40,11 @@ it('should handle a task being added', () => {
         },
       ],
     },
-  });
-});
+  })
+})
 
 it('should set completed to false when adding a new task', () => {
-  const previousState: TasksState = { storage: {} };
+  const previousState: TasksState = { storage: {} }
 
   expect(
     reducer(
@@ -64,8 +64,8 @@ it('should set completed to false when adding a new task', () => {
         },
       ],
     },
-  });
-});
+  })
+})
 
 it('should handle a task being added to the existing tasks store', () => {
   const previousState: TasksState = {
@@ -78,7 +78,7 @@ it('should handle a task being added to the existing tasks store', () => {
         },
       ],
     },
-  };
+  }
 
   expect(
     reducer(
@@ -103,8 +103,8 @@ it('should handle a task being added to the existing tasks store', () => {
         },
       ],
     },
-  });
-});
+  })
+})
 
 it('should handle an existing task being modified', () => {
   const previousState: TasksState = {
@@ -117,7 +117,7 @@ it('should handle an existing task being modified', () => {
         },
       ],
     },
-  };
+  }
 
   expect(
     reducer(
@@ -137,8 +137,8 @@ it('should handle an existing task being modified', () => {
         },
       ],
     },
-  });
-});
+  })
+})
 
 it('should not modify tasks if an invalid id is provided', () => {
   const previousState: TasksState = {
@@ -151,7 +151,7 @@ it('should not modify tasks if an invalid id is provided', () => {
         },
       ],
     },
-  };
+  }
 
   expect(
     reducer(
@@ -171,8 +171,8 @@ it('should not modify tasks if an invalid id is provided', () => {
         },
       ],
     },
-  });
-});
+  })
+})
 
 it('should keep completed field as-is, if task is modified', () => {
   const previousState: TasksState = {
@@ -185,7 +185,7 @@ it('should keep completed field as-is, if task is modified', () => {
         },
       ],
     },
-  };
+  }
 
   expect(
     reducer(
@@ -209,8 +209,8 @@ it('should keep completed field as-is, if task is modified', () => {
         },
       ],
     },
-  });
-});
+  })
+})
 
 it('should handle an existing task being toggled', () => {
   const previousState: TasksState = {
@@ -223,7 +223,7 @@ it('should handle an existing task being toggled', () => {
         },
       ],
     },
-  };
+  }
 
   expect(
     reducer(previousState, taskToggled({ id: 'some-id', group: 'Test' }))
@@ -237,8 +237,8 @@ it('should handle an existing task being toggled', () => {
         },
       ],
     },
-  });
-});
+  })
+})
 
 it('should handle an existing task being deleted', () => {
   const previousState: TasksState = {
@@ -256,7 +256,7 @@ it('should handle an existing task being deleted', () => {
         },
       ],
     },
-  };
+  }
 
   expect(
     reducer(previousState, taskDeleted({ id: 'some-id', group: 'Test' }))
@@ -270,8 +270,8 @@ it('should handle an existing task being deleted', () => {
         },
       ],
     },
-  });
-});
+  })
+})
 
 it('should handle opening all tasks that are marked as completed', () => {
   const previousState: TasksState = {
@@ -294,7 +294,7 @@ it('should handle opening all tasks that are marked as completed', () => {
         },
       ],
     },
-  };
+  }
 
   expect(reducer(previousState, openAllCompleted({ group: 'Test' }))).toEqual({
     storage: {
@@ -316,8 +316,8 @@ it('should handle opening all tasks that are marked as completed', () => {
         },
       ],
     },
-  });
-});
+  })
+})
 
 it('should handle clear all completed tasks', () => {
   const previousState: TasksState = {
@@ -340,7 +340,7 @@ it('should handle clear all completed tasks', () => {
         },
       ],
     },
-  };
+  }
 
   expect(reducer(previousState, deleteAllCompleted({ group: 'Test' }))).toEqual(
     {
@@ -354,8 +354,8 @@ it('should handle clear all completed tasks', () => {
         ],
       },
     }
-  );
-});
+  )
+})
 
 it('should handle loading tasks into the tasks store, if an invalid payload is provided', () => {
   const previousState: TasksState = {
@@ -368,19 +368,19 @@ it('should handle loading tasks into the tasks store, if an invalid payload is p
         },
       ],
     },
-  };
+  }
 
-  expect(reducer(previousState, tasksLoaded(''))).toEqual(previousState);
-  expect(reducer(previousState, tasksLoaded('null'))).toEqual(previousState);
+  expect(reducer(previousState, tasksLoaded(''))).toEqual(previousState)
+  expect(reducer(previousState, tasksLoaded('null'))).toEqual(previousState)
   expect(reducer(previousState, tasksLoaded('undefined'))).toEqual(
     previousState
-  );
-});
+  )
+})
 
 it('should handle loading tasks into the tasks store, with a valid payload', () => {
   const previousState: TasksState = {
     storage: {},
-  };
+  }
 
   const tasksPayload: GroupedTaskPayload = {
     Test: [
@@ -400,9 +400,9 @@ it('should handle loading tasks into the tasks store, with a valid payload', () 
         completed: true,
       },
     ],
-  };
+  }
 
-  const serializedPayload = JSON.stringify(tasksPayload);
+  const serializedPayload = JSON.stringify(tasksPayload)
   expect(reducer(previousState, tasksLoaded(serializedPayload))).toEqual({
     initialized: true,
     storage: {
@@ -424,18 +424,18 @@ it('should handle loading tasks into the tasks store, with a valid payload', () 
         },
       ],
     },
-  });
-});
+  })
+})
 
 it('should handle adding a new task group', () => {
-  const previousState: TasksState = { storage: {} };
+  const previousState: TasksState = { storage: {} }
 
   expect(reducer(previousState, tasksGroupAdded('New group'))).toEqual({
     storage: {
       'New group': [],
     },
-  });
-});
+  })
+})
 
 it('should handle adding an existing task group', () => {
   const previousState: TasksState = {
@@ -448,12 +448,12 @@ it('should handle adding an existing task group', () => {
         },
       ],
     },
-  };
+  }
 
   expect(reducer(previousState, tasksGroupAdded('Existing group'))).toEqual(
     previousState
-  );
-});
+  )
+})
 
 it('should handle reordering tasks from the same section', () => {
   const previousState: TasksState = {
@@ -476,7 +476,7 @@ it('should handle reordering tasks from the same section', () => {
         },
       ],
     },
-  };
+  }
 
   expect(
     reducer(
@@ -508,8 +508,8 @@ it('should handle reordering tasks from the same section', () => {
         },
       ],
     },
-  });
-});
+  })
+})
 
 it('should handle reordering tasks from different sections', () => {
   const previousState: TasksState = {
@@ -532,7 +532,7 @@ it('should handle reordering tasks from different sections', () => {
         },
       ],
     },
-  };
+  }
 
   expect(
     reducer(
@@ -564,5 +564,5 @@ it('should handle reordering tasks from different sections', () => {
         },
       ],
     },
-  });
-});
+  })
+})

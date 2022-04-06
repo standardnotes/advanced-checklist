@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
 type CircularProgressBarProps = {
-  size: number;
-  percentage: number;
-};
+  size: number
+  percentage: number
+}
 
 const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   size,
   percentage,
 }) => {
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
-    setProgress(percentage);
-  }, [percentage]);
+    setProgress(percentage)
+  }, [percentage])
 
-  const viewBox = `0 0 ${size} ${size}`;
-  const strokeWidth = size * (0.1 / 100) * 100 + 1;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * Math.PI * 2;
-  const dash = (progress * circumference) / 100;
+  const viewBox = `0 0 ${size} ${size}`
+  const strokeWidth = size * (0.1 / 100) * 100 + 1
+  const radius = (size - strokeWidth) / 2
+  const circumference = radius * Math.PI * 2
+  const dash = (progress * circumference) / 100
 
   return (
     <svg
@@ -50,7 +50,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
         style={{ transition: 'all 0.5s' }}
       />
     </svg>
-  );
-};
+  )
+}
 
-export default CircularProgressBar;
+export default CircularProgressBar
