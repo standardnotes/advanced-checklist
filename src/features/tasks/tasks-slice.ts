@@ -96,8 +96,6 @@ const tasksSlice = createSlice({
       const { group, swapTaskIndex, withTaskIndex, isSameSection } =
         action.payload
       if (!isSameSection) {
-        const task = state.storage[group][swapTaskIndex]
-        task.completed = !task.completed
         return
       }
       state.storage[group] = arrayMoveImmutable(

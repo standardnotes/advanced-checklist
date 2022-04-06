@@ -550,7 +550,7 @@ it('should handle reordering tasks from different sections', () => {
         {
           id: 'some-id',
           description: 'A simple task',
-          completed: false,
+          completed: true,
         },
         {
           id: 'another-id',
