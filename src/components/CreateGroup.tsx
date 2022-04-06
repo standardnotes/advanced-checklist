@@ -1,18 +1,23 @@
-import { ChangeEvent, KeyboardEvent, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
 
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { tasksGroupAdded } from './../features/tasks/tasks-slice'
 
-const CreateGroup: React.FC<{}> = () => {
+const CreateGroup: React.FC = () => {
+  const inputElement = useRef<HTMLInputElement | null>()
+
   const dispatch = useAppDispatch()
 
   const [group, setGroup] = useState('')
-  const [mode, setMode] = useState<'read' | 'insert'>('read')
+  const [isCreateMode, setIsCreateMode] = useState(false)
 
   const canEdit = useAppSelector((state) => state.settings.canEdit)
+  const spellCheckerEnabled = useAppSelector(
+    (state) => state.settings.spellCheckerEnabled
+  )
 
   function toggleMode() {
-    setMode(mode === 'read' ? 'insert' : 'read')
+    setIsCreateMode(!isCreateMode)
   }
 
   function onTextChange(event: ChangeEvent<HTMLInputElement>) {
@@ -26,7 +31,7 @@ const CreateGroup: React.FC<{}> = () => {
         dispatch(tasksGroupAdded(rawString))
       }
 
-      setMode('read')
+      setIsCreateMode(false)
       setGroup('')
     }
   }
@@ -37,12 +42,12 @@ const CreateGroup: React.FC<{}> = () => {
 
   return (
     <div className="create-group-container">
-      {mode === 'read' && (
+      {!isCreateMode && (
         <button className="create-group-button" onClick={toggleMode}>
           +
         </button>
       )}
-      {mode === 'insert' && (
+      {isCreateMode && (
         <input
           className="create-group-input"
           type="text"
@@ -50,6 +55,9 @@ const CreateGroup: React.FC<{}> = () => {
           onChange={onTextChange}
           onKeyPress={handleKeyPress}
           placeholder="Name your task group and press enter"
+          ref={(ref) => (inputElement.current = ref)}
+          spellCheck={spellCheckerEnabled}
+          autoFocus
         />
       )}
     </div>

@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useAppDispatch, useAppSelector } from '../app/hooks'
@@ -9,7 +9,7 @@ type CreateTaskProps = {
 }
 
 const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
-  let inputElement: HTMLInputElement | null = null
+  const inputElement = useRef<HTMLInputElement | null>()
 
   const dispatch = useAppDispatch()
 
@@ -24,7 +24,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
 
   useEffect(() => {
     if (isRunningOnMobile) {
-      inputElement!.focus()
+      inputElement.current!.focus()
     }
   })
 
@@ -55,7 +55,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
         onChange={onTextChange}
         onKeyPress={handleKeyPress}
         placeholder={'Type in your task, then press enter'}
-        ref={(ref) => (inputElement = ref)}
+        ref={(ref) => (inputElement.current = ref)}
         spellCheck={spellCheckerEnabled}
         type="text"
         value={taskDraft}
