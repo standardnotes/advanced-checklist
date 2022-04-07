@@ -5,7 +5,8 @@ const WideButton = styled.button`
   border-radius: 4px;
   border: none;
   color: var(--sn-stylekit-contrast-foreground-color);
-  font-size: var(--sn-stylekit-font-size-h1);
+  font-size: 1.8em;
+  font-weight: 500;
   height: 32px;
   width: 100%;
 `
