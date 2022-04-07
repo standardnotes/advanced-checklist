@@ -110,6 +110,7 @@
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-dom": "^17.0.13",
     "@types/redux-mock-store": "^1.0.3",
+    "@types/styled-components": "^5.1.24",
     "@types/uuid": "^8.3.4",
     "gh-pages": "^3.2.3",
     "husky": "^7.0.0",
@@ -124,6 +125,7 @@
     "redux": "^4.1.2",
     "redux-mock-store": "^1.5.4",
     "source-map-explorer": "^2.5.2",
+    "styled-components": "^5.3.5",
     "ts-jest": "^27.1.4",
     "typescript": "^4.6.2",
     "uuid": "^8.3.2"

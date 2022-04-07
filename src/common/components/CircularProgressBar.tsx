@@ -1,4 +1,16 @@
 import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+
+const ProgressBarBackground = styled.circle`
+  fill: none;
+  stroke: var(--sn-stylekit-contrast-background-color);
+`
+
+const ProgressBarStroke = styled.circle`
+  fill: none;
+  stroke: var(--sn-stylekit-info-color);
+  transition: all 0.5s;
+`
 
 type CircularProgressBarProps = {
   size: number
@@ -29,17 +41,13 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
       width={size}
       data-testid="circular-progress-bar"
     >
-      <circle
-        fill="none"
-        className="background"
+      <ProgressBarBackground
         cx={size / 2}
         cy={size / 2}
         r={radius}
         strokeWidth={strokeWidth}
       />
-      <circle
-        fill="none"
-        className="stroke"
+      <ProgressBarStroke
         cx={size / 2}
         cy={size / 2}
         r={radius}
