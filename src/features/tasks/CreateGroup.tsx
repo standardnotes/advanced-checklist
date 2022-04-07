@@ -1,19 +1,9 @@
 import { ChangeEvent, createRef, KeyboardEvent, useState } from 'react'
-import styled from 'styled-components'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { tasksGroupAdded } from './tasks-slice'
 import BigTextInput from '../../common/components/BigTextInput'
-
-const AddGroupButton = styled.button`
-  background-color: var(--sn-stylekit-contrast-background-color);
-  border-radius: 4px;
-  border: none;
-  color: var(--sn-stylekit-contrast-foreground-color);
-  font-size: var(--sn-stylekit-font-size-h1);
-  height: 32px;
-  width: 100%;
-`
+import WideButton from '../../common/components/WideButton'
 
 const CreateGroup: React.FC = () => {
   const inputRef = createRef<HTMLInputElement>()
@@ -54,7 +44,7 @@ const CreateGroup: React.FC = () => {
 
   return (
     <>
-      {!isCreateMode && <AddGroupButton onClick={toggleMode}>+</AddGroupButton>}
+      {!isCreateMode && <WideButton onClick={toggleMode}>+</WideButton>}
       {isCreateMode && (
         <BigTextInput
           value={group}

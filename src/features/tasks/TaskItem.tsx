@@ -1,29 +1,54 @@
 import {
   ChangeEvent,
+  createRef,
   KeyboardEvent,
-  LegacyRef,
   useEffect,
   useState,
 } from 'react'
+import styled from 'styled-components'
 
-import { taskDeleted, TaskPayload, taskToggled } from './tasks-slice'
+import {
+  taskDeleted,
+  taskModified,
+  TaskPayload,
+  taskToggled,
+} from './tasks-slice'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import CheckBoxInput from '../../common/components/CheckBoxInput'
+import TextAreaInput from '../../common/components/TextAreaInput'
+
+type ItemContainerProps = {
+  completed?: boolean
+}
+
+const Container = styled.div<ItemContainerProps>`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 8px;
+
+  ${({ completed }) =>
+    completed &&
+    `
+    text-decoration: line-through;
+    opacity: 0.6;
+  `}
+`
 
 export type TaskItemProps = {
   task: TaskPayload
   group: string
-  innerRef: LegacyRef<HTMLDivElement>
+  innerRef: (element?: HTMLElement | null | undefined) => any
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
-  let textAreaElement: HTMLTextAreaElement | null = null
+  const textAreaRef = createRef<HTMLTextAreaElement>()
+
+  const dispatch = useAppDispatch()
 
   const canEdit = useAppSelector((state) => state.settings.canEdit)
   const spellCheckEnabled = useAppSelector(
     (state) => state.settings.spellCheckerEnabled
   )
-
-  const dispatch = useAppDispatch()
 
   const [task, setTask] = useState(props.task)
 
@@ -40,7 +65,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
   }
 
   useEffect(() => {
-    resizeTextArea(textAreaElement)
+    resizeTextArea(textAreaRef.current)
   })
 
   function toggleCheckboxChange() {
@@ -75,35 +100,34 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
     }
   }
 
+  /**
+   * Save the task after the user has stopped typing.
+   */
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      dispatch(taskModified({ task, group }))
+    }, 500)
+
+    return () => clearTimeout(timeoutId)
+  }, [dispatch, task, group])
+
   return (
-    <div
-      className={`task ${task.completed ? 'completed' : ''}`}
-      ref={innerRef}
-      {...props}
-    >
-      <label className="checkbox-container">
-        <input
-          checked={task.completed}
-          className="checkbox"
-          disabled={!canEdit}
-          onChange={toggleCheckboxChange}
-          spellCheck={spellCheckEnabled}
-          type="checkbox"
-        />
-        <span className="checkmark" />
-      </label>
-      <textarea
+    <Container completed={task.completed} ref={innerRef} {...props}>
+      <CheckBoxInput
+        checked={task.completed}
+        disabled={!canEdit}
+        onChange={toggleCheckboxChange}
+      />
+      <TextAreaInput
         disabled={!canEdit || !!task.completed}
-        className="task-input-textarea"
-        dir="auto"
         onChange={onTextChange}
         onKeyPress={onKeyPress}
         onKeyUp={onKeyUp}
-        ref={(textarea) => (textAreaElement = textarea)}
+        ref={textAreaRef}
         spellCheck={spellCheckEnabled}
         value={task.description}
       />
-    </div>
+    </Container>
   )
 }
 

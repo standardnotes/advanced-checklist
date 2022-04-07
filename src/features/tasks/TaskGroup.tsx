@@ -1,22 +1,29 @@
-import { TaskPayload } from './tasks-slice'
-import CreateTask from './CreateTask'
-import TaskList from './TaskList'
+import styled from 'styled-components'
+
 import { getPercentage } from '../../common/utils'
+import { TaskPayload } from './tasks-slice'
 import CircularProgressBar from '../../common/components/CircularProgressBar'
-import MainTitle from '../../common/components/MainTitle'
+import CreateTask from './CreateTask'
 import GenericInlineText from '../../common/components/GenericInlineText'
+import MainTitle from '../../common/components/MainTitle'
+import TaskList from './TaskList'
 import ThematicBreak from '../../common/components/ThematicBreak'
 
-const TaskGroupName: React.FC = ({ children }) => {
+const GroupHeader = styled.div`
+  align-items: center;
+  display: flex;
+`
+
+const GroupName: React.FC = ({ children }) => {
   return <MainTitle data-testid="task-group-name">{children}</MainTitle>
 }
 
-type TaskGroupStatsProps = {
+type GroupStatsProps = {
   completedTasks: number
   totalTasks: number
 }
 
-const TaskGroupStats: React.FC<TaskGroupStatsProps> = ({
+const GroupStats: React.FC<GroupStatsProps> = ({
   completedTasks,
   totalTasks,
 }) => {
@@ -27,7 +34,7 @@ const TaskGroupStats: React.FC<TaskGroupStatsProps> = ({
   )
 }
 
-const TaskGroupSeparator: React.FC = () => {
+const GroupSeparator: React.FC = () => {
   return <ThematicBreak data-testid="task-group-separator" />
 }
 
@@ -44,19 +51,16 @@ const TaskGroup: React.FC<TaskGroupProps> = ({ group, tasks, isLast }) => {
 
   return (
     <>
-      <div className="task-group">
-        <TaskGroupName>{group}</TaskGroupName>
+      <GroupHeader>
+        <GroupName>{group}</GroupName>
         <CircularProgressBar size={22} percentage={percentageCompleted} />
-        <TaskGroupStats
-          completedTasks={completedTasks}
-          totalTasks={totalTasks}
-        />
-      </div>
+        <GroupStats completedTasks={completedTasks} totalTasks={totalTasks} />
+      </GroupHeader>
 
       <CreateTask group={group} />
       <TaskList group={group} tasks={tasks} />
 
-      {!isLast && <TaskGroupSeparator />}
+      {!isLast && <GroupSeparator />}
     </>
   )
 }
