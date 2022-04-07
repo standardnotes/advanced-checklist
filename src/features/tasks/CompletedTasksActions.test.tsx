@@ -2,9 +2,10 @@ import { fireEvent, screen } from '@testing-library/react'
 
 import { testRender } from '../../testUtils'
 import CompletedTasksActions from './CompletedTasksActions'
+import { deleteAllCompleted, openAllCompleted } from './tasks-slice'
 
-beforeAll(() => {
-  global.confirm = jest.fn().mockImplementation((message) => true)
+beforeEach(() => {
+  window.confirm = jest.fn().mockReturnValue(true)
 })
 
 const group = 'default group'
@@ -21,7 +22,7 @@ it('renders two buttons', () => {
 })
 
 it('should dispatch openAllCompleted action', () => {
-  testRender(<CompletedTasksActions group={group} />)
+  const { mockStore } = testRender(<CompletedTasksActions group={group} />)
 
   const reOpenCompletedButton = screen.getByTestId('reopen-completed-button')
   fireEvent.click(reOpenCompletedButton)
@@ -29,11 +30,14 @@ it('should dispatch openAllCompleted action', () => {
   expect(window.confirm).toBeCalledWith(
     `Are you sure you want to reopen completed tasks on the '${group}' group?`
   )
-  // TODO: test that dispatch is called
+
+  const dispatchedActions = mockStore.getActions()
+  expect(dispatchedActions).toHaveLength(1)
+  expect(dispatchedActions[0]).toMatchObject(openAllCompleted({ group }))
 })
 
 it('should dispatch deleteCompleted action', () => {
-  testRender(<CompletedTasksActions group={group} />)
+  const { mockStore } = testRender(<CompletedTasksActions group={group} />)
 
   const deleteCompletedButton = screen.getByTestId('delete-completed-button')
   fireEvent.click(deleteCompletedButton)
@@ -41,5 +45,8 @@ it('should dispatch deleteCompleted action', () => {
   expect(window.confirm).toBeCalledWith(
     `Are you sure you want to delete completed tasks on the '${group}' group?`
   )
-  // TODO: test that dispatch is called
+
+  const dispatchedActions = mockStore.getActions()
+  expect(dispatchedActions).toHaveLength(1)
+  expect(dispatchedActions[0]).toMatchObject(deleteAllCompleted({ group }))
 })

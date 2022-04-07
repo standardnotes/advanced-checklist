@@ -36,10 +36,6 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
   })
 
   function onTextChange(event: ChangeEvent<HTMLInputElement>) {
-    /**
-     * Save this as the current 'un-saved' task if while we're not
-     * officially saving it as an actual task yet.
-     */
     const rawString = event.target.value
     setTaskDraft(rawString)
   }
@@ -47,6 +43,10 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
   function handleKeyPress(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
       const rawString = (event.target as HTMLInputElement).value
+      if (rawString.length === 0) {
+        return
+      }
+
       dispatch(
         taskAdded({ task: { id: uuidv4(), description: rawString }, group })
       )

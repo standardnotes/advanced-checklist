@@ -44,9 +44,14 @@ const CreateGroup: React.FC = () => {
 
   return (
     <>
-      {!isCreateMode && <WideButton onClick={toggleMode}>+</WideButton>}
+      {!isCreateMode && (
+        <WideButton data-testid="create-group-button" onClick={toggleMode}>
+          +
+        </WideButton>
+      )}
       {isCreateMode && (
         <BigTextInput
+          testId="create-group-input"
           value={group}
           onChange={onTextChange}
           onKeyPress={handleKeyPress}

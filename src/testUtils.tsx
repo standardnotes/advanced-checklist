@@ -3,7 +3,9 @@ import { Provider } from 'react-redux'
 import { render as rtlRender, RenderOptions } from '@testing-library/react'
 import configureStore from 'redux-mock-store'
 
-const mockStore = configureStore()({
+import { RootState } from './app/store'
+
+const defaultMockState: RootState = {
   tasks: {
     storage: {},
   },
@@ -12,9 +14,17 @@ const mockStore = configureStore()({
     isRunningOnMobile: false,
     spellCheckerEnabled: true,
   },
-})
+}
 
-function testRender(ui: React.ReactElement, renderOptions?: RenderOptions) {
+function testRender(
+  ui: React.ReactElement,
+  renderOptions?: RenderOptions,
+  state?: Partial<RootState>
+) {
+  const mockStore = configureStore()({
+    ...defaultMockState,
+    ...state,
+  })
   function Wrapper({
     children,
   }: {
@@ -22,7 +32,10 @@ function testRender(ui: React.ReactElement, renderOptions?: RenderOptions) {
   }) {
     return <Provider store={mockStore}>{children}</Provider>
   }
-  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
+  return {
+    component: rtlRender(ui, { wrapper: Wrapper, ...renderOptions }),
+    mockStore,
+  }
 }
 
-export { testRender }
+export { testRender, defaultMockState }
