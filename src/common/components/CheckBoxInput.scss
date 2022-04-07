@@ -1,0 +1,79 @@
+.checkbox-container {
+  cursor: pointer;
+  display: block;
+  font-size: 22px;
+  margin-bottom: 8px;
+  margin-left: 1px;
+  margin-top: 6px;
+  padding-left: 20px;
+  position: relative;
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+
+  input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  /* On mouse-over, add a grey background color */
+  &:hover input ~ .checkmark {
+    border-color: var(--sn-stylekit-border-color);
+  }
+
+  /* When the checkbox is checked, add a blue background */
+  input:checked ~ .checkmark {
+    background-color: var(--sn-stylekit-info-color);
+    border-color: var(--sn-stylekit-info-color);
+  }
+
+  /* When the mouse is held on the box */
+  input:active ~ .checkmark {
+    background-color: var(--sn-stylekit-info-color);
+    // border-color: var(--sn-stylekit-info-contrast-color);
+  }
+
+  /* Show the checkmark when checked */
+  input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  /* Hide the browser's default checkbox */
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 10px;
+  width: 10px;
+  border-radius: 1px;
+  background-color: var(--sn-stylekit-contrast-background-color);
+  border: 1px solid var(--sn-stylekit-contrast-border-color);
+
+  &:after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 3px;
+    top: 1px;
+    width: 3px;
+    height: 6px;
+    border: solid white;
+    border-width: 0 1px 1px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+}

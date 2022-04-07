@@ -49,15 +49,15 @@ const BigTextInput = forwardRef<HTMLInputElement, BigTextInputProps>(
     return (
       <StyledInput
         type="text"
-        value={value}
-        onChange={onChange}
-        onKeyPress={onKeyPress}
         autoFocus={autoFocus}
         data-testid={testId}
         dir={dir}
+        onChange={onChange}
+        onKeyPress={onKeyPress}
         placeholder={placeholder}
         ref={ref}
         spellCheck={spellCheck}
+        value={value}
       />
     )
   }
