@@ -1,6 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react'
 
-import { testRender } from '../testUtils'
+import { testRender } from '../../testUtils'
 import CompletedTasksActions from './CompletedTasksActions'
 
 beforeAll(() => {

@@ -1,15 +1,14 @@
+import { TaskPayload } from './tasks-slice'
 import CreateTask from './CreateTask'
 import TaskList from './TaskList'
-import { TaskPayload } from './../features/tasks/tasks-slice'
-import { getPercentage } from '../common/utils'
-import CircularProgressBar from './CircularProgressBar'
+import { getPercentage } from '../../common/utils'
+import CircularProgressBar from '../../common/components/CircularProgressBar'
+import MainTitle from '../../common/components/MainTitle'
+import GenericInlineText from '../../common/components/GenericInlineText'
+import ThematicBreak from '../../common/components/ThematicBreak'
 
 const TaskGroupName: React.FC = ({ children }) => {
-  return (
-    <h1 className="group-name" data-testid="task-group-name">
-      {children}
-    </h1>
-  )
+  return <MainTitle data-testid="task-group-name">{children}</MainTitle>
 }
 
 type TaskGroupStatsProps = {
@@ -22,14 +21,14 @@ const TaskGroupStats: React.FC<TaskGroupStatsProps> = ({
   totalTasks,
 }) => {
   return (
-    <span className="stats" data-testid="task-group-stats">
+    <GenericInlineText data-testid="task-group-stats">
       {completedTasks}/{totalTasks}
-    </span>
+    </GenericInlineText>
   )
 }
 
 const TaskGroupSeparator: React.FC = () => {
-  return <hr data-testid="task-group-separator" />
+  return <ThematicBreak data-testid="task-group-separator" />
 }
 
 type TaskGroupProps = {
@@ -44,7 +43,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({ group, tasks, isLast }) => {
   const percentageCompleted = getPercentage(completedTasks, totalTasks)
 
   return (
-    <div className="task-group-container">
+    <>
       <div className="task-group">
         <TaskGroupName>{group}</TaskGroupName>
         <CircularProgressBar size={22} percentage={percentageCompleted} />
@@ -58,7 +57,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({ group, tasks, isLast }) => {
       <TaskList group={group} tasks={tasks} />
 
       {!isLast && <TaskGroupSeparator />}
-    </div>
+    </>
   )
 }
 

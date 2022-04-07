@@ -5,10 +5,10 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import EditorKit, { EditorKitDelegate } from '@standardnotes/editor-kit'
 
-import CreateGroup from './components/CreateGroup'
-import TaskGroup from './components/TaskGroup'
 import { store } from './app/store'
 import { useAppDispatch, useAppSelector } from './app/hooks'
+import CreateGroup from './features/tasks/CreateGroup'
+import TaskGroup from './features/tasks/TaskGroup'
 import {
   setCanEdit,
   setIsRunningOnMobile,

@@ -1,10 +1,10 @@
 import React from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 
-import { useAppDispatch } from '../app/hooks'
-import DroppableContainer from '../components/DroppableContainer'
+import { useAppDispatch } from '../../app/hooks'
+import TasksContainer from './TasksContainer'
 import CompletedTasksActions from './CompletedTasksActions'
-import { TaskPayload, tasksReordered } from '../features/tasks/tasks-slice'
+import { TaskPayload, tasksReordered } from './tasks-slice'
 
 type TaskListProps = {
   group: string
@@ -41,21 +41,21 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, group }) => {
   return (
     <div data-testid="task-list">
       <DragDropContext onDragEnd={onDragEnd}>
-        <DroppableContainer
+        <TasksContainer
           droppableId="open-tasks"
           title="Open tasks"
           tasks={openTasks}
           group={group}
         />
 
-        <DroppableContainer
+        <TasksContainer
           droppableId="completed-tasks"
           title="Completed tasks"
           tasks={completedTasks}
           group={group}
         >
           {completedTasks.length > 0 && <CompletedTasksActions group={group} />}
-        </DroppableContainer>
+        </TasksContainer>
       </DragDropContext>
     </div>
   )

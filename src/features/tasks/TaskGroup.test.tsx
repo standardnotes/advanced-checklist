@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react'
-import { TaskPayload } from '../features/tasks/tasks-slice'
 
-import { testRender } from '../testUtils'
+import { TaskPayload } from './tasks-slice'
+import { testRender } from '../../testUtils'
 import TaskGroup from './TaskGroup'
 
 const group = 'default group'
@@ -56,7 +56,7 @@ it('does not render a thematic break element', () => {
 it('renders the element that is used to create a new task', () => {
   testRender(<TaskGroup group={group} tasks={tasks} isLast={false} />)
 
-  expect(screen.getByTestId('create-task')).toBeInTheDocument()
+  expect(screen.getByTestId('create-task-input')).toBeInTheDocument()
 })
 
 it('renders the element that is used to display the list of tasks', () => {

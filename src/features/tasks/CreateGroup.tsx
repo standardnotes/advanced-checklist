@@ -1,10 +1,22 @@
-import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
+import { ChangeEvent, createRef, KeyboardEvent, useState } from 'react'
+import styled from 'styled-components'
 
-import { useAppDispatch, useAppSelector } from '../app/hooks'
-import { tasksGroupAdded } from './../features/tasks/tasks-slice'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { tasksGroupAdded } from './tasks-slice'
+import BigTextInput from '../../common/components/BigTextInput'
+
+const AddGroupButton = styled.button`
+  background-color: var(--sn-stylekit-contrast-background-color);
+  border-radius: 4px;
+  border: none;
+  color: var(--sn-stylekit-contrast-foreground-color);
+  font-size: var(--sn-stylekit-font-size-h1);
+  height: 32px;
+  width: 100%;
+`
 
 const CreateGroup: React.FC = () => {
-  const inputElement = useRef<HTMLInputElement | null>()
+  const inputRef = createRef<HTMLInputElement>()
 
   const dispatch = useAppDispatch()
 
@@ -41,26 +53,20 @@ const CreateGroup: React.FC = () => {
   }
 
   return (
-    <div className="create-group-container">
-      {!isCreateMode && (
-        <button className="create-group-button" onClick={toggleMode}>
-          +
-        </button>
-      )}
+    <>
+      {!isCreateMode && <AddGroupButton onClick={toggleMode}>+</AddGroupButton>}
       {isCreateMode && (
-        <input
-          className="create-group-input"
-          type="text"
+        <BigTextInput
           value={group}
           onChange={onTextChange}
           onKeyPress={handleKeyPress}
           placeholder="Name your task group and press enter"
-          ref={(ref) => (inputElement.current = ref)}
+          ref={inputRef}
           spellCheck={spellCheckerEnabled}
           autoFocus
         />
       )}
-    </div>
+    </>
   )
 }
 

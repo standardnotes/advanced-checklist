@@ -6,12 +6,8 @@ import {
   useState,
 } from 'react'
 
-import {
-  taskDeleted,
-  TaskPayload,
-  taskToggled,
-} from '../features/tasks/tasks-slice'
-import { useAppDispatch, useAppSelector } from '../app/hooks'
+import { taskDeleted, TaskPayload, taskToggled } from './tasks-slice'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 
 export type TaskItemProps = {
   task: TaskPayload

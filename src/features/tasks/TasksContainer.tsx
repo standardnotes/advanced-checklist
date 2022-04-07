@@ -1,8 +1,8 @@
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 
-import { useAppSelector } from '../app/hooks'
+import { useAppSelector } from '../../app/hooks'
 import TaskItem from './TaskItem'
-import { TaskPayload } from '../features/tasks/tasks-slice'
+import { TaskPayload } from './tasks-slice'
 
 type DroppableContainerProps = {
   droppableId: string
@@ -11,7 +11,7 @@ type DroppableContainerProps = {
   group: string
 }
 
-const DroppableContainer: React.FC<DroppableContainerProps> = ({
+const TasksContainer: React.FC<DroppableContainerProps> = ({
   droppableId,
   group,
   tasks,
@@ -57,4 +57,4 @@ const DroppableContainer: React.FC<DroppableContainerProps> = ({
   )
 }
 
-export default DroppableContainer
+export default TasksContainer

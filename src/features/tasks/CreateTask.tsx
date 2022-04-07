@@ -1,15 +1,22 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  createRef,
+  KeyboardEvent,
+  useEffect,
+  useState,
+} from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-import { useAppDispatch, useAppSelector } from '../app/hooks'
-import { taskAdded } from '../features/tasks/tasks-slice'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { taskAdded } from './tasks-slice'
+import BigTextInput from '../../common/components/BigTextInput'
 
 type CreateTaskProps = {
   group: string
 }
 
 const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
-  const inputElement = useRef<HTMLInputElement | null>()
+  const inputRef = createRef<HTMLInputElement>()
 
   const dispatch = useAppDispatch()
 
@@ -24,7 +31,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
 
   useEffect(() => {
     if (isRunningOnMobile) {
-      inputElement.current!.focus()
+      inputRef.current!.focus()
     }
   })
 
@@ -48,19 +55,15 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
   }
 
   return (
-    <div className="create-task-container" data-testid="create-task">
-      <input
-        className="create-task-input"
-        dir="auto"
-        onChange={onTextChange}
-        onKeyPress={handleKeyPress}
-        placeholder={'Type in your task, then press enter'}
-        ref={(ref) => (inputElement.current = ref)}
-        spellCheck={spellCheckerEnabled}
-        type="text"
-        value={taskDraft}
-      />
-    </div>
+    <BigTextInput
+      testId="create-task-input"
+      onChange={onTextChange}
+      onKeyPress={handleKeyPress}
+      placeholder={'Type in your task, then press enter'}
+      ref={inputRef}
+      spellCheck={spellCheckerEnabled}
+      value={taskDraft}
+    />
   )
 }
 
