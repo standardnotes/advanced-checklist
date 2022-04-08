@@ -35,7 +35,6 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
 
   return (
     <svg
-      className="circular-progress-bar"
       height={size}
       viewBox={viewBox}
       width={size}
