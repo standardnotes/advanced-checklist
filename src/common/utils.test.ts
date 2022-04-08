@@ -1,4 +1,12 @@
-import { arrayMoveMutable, arrayMoveImmutable, getPercentage } from './utils'
+import { TaskPayload } from '../features/tasks/tasks-slice'
+import {
+  arrayMoveMutable,
+  arrayMoveImmutable,
+  getPercentage,
+  groupTasksByCompletedStatus,
+  getTaskArrayFromGroupedTasks,
+  truncateText,
+} from './utils'
 
 describe('arrayMoveMutable', () => {
   it('should not mutate array if there are no elements', () => {
@@ -71,5 +79,89 @@ describe('getPercentage', () => {
     expect(getPercentage(10, 100)).toBe(10)
     expect(getPercentage(10, 40)).toBe(25)
     expect(getPercentage(15, 30)).toBe(50)
+  })
+})
+
+describe('groupTasksByCompletedStatus', () => {
+  it('should return open tasks and completed tasks', () => {
+    const tasks: TaskPayload[] = [
+      {
+        id: 'test-1',
+        description: 'Testing #1',
+        completed: false,
+      },
+      {
+        id: 'test-2',
+        description: 'Testing #2',
+      },
+      {
+        id: 'test-3',
+        description: 'Testing #3',
+        completed: true,
+      },
+    ]
+
+    const { openTasks, completedTasks } = groupTasksByCompletedStatus(tasks)
+
+    expect(openTasks).toHaveLength(2)
+    expect(openTasks[0]).toBe(tasks[0])
+    expect(openTasks[1]).toBe(tasks[1])
+
+    expect(completedTasks).toHaveLength(1)
+    expect(completedTasks[0]).toBe(tasks[2])
+  })
+})
+
+describe('getTaskArrayFromGroupedTasks', () => {
+  it('should return an array of tasks', () => {
+    const workTasks = [
+      {
+        id: 'test-b-1',
+        description: 'Test #1',
+      },
+      {
+        id: 'test-b-2',
+        description: 'Test #2',
+        completed: true,
+      },
+    ]
+
+    const personalTasks = [
+      {
+        id: 'test-c-1',
+        description: 'Test #3',
+      },
+      {
+        id: 'test-c-2',
+        description: 'Test #4',
+        completed: true,
+      },
+    ]
+
+    const groupedTasks = {
+      Work: workTasks,
+      Personal: personalTasks,
+    }
+
+    const taskArray = getTaskArrayFromGroupedTasks(groupedTasks)
+
+    expect(taskArray).toHaveLength(workTasks.length + personalTasks.length)
+    expect(taskArray).toStrictEqual([...workTasks, ...personalTasks])
+  })
+})
+
+describe('truncateText', () => {
+  it('should return the text as-is', () => {
+    const text = 'This is a simple text. It should not be truncated.'
+
+    expect(truncateText(text, 100)).toBe(text)
+  })
+
+  it('should return the truncated text', () => {
+    const text = 'This is a simple text. It should not be truncated.'
+    const truncated = truncateText(text, 10)
+
+    expect(truncated).toHaveLength(13) // Includes ellipsis
+    expect(truncated).toBe('This is a ...')
   })
 })

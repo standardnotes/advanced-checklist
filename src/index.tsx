@@ -2,6 +2,7 @@ import './stylesheets/main.scss'
 
 import React, { useCallback, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
+import { renderToString } from 'react-dom/server'
 import { Provider } from 'react-redux'
 import EditorKit, { EditorKitDelegate } from '@standardnotes/editor-kit'
 
@@ -15,6 +16,7 @@ import {
   setSpellCheckerEnabled,
 } from './features/settings/settings-slice'
 import { tasksLoaded } from './features/tasks/tasks-slice'
+import NotePreview, { getPlainPreview } from './features/tasks/NotePreview'
 
 const TaskEditor: React.FC = () => {
   const note = useRef<any>()
@@ -73,9 +75,13 @@ const TaskEditor: React.FC = () => {
 
     editorKit.current!.saveItemWithPresave(currentNote, () => {
       const groupedTasks = store.getState().tasks.storage
+      const htmlPreview = renderToString(
+        <NotePreview groupedTasks={groupedTasks} />
+      )
+      const plainPreview = getPlainPreview(groupedTasks)
       currentNote.content.text = JSON.stringify(groupedTasks)
-      currentNote.content.preview_html = '<span>WIP</span>'
-      currentNote.content.preview_plain = 'WIP'
+      currentNote.content.preview_html = htmlPreview
+      currentNote.content.preview_plain = plainPreview
     })
   }, [initialized])
 
