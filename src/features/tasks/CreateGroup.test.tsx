@@ -40,16 +40,16 @@ it('renders an input box when the button is clicked', () => {
   expect(inputBox).toHaveTextContent('')
 })
 
-it('changes text value', () => {
+it('changes the input box text', () => {
   testRender(<CreateGroup />)
 
   const button = screen.getByTestId('create-group-button')
   fireEvent.click(button)
 
-  const inputBox = screen.getByTestId('create-group-input')
+  const inputBox = screen.getByTestId('create-group-input') as HTMLInputElement
   fireEvent.change(inputBox, { target: { value: 'This is the new text' } })
 
-  expect(inputBox.getAttribute('value')).toBe('This is the new text')
+  expect(inputBox.value).toBe('This is the new text')
 })
 
 test('pressing enter when input box is empty, should not create a new group', () => {

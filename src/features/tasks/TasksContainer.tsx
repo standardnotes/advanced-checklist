@@ -30,65 +30,68 @@ const getItemStyle = (
 })
 
 type TasksContainerProps = {
-  droppableId: string
   title: string
   tasks: TaskPayload[]
   group: string
+  testId?: string
 }
 
 const TasksContainer: React.FC<TasksContainerProps> = ({
-  droppableId,
   group,
   tasks,
   title,
+  testId,
   children,
 }) => {
   const canEdit = useAppSelector((state) => state.settings.canEdit)
+  const droppableId = title.replace(' ', '-').toLowerCase()
 
   return (
-    <Droppable droppableId={droppableId} isDropDisabled={!canEdit}>
-      {(provided) => (
-        <SubContainer>
-          <SubTitle>{title}</SubTitle>
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            {tasks.map((task, index) => {
-              const identifier = `${index}-${task.id}-${task.description}`
-              return (
-                <Draggable
-                  key={identifier}
-                  draggableId={identifier}
-                  index={index}
-                  isDragDisabled={!canEdit}
-                >
-                  {(
-                    { innerRef, draggableProps, dragHandleProps },
-                    { isDragging }
-                  ) => {
-                    const { style, ...restDraggableProps } = draggableProps
-                    return (
-                      <div
-                        style={getItemStyle(isDragging, style)}
-                        {...restDraggableProps}
-                      >
-                        <TaskItem
-                          key={identifier}
-                          task={task}
-                          group={group}
-                          innerRef={innerRef}
-                          {...dragHandleProps}
-                        />
-                      </div>
-                    )
-                  }}
-                </Draggable>
-              )
-            })}
-            {provided.placeholder}
-          </div>
-          {children}
-        </SubContainer>
-      )}
-    </Droppable>
+    <div data-testid={testId}>
+      <Droppable droppableId={droppableId} isDropDisabled={!canEdit}>
+        {(provided) => (
+          <SubContainer>
+            <SubTitle>{title}</SubTitle>
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {tasks.map((task, index) => {
+                const identifier = `${index}-${task.id}`
+                return (
+                  <Draggable
+                    key={identifier}
+                    draggableId={identifier}
+                    index={index}
+                    isDragDisabled={!canEdit}
+                  >
+                    {(
+                      { innerRef, draggableProps, dragHandleProps },
+                      { isDragging }
+                    ) => {
+                      const { style, ...restDraggableProps } = draggableProps
+                      return (
+                        <div
+                          style={getItemStyle(isDragging, style)}
+                          {...restDraggableProps}
+                        >
+                          <TaskItem
+                            key={identifier}
+                            task={task}
+                            group={group}
+                            innerRef={innerRef}
+                            {...dragHandleProps}
+                          />
+                        </div>
+                      )
+                    }}
+                  </Draggable>
+                )
+              })}
+              {provided.placeholder}
+            </div>
+            {children}
+          </SubContainer>
+        )}
+      </Droppable>
+    </div>
   )
 }
 

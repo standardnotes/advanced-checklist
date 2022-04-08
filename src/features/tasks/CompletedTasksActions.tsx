@@ -51,7 +51,7 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
   }
 
   return (
-    <>
+    <div data-testid="completed-tasks-actions">
       <LinkButton
         onClick={handleReOpenCompleted}
         data-testid="reopen-completed-button"
@@ -64,7 +64,7 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
       >
         Delete Completed
       </LinkButton>
-    </>
+    </div>
   )
 }
 

@@ -37,7 +37,7 @@ const Container = styled.div<ItemContainerProps>`
 export type TaskItemProps = {
   task: TaskPayload
   group: string
-  innerRef: (element?: HTMLElement | null | undefined) => any
+  innerRef?: (element?: HTMLElement | null | undefined) => any
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
@@ -112,13 +112,20 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
   }, [dispatch, task, group])
 
   return (
-    <Container completed={task.completed} ref={innerRef} {...props}>
+    <Container
+      data-testid="task-item"
+      completed={task.completed}
+      ref={innerRef}
+      {...props}
+    >
       <CheckBoxInput
+        testId="check-box-input"
         checked={task.completed}
         disabled={!canEdit}
         onChange={toggleCheckboxChange}
       />
       <TextAreaInput
+        testId="text-area-input"
         disabled={!canEdit || !!task.completed}
         onChange={onTextChange}
         onKeyPress={onKeyPress}

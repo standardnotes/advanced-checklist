@@ -21,13 +21,13 @@ it('renders a button by default', () => {
   expect(inputBox).toHaveTextContent('')
 })
 
-it('changes text value', () => {
+it('changes the input box value', () => {
   testRender(<CreateTask group={defaultGroup} />)
 
-  const inputBox = screen.getByTestId('create-task-input')
+  const inputBox = screen.getByTestId('create-task-input') as HTMLInputElement
   fireEvent.change(inputBox, { target: { value: 'This is a simple task' } })
 
-  expect(inputBox.getAttribute('value')).toBe('This is a simple task')
+  expect(inputBox.value).toBe('This is a simple task')
 })
 
 test('pressing enter when input box is empty, should not create a new task', () => {
