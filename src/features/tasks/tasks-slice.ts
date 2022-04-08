@@ -44,17 +44,10 @@ const tasksSlice = createSlice({
       action: PayloadAction<{ task: TaskPayload; group: string }>
     ) {
       const { task, group } = action.payload
-      const tasks = state.storage[group].map((original) => {
-        if (task.id === original.id) {
-          delete task.completed
-          return {
-            ...original,
-            ...task,
-          }
-        }
-        return original
-      })
-      state.storage[group] = tasks
+      const currentTask = state.storage[group].find(
+        (item) => item.id === task.id
+      )
+      currentTask && (currentTask.description = task.description)
     },
     taskDeleted(state, action: PayloadAction<{ id: string; group: string }>) {
       const { id, group } = action.payload
