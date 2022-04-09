@@ -23,6 +23,7 @@ const TaskEditor: React.FC = () => {
   const editorKit = useRef<EditorKit>()
 
   const initialized = useAppSelector((state) => state.tasks.initialized)
+  const groupedTasks = useAppSelector((state) => state.tasks.storage)
 
   const dispatch = useAppDispatch()
 
@@ -88,7 +89,7 @@ const TaskEditor: React.FC = () => {
 
   return (
     <>
-      <TaskGroupList />
+      <TaskGroupList groupedTasks={groupedTasks} />
       <CreateGroup />
     </>
   )

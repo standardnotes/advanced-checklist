@@ -8,10 +8,14 @@ import {
 
 import { useAppSelector } from '../../app/hooks'
 import TaskGroup from './TaskGroup'
+import { GroupedTaskPayload } from './tasks-slice'
 
-const TaskGroupList: React.FC = () => {
+type TaskGroupListProps = {
+  groupedTasks: GroupedTaskPayload
+}
+
+const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
   const canEdit = useAppSelector((state) => state.settings.canEdit)
-  const groupedTasks = useAppSelector((state) => state.tasks.storage)
 
   function onDragEnd(result: DropResult) {}
 
@@ -29,6 +33,7 @@ const TaskGroupList: React.FC = () => {
                 const tasks = groupedTasks[group]
                 return (
                   <Draggable
+                    key={identifier}
                     draggableId={identifier}
                     index={index}
                     isDragDisabled={!canEdit}
@@ -39,6 +44,7 @@ const TaskGroupList: React.FC = () => {
                     ) => {
                       return (
                         <TaskGroup
+                          key={identifier}
                           tasks={tasks}
                           group={group}
                           innerRef={innerRef}
