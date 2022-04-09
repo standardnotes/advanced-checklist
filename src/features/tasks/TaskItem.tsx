@@ -13,7 +13,8 @@ import {
   TaskPayload,
   taskToggled,
 } from './tasks-slice'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { useAppDispatch, useAppSelector, useDidMount } from '../../app/hooks'
+
 import CheckBoxInput from '../../common/components/CheckBoxInput'
 import TextAreaInput from '../../common/components/TextAreaInput'
 
@@ -40,7 +41,12 @@ export type TaskItemProps = {
   innerRef?: (element?: HTMLElement | null | undefined) => any
 }
 
-const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
+const TaskItem: React.FC<TaskItemProps> = ({
+  group,
+  task,
+  innerRef,
+  ...props
+}) => {
   const textAreaRef = createRef<HTMLTextAreaElement>()
 
   const dispatch = useAppDispatch()
@@ -50,7 +56,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
     (state) => state.settings.spellCheckerEnabled
   )
 
-  const [task, setTask] = useState(props.task)
+  const [description, setDescription] = useState(task.description)
 
   function resizeTextArea(textarea: HTMLTextAreaElement | null): void {
     if (!textarea) {
@@ -73,17 +79,13 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
   }
 
   function onTextChange(event: ChangeEvent<HTMLTextAreaElement>) {
-    const description = event.target.value
-    setTask({
-      ...task,
-      description,
-    })
+    setDescription(event.target.value)
   }
 
   function onKeyUp(event: KeyboardEvent<HTMLTextAreaElement>) {
     // Delete task if empty and enter pressed
     if (event.key === 'Enter') {
-      if (task.description.length === 0) {
+      if (description.length === 0) {
         dispatch(taskDeleted({ id: task.id, group }))
         event.preventDefault()
       }
@@ -103,13 +105,15 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
   /**
    * Save the task after the user has stopped typing.
    */
-  useEffect(() => {
+  useDidMount(() => {
     const timeoutId = setTimeout(() => {
-      dispatch(taskModified({ task, group }))
+      if (description !== task.description) {
+        dispatch(taskModified({ task: { ...task, description }, group }))
+      }
     }, 500)
 
     return () => clearTimeout(timeoutId)
-  }, [dispatch, task, group])
+  }, [description, group])
 
   return (
     <Container
@@ -132,7 +136,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ group, innerRef, ...props }) => {
         onKeyUp={onKeyUp}
         ref={textAreaRef}
         spellCheck={spellCheckEnabled}
-        value={task.description}
+        value={description}
       />
     </Container>
   )

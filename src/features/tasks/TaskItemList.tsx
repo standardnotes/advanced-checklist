@@ -2,20 +2,21 @@ import React from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 
 import { useAppDispatch } from '../../app/hooks'
-import TasksContainer from './TasksContainer'
-import CompletedTasksActions from './CompletedTasksActions'
+import { groupTasksByCompletedStatus } from '../../common/utils'
 import { TaskPayload, tasksReordered } from './tasks-slice'
 
-type TaskListProps = {
+import TasksContainer from './TasksContainer'
+import CompletedTasksActions from './CompletedTasksActions'
+
+type TaskItemListProps = {
   group: string
   tasks: TaskPayload[]
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, group }) => {
+const TaskItemList: React.FC<TaskItemListProps> = ({ tasks, group }) => {
   const dispatch = useAppDispatch()
 
-  const openTasks = tasks.filter((task) => !task.completed)
-  const completedTasks = tasks.filter((task) => task.completed)
+  const { openTasks, completedTasks } = groupTasksByCompletedStatus(tasks)
 
   function onDragEnd(result: DropResult) {
     const droppedOutsideList = !result.destination
@@ -61,4 +62,4 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, group }) => {
   )
 }
 
-export default TaskList
+export default TaskItemList

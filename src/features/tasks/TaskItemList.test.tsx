@@ -2,7 +2,7 @@ import { screen, within } from '@testing-library/react'
 
 import { TaskPayload } from './tasks-slice'
 import { testRender } from '../../testUtils'
-import TaskList from './TaskList'
+import TaskItemList from './TaskItemList'
 
 const group = 'default group'
 const tasks: TaskPayload[] = [
@@ -19,7 +19,7 @@ const tasks: TaskPayload[] = [
 ]
 
 it('renders the open tasks container', async () => {
-  testRender(<TaskList group={group} tasks={tasks} />)
+  testRender(<TaskItemList group={group} tasks={tasks} />)
 
   const openTasksContainer = screen.getByTestId('open-tasks-container')
 
@@ -43,7 +43,7 @@ it('renders the completed tasks container', () => {
     },
   ]
 
-  testRender(<TaskList group={group} tasks={tasksIncludesCompleted} />)
+  testRender(<TaskItemList group={group} tasks={tasksIncludesCompleted} />)
 
   const completedTasksContainer = screen.getByTestId(
     'completed-tasks-container'

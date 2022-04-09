@@ -21,7 +21,7 @@ const tasks: TaskPayload[] = [
 it('renders the group name', () => {
   testRender(<TaskGroup group={group} tasks={tasks} isLast={false} />)
 
-  expect(screen.getByTestId('task-group-name')).toHaveTextContent(group)
+  expect(screen.getByText(group)).toBeVisible()
 })
 
 it('renders the number of completed tasks and total tasks', () => {

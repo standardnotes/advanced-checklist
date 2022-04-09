@@ -9,7 +9,6 @@ import EditorKit, { EditorKitDelegate } from '@standardnotes/editor-kit'
 import { store } from './app/store'
 import { useAppDispatch, useAppSelector } from './app/hooks'
 import CreateGroup from './features/tasks/CreateGroup'
-import TaskGroup from './features/tasks/TaskGroup'
 import {
   setCanEdit,
   setIsRunningOnMobile,
@@ -17,13 +16,13 @@ import {
 } from './features/settings/settings-slice'
 import { tasksLoaded } from './features/tasks/tasks-slice'
 import NotePreview, { getPlainPreview } from './features/tasks/NotePreview'
+import TaskGroupList from './features/tasks/TaskGroupList'
 
 const TaskEditor: React.FC = () => {
   const note = useRef<any>()
   const editorKit = useRef<EditorKit>()
 
   const initialized = useAppSelector((state) => state.tasks.initialized)
-  const groupedTasks = useAppSelector((state) => state.tasks.storage)
 
   const dispatch = useAppDispatch()
 
@@ -89,18 +88,7 @@ const TaskEditor: React.FC = () => {
 
   return (
     <>
-      {Object.keys(groupedTasks).map((group, index, { length }) => {
-        const tasks = groupedTasks[group]
-        return (
-          <TaskGroup
-            key={index}
-            group={group}
-            tasks={tasks}
-            isLast={index + 1 === length}
-          />
-        )
-      })}
-
+      <TaskGroupList />
       <CreateGroup />
     </>
   )
