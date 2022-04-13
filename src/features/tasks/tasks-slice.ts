@@ -99,7 +99,7 @@ const tasksSlice = createSlice({
     },
     tasksLoaded(state, action: PayloadAction<string>) {
       if (!action.payload) {
-        return
+        action.payload = '{}'
       }
 
       try {
@@ -118,7 +118,7 @@ const tasksSlice = createSlice({
 
         if (newState !== initialState) {
           state.storage = newState.storage
-          state.initialized = true
+          state.initialized = newState.initialized
         }
       } catch (e) {
         return
