@@ -25,6 +25,7 @@ type BigTextInputProps = {
   value: string
   autoFocus?: boolean
   dir?: 'ltr' | 'rtl' | 'auto'
+  disabled?: boolean
   placeholder?: string
   spellCheck?: boolean
   testId?: string
@@ -38,6 +39,7 @@ const BigTextInput = forwardRef<HTMLInputElement, BigTextInputProps>(
       value,
       autoFocus,
       dir = 'auto',
+      disabled,
       placeholder,
       spellCheck,
       testId,
@@ -52,6 +54,7 @@ const BigTextInput = forwardRef<HTMLInputElement, BigTextInputProps>(
         autoFocus={autoFocus}
         data-testid={testId}
         dir={dir}
+        disabled={disabled}
         onChange={onChange}
         onKeyPress={onKeyPress}
         placeholder={placeholder}
