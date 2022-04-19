@@ -27,6 +27,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
   const spellCheckerEnabled = useAppSelector(
     (state) => state.settings.spellCheckerEnabled
   )
+  const canEdit = useAppSelector((state) => state.settings.canEdit)
 
   const [taskDraft, setTaskDraft] = useState('')
 
@@ -55,9 +56,14 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
     }
   }
 
+  if (!canEdit) {
+    return <></>
+  }
+
   return (
     <BigTextInput
       testId="create-task-input"
+      disabled={!canEdit}
       onChange={onTextChange}
       onKeyPress={handleKeyPress}
       placeholder={'Type in your task, then press enter'}
