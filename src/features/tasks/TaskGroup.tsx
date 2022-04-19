@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+import { useAppSelector } from '../../app/hooks'
 import { getPercentage } from '../../common/utils'
 import { TaskPayload } from './tasks-slice'
 
@@ -34,6 +35,7 @@ type TaskGroupProps = {
   group: string
   tasks: TaskPayload[]
   isLast: boolean
+  isDragging: boolean
   innerRef?: (element?: HTMLElement | null | undefined) => any
 }
 
@@ -41,6 +43,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
   group,
   tasks,
   isLast,
+  isDragging,
   innerRef,
   ...props
 }) => {
@@ -48,7 +51,9 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
   const totalTasks = tasks.length
   const percentageCompleted = getPercentage(completedTasks, totalTasks)
 
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(isDragging)
+
+  const canEdit = useAppSelector((state) => state.settings.canEdit)
 
   function handleCollapse() {
     setCollapsed(!collapsed)
@@ -58,6 +63,10 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
     console.log('Options button clicked...')
   }
 
+  useEffect(() => {
+    setCollapsed(isDragging)
+  }, [isDragging, setCollapsed])
+
   return (
     <div ref={innerRef} {...props}>
       <div
@@ -66,27 +75,31 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
         }`}
       >
         <div className="flex flex-grow items-center">
-          <div className="mr-3">
-            <ReorderIcon />
-          </div>
+          {canEdit && (
+            <div className="mr-3">
+              <ReorderIcon />
+            </div>
+          )}
           <MainTitle>{group}</MainTitle>
           <CircularProgressBar size={22} percentage={percentageCompleted} />
           <GenericInlineText data-testid="task-group-stats">
             {completedTasks}/{totalTasks}
           </GenericInlineText>
         </div>
-        <div className="flex items-center">
-          <div className="ml-3">
-            <RoundButton onClick={handleOptions}>
-              <MoreIcon />
-            </RoundButton>
+        {!isDragging && (
+          <div className="flex items-center">
+            <div className="ml-3">
+              <RoundButton onClick={handleOptions}>
+                <MoreIcon />
+              </RoundButton>
+            </div>
+            <div className="ml-3">
+              <RoundButton onClick={handleCollapse}>
+                {!collapsed ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              </RoundButton>
+            </div>
           </div>
-          <div className="ml-3">
-            <RoundButton onClick={handleCollapse}>
-              {!collapsed ? <ChevronUpIcon /> : <ChevronDownIcon />}
-            </RoundButton>
-          </div>
-        </div>
+        )}
       </div>
 
       <CollapsableContainer collapsed={collapsed}>
