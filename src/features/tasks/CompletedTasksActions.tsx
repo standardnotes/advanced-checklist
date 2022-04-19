@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { useAppDispatch } from '../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { openAllCompleted, deleteAllCompleted } from './tasks-slice'
 
 const LinkButton = styled.button`
@@ -30,6 +30,8 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
 }) => {
   const dispatch = useAppDispatch()
 
+  const canEdit = useAppSelector((state) => state.settings.canEdit)
+
   function handleReOpenCompleted() {
     if (
       window.confirm(
@@ -48,6 +50,10 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
     ) {
       dispatch(deleteAllCompleted({ group }))
     }
+  }
+
+  if (!canEdit) {
+    return <></>
   }
 
   return (
