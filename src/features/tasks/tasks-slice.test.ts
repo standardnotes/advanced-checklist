@@ -370,11 +370,46 @@ it('should handle loading tasks into the tasks store, if an invalid payload is p
     },
   }
 
-  expect(reducer(previousState, tasksLoaded(''))).toEqual(previousState)
   expect(reducer(previousState, tasksLoaded('null'))).toEqual(previousState)
   expect(reducer(previousState, tasksLoaded('undefined'))).toEqual(
     previousState
   )
+})
+
+it('should initialize the storage with an empty object', () => {
+  const previousState: TasksState = {
+    storage: {
+      Test: [
+        {
+          id: 'another-id',
+          description: 'Another simple task',
+          completed: false,
+        },
+      ],
+    },
+  }
+
+  expect(reducer(previousState, tasksLoaded(''))).toEqual({
+    initialized: true,
+    storage: {},
+  })
+})
+
+it('should not initialize the storage again with an empty object', () => {
+  const previousState: TasksState = {
+    storage: {
+      Test: [
+        {
+          id: 'another-id',
+          description: 'Another simple task',
+          completed: false,
+        },
+      ],
+    },
+    initialized: true,
+  }
+
+  expect(reducer(previousState, tasksLoaded(''))).toEqual(previousState)
 })
 
 it('should handle loading tasks into the tasks store, with a valid payload', () => {

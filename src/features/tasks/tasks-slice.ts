@@ -98,7 +98,7 @@ const tasksSlice = createSlice({
       )
     },
     tasksLoaded(state, action: PayloadAction<string>) {
-      if (!action.payload) {
+      if (!action.payload && !state.initialized) {
         action.payload = '{}'
       }
 
