@@ -58,18 +58,16 @@ const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
                     isDragDisabled={!canEdit}
                   >
                     {(
-                      { innerRef, draggableProps, dragHandleProps = {} },
+                      { innerRef, draggableProps, dragHandleProps },
                       { isDragging }
                     ) => {
                       const { style, onTransitionEnd, ...restDraggableProps } =
                         draggableProps
-                      const { onDragStart, ...restDragHandleProps } =
-                        dragHandleProps
                       return (
                         <div
                           style={style}
                           onTransitionEnd={onTransitionEnd}
-                          onDragStart={onDragStart}
+                          onDragStart={dragHandleProps?.onDragStart}
                         >
                           <TaskGroup
                             key={identifier}
@@ -78,7 +76,7 @@ const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
                             innerRef={innerRef}
                             isLast={index + 1 === length}
                             isDragging={isDragging}
-                            {...restDragHandleProps}
+                            {...dragHandleProps}
                             {...restDraggableProps}
                           />
                         </div>
