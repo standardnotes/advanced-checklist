@@ -68,7 +68,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
   }, [isDragging, setCollapsed])
 
   return (
-    <div ref={innerRef} {...props}>
+    <div ref={innerRef}>
       <div
         className={`flex items-center justify-between h-8 mt-1 ${
           isLast ? 'mb-3' : 'mb-1'
@@ -76,7 +76,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
       >
         <div className="flex flex-grow items-center">
           {canEdit && (
-            <div className="mr-3">
+            <div className="mr-3" {...props}>
               <ReorderIcon highlight={isDragging} />
             </div>
           )}

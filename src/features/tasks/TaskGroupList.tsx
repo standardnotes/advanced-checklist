@@ -6,18 +6,37 @@ import {
   DropResult,
 } from 'react-beautiful-dnd'
 
-import { useAppSelector } from '../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import TaskGroup from './TaskGroup'
-import { GroupedTaskPayload } from './tasks-slice'
+import { GroupedTaskPayload, tasksGroupReordered } from './tasks-slice'
 
 type TaskGroupListProps = {
   groupedTasks: GroupedTaskPayload
 }
 
 const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
+  const dispatch = useAppDispatch()
+
   const canEdit = useAppSelector((state) => state.settings.canEdit)
 
-  function onDragEnd(result: DropResult) {}
+  function onDragEnd(result: DropResult) {
+    const droppedOutsideList = !result.destination
+    if (droppedOutsideList) {
+      return
+    }
+
+    const { source, destination } = result
+    if (!destination) {
+      return
+    }
+
+    dispatch(
+      tasksGroupReordered({
+        swapGroupIndex: source.index,
+        withGroupIndex: destination.index,
+      })
+    )
+  }
 
   return (
     <div data-testid="task-group-list">
@@ -39,20 +58,30 @@ const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
                     isDragDisabled={!canEdit}
                   >
                     {(
-                      { innerRef, draggableProps, dragHandleProps },
+                      { innerRef, draggableProps, dragHandleProps = {} },
                       { isDragging }
                     ) => {
+                      const { style, onTransitionEnd, ...restDraggableProps } =
+                        draggableProps
+                      const { onDragStart, ...restDragHandleProps } =
+                        dragHandleProps
                       return (
-                        <TaskGroup
-                          key={identifier}
-                          tasks={tasks}
-                          group={group}
-                          innerRef={innerRef}
-                          isLast={index + 1 === length}
-                          isDragging={isDragging}
-                          {...dragHandleProps}
-                          {...draggableProps}
-                        />
+                        <div
+                          style={style}
+                          onTransitionEnd={onTransitionEnd}
+                          onDragStart={onDragStart}
+                        >
+                          <TaskGroup
+                            key={identifier}
+                            tasks={tasks}
+                            group={group}
+                            innerRef={innerRef}
+                            isLast={index + 1 === length}
+                            isDragging={isDragging}
+                            {...restDragHandleProps}
+                            {...restDraggableProps}
+                          />
+                        </div>
                       )
                     }}
                   </Draggable>

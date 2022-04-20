@@ -29,7 +29,6 @@ const tasksSlice = createSlice({
       action: PayloadAction<{ task: TaskPayload; group: string }>
     ) {
       const { group, task } = action.payload
-
       if (!state.storage[group]) {
         state.storage[group] = []
       }
@@ -97,6 +96,27 @@ const tasksSlice = createSlice({
         withTaskIndex
       )
     },
+    tasksGroupReordered(
+      state,
+      action: PayloadAction<{
+        swapGroupIndex: number
+        withGroupIndex: number
+      }>
+    ) {
+      const { swapGroupIndex, withGroupIndex } = action.payload
+      const orderedGroups = arrayMoveImmutable(
+        Object.keys(state.storage),
+        swapGroupIndex,
+        withGroupIndex
+      )
+      state.storage = orderedGroups.reduce(
+        (acc, key) => ({
+          ...acc,
+          [key]: state.storage[key],
+        }),
+        {}
+      )
+    },
     tasksLoaded(state, action: PayloadAction<string>) {
       if (!action.payload && !state.initialized) {
         action.payload = '{}'
@@ -137,5 +157,6 @@ export const {
   tasksLoaded,
   tasksGroupAdded,
   tasksReordered,
+  tasksGroupReordered,
 } = tasksSlice.actions
 export default tasksSlice.reducer

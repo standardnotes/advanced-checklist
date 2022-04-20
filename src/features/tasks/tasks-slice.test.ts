@@ -8,6 +8,7 @@ import reducer, {
   taskToggled,
   tasksGroupAdded,
   tasksReordered,
+  tasksGroupReordered,
 } from './tasks-slice'
 import type { TasksState, GroupedTaskPayload } from './tasks-slice'
 
@@ -600,4 +601,68 @@ it('should handle reordering tasks from different sections', () => {
       ],
     },
   })
+})
+
+it('should handle reordering task groups', () => {
+  const previousState: TasksState = {
+    storage: {
+      Test: [
+        {
+          id: 'some-id',
+          description: 'A simple task',
+          completed: true,
+        },
+      ],
+      Testing: [
+        {
+          id: 'another-id',
+          description: 'Another simple task',
+          completed: false,
+        },
+      ],
+      Tests: [
+        {
+          id: 'yet-another-id',
+          description: 'Yet another simple task',
+          completed: true,
+        },
+      ],
+    },
+  }
+
+  const currentState = reducer(
+    previousState,
+    tasksGroupReordered({
+      swapGroupIndex: 0,
+      withGroupIndex: 1,
+    })
+  )
+
+  const expectedState = {
+    storage: {
+      Testing: [
+        {
+          id: 'another-id',
+          description: 'Another simple task',
+          completed: false,
+        },
+      ],
+      Test: [
+        {
+          id: 'some-id',
+          description: 'A simple task',
+          completed: true,
+        },
+      ],
+      Tests: [
+        {
+          id: 'yet-another-id',
+          description: 'Yet another simple task',
+          completed: true,
+        },
+      ],
+    },
+  }
+
+  expect(JSON.stringify(currentState)).toEqual(JSON.stringify(expectedState))
 })
