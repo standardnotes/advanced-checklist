@@ -77,10 +77,10 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
         <div className="flex flex-grow items-center">
           {canEdit && (
             <div className="mr-3">
-              <ReorderIcon />
+              <ReorderIcon highlight={isDragging} />
             </div>
           )}
-          <MainTitle>{group}</MainTitle>
+          <MainTitle highlight={isDragging}>{group}</MainTitle>
           <CircularProgressBar size={22} percentage={percentageCompleted} />
           <GenericInlineText data-testid="task-group-stats">
             {completedTasks}/{totalTasks}

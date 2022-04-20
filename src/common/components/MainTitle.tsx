@@ -7,8 +7,17 @@ const Header1 = styled.h1`
   margin-right: 10px !important;
 `
 
-const MainTitle: React.FC = ({ children }) => {
-  return <Header1 className="sk-h1">{children}</Header1>
+type MainTitleProps = {
+  highlight?: boolean
+}
+
+const MainTitle: React.FC<MainTitleProps> = ({
+  children,
+  highlight = false,
+}) => {
+  return (
+    <Header1 className={`sk-h1 ${highlight ? 'info' : ''}`}>{children}</Header1>
+  )
 }
 
 export default MainTitle
