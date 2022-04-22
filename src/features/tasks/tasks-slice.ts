@@ -117,6 +117,15 @@ const tasksSlice = createSlice({
         {}
       )
     },
+    tasksGroupDeleted(
+      state,
+      action: PayloadAction<{
+        group: string
+      }>
+    ) {
+      const { group } = action.payload
+      delete state.storage[group]
+    },
     tasksLoaded(state, action: PayloadAction<string>) {
       if (!action.payload && !state.initialized) {
         action.payload = '{}'
@@ -158,5 +167,6 @@ export const {
   tasksGroupAdded,
   tasksReordered,
   tasksGroupReordered,
+  tasksGroupDeleted,
 } = tasksSlice.actions
 export default tasksSlice.reducer

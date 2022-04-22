@@ -29,3 +29,48 @@ html {
     margin-right: 0.75rem;
   }
 }
+
+:root {
+  --reach-menu-button: 1;
+}
+
+reach-portal {
+  @import '~@standardnotes/stylekit/src/css/utils';
+  @import '~@standardnotes/stylekit/src/css/sn';
+
+  font-family: var(--sn-stylekit-sans-serif-font);
+  font-size: var(--sn-stylekit-font-size-editor);
+
+  div[data-reach-menu-list] {
+    @extend .bg-default;
+    @extend .border-main;
+    @extend .rounded;
+    @extend .box-shadow;
+    @extend .font-normal;
+    @extend .min-w-55;
+    @extend .mt-2;
+    @extend .focus\:outline-none;
+    @extend .origin-top-right;
+    @extend .py-2;
+    @extend .slide-down-animation;
+    @extend .color-text;
+    @extend .w-auto;
+  }
+
+  div[data-reach-menu-item] {
+    @extend .items-center;
+    @extend .cursor-pointer;
+    @extend .flex;
+    @extend .hover\:bg-highlight;
+    @extend .focus\:outline-none;
+    @extend .focus\:shadow-none;
+    @extend .px-2;
+    @extend .selected\:bg-color;
+    @extend .selected\:fg-color;
+    @extend .m-h-32;
+  }
+
+  div[data-reach-menu-item] > .sn-icon {
+    @extend .mr-2;
+  }
+}
