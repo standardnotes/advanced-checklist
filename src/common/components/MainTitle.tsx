@@ -11,7 +11,7 @@ type MainTitleProps = {
   highlight?: boolean
 }
 
-const MainTitle: React.FC<MainTitleProps> = ({
+export const MainTitle: React.FC<MainTitleProps> = ({
   children,
   highlight = false,
 }) => {
@@ -19,5 +19,3 @@ const MainTitle: React.FC<MainTitleProps> = ({
     <Header1 className={`sk-h1 ${highlight ? 'info' : ''}`}>{children}</Header1>
   )
 }
-
-export default MainTitle

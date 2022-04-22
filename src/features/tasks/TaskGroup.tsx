@@ -8,16 +8,20 @@ import { TaskPayload } from './tasks-slice'
 import CreateTask from './CreateTask'
 import TaskItemList from './TaskItemList'
 
-import CircularProgressBar from '../../common/components/CircularProgressBar'
-import GenericInlineText from '../../common/components/GenericInlineText'
-import MainTitle from '../../common/components/MainTitle'
-import RoundButton from '../../common/components/RoundButton'
-import ThematicBreak from '../../common/components/ThematicBreak'
+import TaskGroupOptions from './TaskGroupOptions'
 
-import MoreIcon from '../../common/components/icons/MoreIcon'
-import ChevronDownIcon from '../../common/components/icons/ChevronDownIcon'
-import ReorderIcon from '../../common/components/icons/ReorderIcon'
-import ChevronUpIcon from '../../common/components/icons/ChevronUpIcon'
+import {
+  CircularProgressBar,
+  GenericInlineText,
+  MainTitle,
+  RoundButton,
+  ThematicBreak,
+} from '../../common/components'
+import {
+  ChevronDownIcon,
+  ReorderIcon,
+  ChevronUpIcon,
+} from '../../common/components/icons'
 
 type CollapsableContainerProps = {
   collapsed: boolean
@@ -59,10 +63,6 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
     setCollapsed(!collapsed)
   }
 
-  function handleOptions() {
-    console.log('Options button clicked...')
-  }
-
   useEffect(() => {
     setCollapsed(isDragging)
   }, [isDragging, setCollapsed])
@@ -89,9 +89,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
         {!isDragging && (
           <div className="flex items-center">
             <div className="ml-3">
-              <RoundButton onClick={handleOptions}>
-                <MoreIcon />
-              </RoundButton>
+              <TaskGroupOptions group={group} />
             </div>
             <div className="ml-3">
               <RoundButton onClick={handleCollapse}>

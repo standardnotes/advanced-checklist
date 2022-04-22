@@ -24,7 +24,10 @@ type TextAreaInputProps = {
   onKeyUp?: (event: KeyboardEvent<HTMLTextAreaElement>) => void
 }
 
-const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
+export const TextAreaInput = forwardRef<
+  HTMLTextAreaElement,
+  TextAreaInputProps
+>(
   (
     {
       value,
@@ -53,5 +56,3 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
     )
   }
 )
-
-export default TextAreaInput

@@ -2,7 +2,9 @@ type ReorderIconProps = {
   highlight?: boolean
 }
 
-const ReorderIcon: React.FC<ReorderIconProps> = ({ highlight = false }) => {
+export const ReorderIcon: React.FC<ReorderIconProps> = ({
+  highlight = false,
+}) => {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -14,5 +16,3 @@ const ReorderIcon: React.FC<ReorderIconProps> = ({ highlight = false }) => {
     </svg>
   )
 }
-
-export default ReorderIcon

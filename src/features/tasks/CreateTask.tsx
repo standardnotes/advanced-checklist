@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { taskAdded } from './tasks-slice'
 
-import BigTextInput from '../../common/components/BigTextInput'
+import { BigTextInput } from '../../common/components'
 
 type CreateTaskProps = {
   group: string

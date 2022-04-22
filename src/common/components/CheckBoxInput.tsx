@@ -9,7 +9,7 @@ type CheckBoxInputProps = {
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
-const CheckBoxInput = forwardRef<HTMLInputElement, CheckBoxInputProps>(
+export const CheckBoxInput = forwardRef<HTMLInputElement, CheckBoxInputProps>(
   ({ checked, disabled, testId, onChange }, ref) => {
     return (
       <label className="checkbox-container">
@@ -26,5 +26,3 @@ const CheckBoxInput = forwardRef<HTMLInputElement, CheckBoxInputProps>(
     )
   }
 )
-
-export default CheckBoxInput

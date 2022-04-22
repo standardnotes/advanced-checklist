@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const WideButton = styled.button`
+export const WideButton = styled.button`
   background-color: var(--sn-stylekit-contrast-background-color);
   border-radius: 4px;
   border: none;
@@ -9,5 +9,3 @@ const WideButton = styled.button`
   height: 32px;
   width: 100%;
 `
-
-export default WideButton

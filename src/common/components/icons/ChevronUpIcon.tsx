@@ -1,4 +1,4 @@
-const ChevronDownIcon = () => {
+export const ChevronUpIcon = () => {
   return (
     <svg
       viewBox="0 0 20 20"
@@ -10,5 +10,3 @@ const ChevronDownIcon = () => {
     </svg>
   )
 }
-
-export default ChevronDownIcon

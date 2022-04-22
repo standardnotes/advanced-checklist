@@ -10,7 +10,7 @@ import { useAppSelector } from '../../app/hooks'
 import { TaskPayload } from './tasks-slice'
 import TaskItem from './TaskItem'
 
-import SubTitle from '../../common/components/SubTitle'
+import { SubTitle } from '../../common/components'
 
 const SubContainer = styled.div`
   color: var(--sn-stylekit-paragraph-text-color);

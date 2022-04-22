@@ -33,7 +33,7 @@ type BigTextInputProps = {
   onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void
 }
 
-const BigTextInput = forwardRef<HTMLInputElement, BigTextInputProps>(
+export const BigTextInput = forwardRef<HTMLInputElement, BigTextInputProps>(
   (
     {
       value,
@@ -65,5 +65,3 @@ const BigTextInput = forwardRef<HTMLInputElement, BigTextInputProps>(
     )
   }
 )
-
-export default BigTextInput

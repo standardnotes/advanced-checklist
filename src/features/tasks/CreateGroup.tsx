@@ -3,8 +3,7 @@ import { ChangeEvent, createRef, KeyboardEvent, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { tasksGroupAdded } from './tasks-slice'
 
-import BigTextInput from '../../common/components/BigTextInput'
-import WideButton from '../../common/components/WideButton'
+import { BigTextInput, WideButton } from '../../common/components'
 
 const CreateGroup: React.FC = () => {
   const inputRef = createRef<HTMLInputElement>()

@@ -15,8 +15,7 @@ import {
 } from './tasks-slice'
 import { useAppDispatch, useAppSelector, useDidMount } from '../../app/hooks'
 
-import CheckBoxInput from '../../common/components/CheckBoxInput'
-import TextAreaInput from '../../common/components/TextAreaInput'
+import { CheckBoxInput, TextAreaInput } from '../../common/components'
 
 type ItemContainerProps = {
   completed?: boolean

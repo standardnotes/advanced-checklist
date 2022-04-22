@@ -17,7 +17,7 @@ type CircularProgressBarProps = {
   percentage: number
 }
 
-const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
+export const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   size,
   percentage,
 }) => {
@@ -59,5 +59,3 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
     </svg>
   )
 }
-
-export default CircularProgressBar

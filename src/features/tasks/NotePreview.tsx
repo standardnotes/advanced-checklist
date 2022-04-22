@@ -6,7 +6,7 @@ import {
 } from '../../common/utils'
 import { GroupedTaskPayload, TaskPayload } from './tasks-slice'
 
-import ProgressBar from '../../common/components/HorizontalProgressBar'
+import { ProgressBar } from '../../common/components'
 
 const TASKS_PREVIEW_LIMIT = 3
 const MAX_TASK_DESCRIPTION_LENGTH = 30
