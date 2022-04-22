@@ -11,6 +11,8 @@ html {
 * {
   // To prevent gray flash when focusing input on mobile Safari
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-family: var(--sn-stylekit-sans-serif-font);
+  font-size: var(--sn-stylekit-font-size-editor);
 }
 
 .sn-component {
@@ -37,9 +39,6 @@ html {
 reach-portal {
   @import '~@standardnotes/stylekit/src/css/utils';
   @import '~@standardnotes/stylekit/src/css/sn';
-
-  font-family: var(--sn-stylekit-sans-serif-font);
-  font-size: var(--sn-stylekit-font-size-editor);
 
   div[data-reach-menu-list] {
     @extend .bg-default;
