@@ -81,10 +81,3 @@ const NotePreview: React.FC<NotePreviewProps> = ({ groupedTasks }) => {
 }
 
 export default NotePreview
-
-export function getPlainPreview(groupedTasks: GroupedTaskPayload) {
-  const allTasks = getTaskArrayFromGroupedTasks(groupedTasks)
-  const { openTasks } = groupTasksByCompletedStatus(allTasks)
-
-  return `${openTasks.length}/${allTasks.length} tasks completed`
-}

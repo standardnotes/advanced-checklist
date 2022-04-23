@@ -27,16 +27,22 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
 
   return (
     <Menu>
-      <MenuButton className="sn-icon-button border-contrast">
+      <MenuButton
+        data-testid="task-group-options"
+        className="sn-icon-button border-contrast"
+      >
         <VisuallyHidden>Options for '{group}' group</VisuallyHidden>
         <MoreIcon />
       </MenuButton>
       <MenuList>
-        <MenuItem onSelect={handleMoveToTrash}>
+        <MenuItem
+          data-testid="move-task-group-trash"
+          onSelect={handleMoveToTrash}
+        >
           <TrashIcon />
           <span className="px-1">Move group to trash</span>
         </MenuItem>
-        <MenuItem onSelect={handleMerge}>
+        <MenuItem data-testid="merge-task-group" onSelect={handleMerge}>
           <MergeIcon />
           <span className="px-1">Merge into another group</span>
         </MenuItem>

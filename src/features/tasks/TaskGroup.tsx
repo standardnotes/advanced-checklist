@@ -92,7 +92,10 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
               <TaskGroupOptions group={group} />
             </div>
             <div className="ml-3">
-              <RoundButton onClick={handleCollapse}>
+              <RoundButton
+                testId="collapse-task-group"
+                onClick={handleCollapse}
+              >
                 {!collapsed ? <ChevronUpIcon /> : <ChevronDownIcon />}
               </RoundButton>
             </div>

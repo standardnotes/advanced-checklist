@@ -1,6 +1,7 @@
 import { fireEvent, screen } from '@testing-library/react'
-
 import { testRender } from '../../testUtils'
+
+import { RootState } from '../../app/store'
 import CompletedTasksActions from './CompletedTasksActions'
 import { deleteAllCompleted, openAllCompleted } from './tasks-slice'
 
@@ -19,6 +20,25 @@ it('renders two buttons', () => {
   expect(screen.getByTestId('delete-completed-button')).toHaveTextContent(
     'Delete Completed'
   )
+})
+
+it('should not render buttons if can not edit', () => {
+  const defaultState: Partial<RootState> = {
+    settings: {
+      canEdit: false,
+      isRunningOnMobile: false,
+      spellCheckerEnabled: true,
+    },
+  }
+
+  testRender(<CompletedTasksActions group={group} />, {}, defaultState)
+
+  expect(
+    screen.queryByTestId('reopen-completed-button')
+  ).not.toBeInTheDocument()
+  expect(
+    screen.queryByTestId('delete-completed-button')
+  ).not.toBeInTheDocument()
 })
 
 it('should dispatch openAllCompleted action', () => {

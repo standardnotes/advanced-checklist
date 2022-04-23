@@ -15,8 +15,10 @@ import {
   setSpellCheckerEnabled,
 } from './features/settings/settings-slice'
 import { tasksLoaded } from './features/tasks/tasks-slice'
-import NotePreview, { getPlainPreview } from './features/tasks/NotePreview'
+import NotePreview from './features/tasks/NotePreview'
 import TaskGroupList from './features/tasks/TaskGroupList'
+
+import { getPlainPreview } from './common/utils'
 
 const TaskEditor: React.FC = () => {
   const note = useRef<any>()

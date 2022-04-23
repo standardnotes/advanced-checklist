@@ -60,3 +60,10 @@ export function truncateText(text: string, limit: number = 50) {
   }
   return text.substring(0, limit) + '...'
 }
+
+export function getPlainPreview(groupedTasks: GroupedTaskPayload) {
+  const allTasks = getTaskArrayFromGroupedTasks(groupedTasks)
+  const { openTasks } = groupTasksByCompletedStatus(allTasks)
+
+  return `${openTasks.length}/${allTasks.length} tasks completed`
+}

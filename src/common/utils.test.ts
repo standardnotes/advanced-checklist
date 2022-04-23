@@ -6,6 +6,7 @@ import {
   groupTasksByCompletedStatus,
   getTaskArrayFromGroupedTasks,
   truncateText,
+  getPlainPreview,
 } from './utils'
 
 describe('arrayMoveMutable', () => {
@@ -163,5 +164,46 @@ describe('truncateText', () => {
 
     expect(truncated).toHaveLength(13) // Includes ellipsis
     expect(truncated).toBe('This is a ...')
+  })
+})
+
+describe('getPlainPreview', () => {
+  it('should return a text preview in the format: {open tasks}/{all tasks}', () => {
+    const workTasks = [
+      {
+        id: 'test-b-1',
+        description: 'Test #1',
+      },
+      {
+        id: 'test-b-2',
+        description: 'Test #2',
+        completed: true,
+      },
+    ]
+
+    const personalTasks = [
+      {
+        id: 'test-c-1',
+        description: 'Test #3',
+      },
+      {
+        id: 'test-c-2',
+        description: 'Test #4',
+        completed: true,
+      },
+      {
+        id: 'test-c-3',
+        description: 'Test #5',
+      },
+    ]
+
+    const groupedTasks = {
+      Work: workTasks,
+      Personal: personalTasks,
+    }
+
+    expect(getPlainPreview(groupedTasks)).toBe('3/5 tasks completed')
+    expect(getPlainPreview({})).toBe('0/0 tasks completed')
+    expect(getPlainPreview({ Test: [] })).toBe('0/0 tasks completed')
   })
 })

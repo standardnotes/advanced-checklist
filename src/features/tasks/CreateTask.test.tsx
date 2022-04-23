@@ -21,6 +21,20 @@ it('renders a button by default', () => {
   expect(inputBox).toHaveTextContent('')
 })
 
+it('should not render input if can not edit', () => {
+  const defaultState: Partial<RootState> = {
+    settings: {
+      canEdit: false,
+      isRunningOnMobile: false,
+      spellCheckerEnabled: true,
+    },
+  }
+
+  testRender(<CreateTask group={defaultGroup} />, {}, defaultState)
+
+  expect(screen.queryByTestId('create-task-input')).not.toBeInTheDocument()
+})
+
 it('changes the input box value', () => {
   testRender(<CreateTask group={defaultGroup} />)
 

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, fireEvent } from '@testing-library/react'
 
 import { TaskPayload } from './tasks-slice'
 import { testRender } from '../../testUtils'
@@ -77,4 +77,22 @@ it('renders the element that is used to display the list of tasks', () => {
   )
 
   expect(screen.getByTestId('task-list')).toBeInTheDocument()
+})
+
+it('collapses the group', () => {
+  testRender(
+    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />
+  )
+
+  const createTask = screen.getByTestId('create-task-input')
+  const taskItemList = screen.getByTestId('task-list')
+
+  expect(createTask).toBeVisible()
+  expect(taskItemList).toBeVisible()
+
+  const collapseButton = screen.getByTestId('collapse-task-group')
+  fireEvent.click(collapseButton)
+
+  expect(createTask).not.toBeVisible()
+  expect(taskItemList).not.toBeVisible()
 })

@@ -9,6 +9,7 @@ import reducer, {
   tasksGroupAdded,
   tasksReordered,
   tasksGroupReordered,
+  tasksGroupDeleted,
 } from './tasks-slice'
 import type { TasksState, GroupedTaskPayload } from './tasks-slice'
 
@@ -665,4 +666,58 @@ it('should handle reordering task groups', () => {
   }
 
   expect(JSON.stringify(currentState)).toEqual(JSON.stringify(expectedState))
+})
+
+it('should handle deleting groups', () => {
+  const previousState: TasksState = {
+    storage: {
+      Test: [
+        {
+          id: 'some-id',
+          description: 'A simple task',
+          completed: true,
+        },
+      ],
+      Testing: [
+        {
+          id: 'another-id',
+          description: 'Another simple task',
+          completed: false,
+        },
+      ],
+      Tests: [
+        {
+          id: 'yet-another-id',
+          description: 'Yet another simple task',
+          completed: true,
+        },
+      ],
+    },
+  }
+
+  const currentState = reducer(
+    previousState,
+    tasksGroupDeleted({ group: 'Testing' })
+  )
+
+  const expectedState = {
+    storage: {
+      Test: [
+        {
+          id: 'some-id',
+          description: 'A simple task',
+          completed: true,
+        },
+      ],
+      Tests: [
+        {
+          id: 'yet-another-id',
+          description: 'Yet another simple task',
+          completed: true,
+        },
+      ],
+    },
+  }
+
+  expect(currentState).toEqual(expectedState)
 })
