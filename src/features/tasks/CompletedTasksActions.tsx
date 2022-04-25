@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { confirmDialog } from '../../common/utils'
 import { openAllCompleted, deleteAllCompleted } from './tasks-slice'
 
 const LinkButton = styled.button`
@@ -32,22 +33,20 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
 
   const canEdit = useAppSelector((state) => state.settings.canEdit)
 
-  function handleReOpenCompleted() {
-    if (
-      window.confirm(
-        `Are you sure you want to reopen completed tasks on the '${group}' group?`
-      )
-    ) {
+  async function handleReOpenCompleted() {
+    const confirmedAction = await confirmDialog({
+      text: `Are you sure you want to reopen completed tasks on the '<strong>${group}</strong>' group?`,
+    })
+    if (confirmedAction) {
       dispatch(openAllCompleted({ group }))
     }
   }
 
-  function handleDeleteCompleted() {
-    if (
-      window.confirm(
-        `Are you sure you want to delete completed tasks on the '${group}' group?`
-      )
-    ) {
+  async function handleDeleteCompleted() {
+    const confirmedAction = await confirmDialog({
+      text: `Are you sure you want to delete completed tasks on the '<strong>${group}</strong>' group?`,
+    })
+    if (confirmedAction) {
       dispatch(deleteAllCompleted({ group }))
     }
   }

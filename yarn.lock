@@ -1914,6 +1914,11 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@standardnotes/common@^1.19.6":
+  version "1.19.6"
+  resolved "https://registry.yarnpkg.com/@standardnotes/common/-/common-1.19.6.tgz#6c672f4f10d5ed123a2c392dfb35dbe3c698b3b9"
+  integrity sha512-HxPrV9JhLp//S7h+QjOjlMPy0lgrjLT4iBKzr8JG8lUeWSS1mY3p1I+w0D9+yiraS2SPq2L14Z0VKds0zs9HXw==
+
 "@standardnotes/editor-kit@2.2.4":
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/@standardnotes/editor-kit/-/editor-kit-2.2.4.tgz#9b9b354315fe3aa8c8b4d2011a41b8b2b6cc10ed"
@@ -1921,19 +1926,27 @@
   optionalDependencies:
     filesafe-js "1.0.5"
 
-"@standardnotes/stylekit@5.20.0":
-  version "5.20.0"
-  resolved "https://registry.yarnpkg.com/@standardnotes/stylekit/-/stylekit-5.20.0.tgz#84ad262b39cbe307a9e06ffa8eb05119db8a7adb"
-  integrity sha512-R926S0NlzB97wq6PyX978s1g21KSymX3CjQCmbM3tfV7KFXfNjjDdWSTVetC8exZj/BPvsudfOtNA5bVsJ8RkA==
+"@standardnotes/stylekit@5.23.0":
+  version "5.23.0"
+  resolved "https://registry.yarnpkg.com/@standardnotes/stylekit/-/stylekit-5.23.0.tgz#13da411b3b8903dd1f5cfda67ae86383b1a6a519"
+  integrity sha512-mU0dO83jMfl+IOO8QXZjA/woieqpL27RfsR7P2VOwqFVS3T+tlwr06VQLix0pF24inkZ0JdfGdYRhu4M71mFPg==
   dependencies:
     "@nanostores/preact" "^0.1.3"
     "@reach/listbox" "^0.16.2"
     "@reach/menu-button" "^0.16.2"
     "@svgr/webpack" "^6.2.1"
-    focus-trap "^6.7.3"
     nanoid "^3.3.1"
     nanostores "^0.5.10"
     prop-types "^15.8.1"
+
+"@standardnotes/utils@^1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@standardnotes/utils/-/utils-1.6.2.tgz#c118b6e7b23c4618d664e7894b3c49c702f656df"
+  integrity sha512-huU/t93Dy940bsB1JTfK3joqcZDT8toZfAtuktvHHHloTI7o5Wb0q9BtsmfGLRf1ohTq5ya0xkHFO5QVaAlV3g==
+  dependencies:
+    "@standardnotes/common" "^1.19.6"
+    dompurify "^2.3.6"
+    lodash "^4.17.21"
 
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
@@ -4623,6 +4636,11 @@ domhandler@^4.0.0, domhandler@^4.2.0, domhandler@^4.3.0:
   dependencies:
     domelementtype "^2.2.0"
 
+dompurify@^2.3.6:
+  version "2.3.6"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.3.6.tgz#2e019d7d7617aacac07cbbe3d88ae3ad354cf875"
+  integrity sha512-OFP2u/3T1R5CEgWCEONuJ1a5+MFKnOYpkywpUSxv/dj1LeBT1erK+JwM7zK0ROy2BRhqVCf0LRw/kHqKuMkVGg==
+
 domutils@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/domutils/-/domutils-1.7.0.tgz#56ea341e834e06e6748af7a1cb25da67ea9f8c2a"
@@ -5431,13 +5449,6 @@ flatted@^3.1.0:
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.5.tgz#76c8584f4fc843db64702a6bd04ab7a8bd666da3"
   integrity sha512-WIWGi2L3DyTUvUrwRKgGi9TwxQMUEqPOPQBVi71R96jZXJdFskXEmf54BoZaS1kknGODoIGASGEzBUYdyMCBJg==
-
-focus-trap@^6.7.3:
-  version "6.7.3"
-  resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-6.7.3.tgz#b5dc195b49c90001f08a63134471d1e6dd381ddd"
-  integrity sha512-8xCEKndV4KrseGhFKKKmczVA14yx1/hnmFICPOjcFjToxCJYj/NHH43tPc3YE/PLnLRNZoFug0EcWkGQde/miQ==
-  dependencies:
-    tabbable "^5.2.1"
 
 follow-redirects@^1.0.0:
   version "1.13.0"
@@ -8848,6 +8859,11 @@ postcss@^8.3.5, postcss@^8.4.4, postcss@^8.4.6, postcss@^8.4.7:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+preact@^10.7.1:
+  version "10.7.1"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.7.1.tgz#bdd2b2dce91a5842c3b9b34dfe050e5401068c9e"
+  integrity sha512-MufnRFz39aIhs9AMFisonjzTud1PK1bY+jcJLo6m2T9Uh8AqjD77w11eAAawmjUogoGOnipECq7e/1RClIKsxg==
+
 prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
@@ -10426,11 +10442,6 @@ tabbable@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-4.0.0.tgz#5bff1d1135df1482cf0f0206434f15eadbeb9261"
   integrity sha512-H1XoH1URcBOa/rZZWxLxHCtOdVUEev+9vo5YdYhC9tCY4wnybX+VQrCYuy9ubkg69fCBxCONJOSLGfw0DWMffQ==
-
-tabbable@^5.2.1:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-5.2.1.tgz#e3fda7367ddbb172dcda9f871c0fdb36d1c4cd9c"
-  integrity sha512-40pEZ2mhjaZzK0BnI+QGNjJO8UYx9pP5v7BGe17SORTO0OEuuaAwQTkAp8whcZvqon44wKFOikD+Al11K3JICQ==
 
 tailwindcss@^3.0.2:
   version "3.0.23"

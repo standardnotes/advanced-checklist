@@ -4,6 +4,7 @@ import VisuallyHidden from '@reach/visually-hidden'
 import { useAppDispatch } from '../../app/hooks'
 import { tasksGroupDeleted } from './tasks-slice'
 
+import { confirmDialog } from '../../common/utils'
 import { MoreIcon, MergeIcon, TrashIcon } from '../../common/components/icons'
 
 type TaskGroupOptionsProps = {
@@ -13,10 +14,14 @@ type TaskGroupOptionsProps = {
 const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
   const dispatch = useAppDispatch()
 
-  function handleMoveToTrash() {
-    if (
-      window.confirm(`Are you sure you want to move '${group}' to the trash?`)
-    ) {
+  async function handleMoveToTrash() {
+    const confirmedAction = await confirmDialog({
+      title: 'Move to trash',
+      text: `Are you sure you want to move '<strong>${group}</strong>' to the trash?`,
+      confirmButtonText: 'Move to trash',
+      confirmButtonStyle: 'danger',
+    })
+    if (confirmedAction) {
       dispatch(tasksGroupDeleted({ group }))
     }
   }

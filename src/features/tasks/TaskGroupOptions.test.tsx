@@ -1,12 +1,10 @@
 import { fireEvent, screen } from '@testing-library/react'
 import { testRender } from '../../testUtils'
 
+import { sleep } from '@standardnotes/utils'
+import * as Utils from '../../common/utils'
 import TaskGroupOptions from './TaskGroupOptions'
 import { tasksGroupDeleted } from './tasks-slice'
-
-beforeEach(() => {
-  window.confirm = jest.fn().mockReturnValue(true)
-})
 
 function clickButton(element: HTMLElement) {
   fireEvent.mouseDown(element)
@@ -36,7 +34,9 @@ it('renders an options menu', () => {
   expect(mergeTaskGroup).toBeVisible()
 })
 
-it('should dispatch tasksGroupDeleted action', () => {
+it('should dispatch tasksGroupDeleted action', async () => {
+  jest.spyOn(Utils, 'confirmDialog').mockResolvedValue(true)
+
   const { mockStore } = testRender(<TaskGroupOptions group={group} />)
 
   const optionsButton = screen.getByTestId('task-group-options')
@@ -45,9 +45,14 @@ it('should dispatch tasksGroupDeleted action', () => {
   const moveGroupToTrash = screen.getByTestId('move-task-group-trash')
   clickButton(moveGroupToTrash)
 
-  expect(window.confirm).toBeCalledWith(
-    `Are you sure you want to move '${group}' to the trash?`
-  )
+  expect(Utils.confirmDialog).toBeCalledWith({
+    confirmButtonStyle: 'danger',
+    confirmButtonText: 'Move to trash',
+    text: `Are you sure you want to move '<strong>${group}</strong>' to the trash?`,
+    title: 'Move to trash',
+  })
+
+  await sleep(1)
 
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
