@@ -88,9 +88,11 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
         </div>
         {!isDragging && (
           <div className="flex items-center">
-            <div className="ml-3">
-              <TaskGroupOptions group={group} />
-            </div>
+            {canEdit && (
+              <div className="ml-3">
+                <TaskGroupOptions group={group} />
+              </div>
+            )}
             <div className="ml-3">
               <RoundButton
                 testId="collapse-task-group"

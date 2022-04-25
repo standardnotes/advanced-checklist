@@ -1,5 +1,6 @@
 import { screen, fireEvent } from '@testing-library/react'
 
+import { RootState } from '../../app/store'
 import { TaskPayload } from './tasks-slice'
 import { testRender } from '../../testUtils'
 import TaskGroup from './TaskGroup'
@@ -95,4 +96,30 @@ it('collapses the group', () => {
 
   expect(createTask).not.toBeVisible()
   expect(taskItemList).not.toBeVisible()
+})
+
+it('shows group options', () => {
+  testRender(
+    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />
+  )
+
+  expect(screen.getByTestId('task-group-options')).toBeInTheDocument()
+})
+
+it('hides group options if can not edit', () => {
+  const defaultState: Partial<RootState> = {
+    settings: {
+      canEdit: false,
+      isRunningOnMobile: false,
+      spellCheckerEnabled: true,
+    },
+  }
+
+  testRender(
+    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />,
+    {},
+    defaultState
+  )
+
+  expect(screen.queryByTestId('task-group-options')).not.toBeInTheDocument()
 })
