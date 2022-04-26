@@ -1,8 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react'
 import { testRender } from '../../testUtils'
 
-import { sleep } from '@standardnotes/utils'
-import * as Utils from '../../common/utils'
 import TaskGroupOptions from './TaskGroupOptions'
 import { tasksGroupDeleted } from './tasks-slice'
 
@@ -34,9 +32,7 @@ it('renders an options menu', () => {
   expect(mergeTaskGroup).toBeVisible()
 })
 
-it('should dispatch tasksGroupDeleted action', async () => {
-  jest.spyOn(Utils, 'confirmDialog').mockResolvedValue(true)
-
+it('should dispatch tasksGroupDeleted action', () => {
   const { mockStore } = testRender(<TaskGroupOptions group={group} />)
 
   const optionsButton = screen.getByTestId('task-group-options')
@@ -45,16 +41,28 @@ it('should dispatch tasksGroupDeleted action', async () => {
   const moveGroupToTrash = screen.getByTestId('move-task-group-trash')
   clickButton(moveGroupToTrash)
 
-  expect(Utils.confirmDialog).toBeCalledWith({
-    confirmButtonStyle: 'danger',
-    confirmButtonText: 'Move to trash',
-    text: `Are you sure you want to move '<strong>${group}</strong>' to the trash?`,
-    title: 'Move to trash',
-  })
+  const confirmDialog = screen.getByTestId('trash-task-group-dialog')
+  expect(confirmDialog).toBeInTheDocument()
+  expect(confirmDialog).toHaveTextContent(
+    `Are you sure you want to move '${group}' to the trash?`
+  )
 
-  await sleep(1)
+  const confirmButton = screen.getByTestId('confirm-dialog-button')
+  fireEvent.click(confirmButton)
 
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
   expect(dispatchedActions[0]).toMatchObject(tasksGroupDeleted({ group }))
+})
+
+it('should open the merge task group dialog', () => {
+  testRender(<TaskGroupOptions group={group} />)
+
+  const optionsButton = screen.getByTestId('task-group-options')
+  fireEvent.click(optionsButton)
+
+  const mergeTaskGroup = screen.getByTestId('merge-task-group')
+  clickButton(mergeTaskGroup)
+
+  expect(screen.getByTestId('merge-task-group-dialog')).toBeInTheDocument()
 })

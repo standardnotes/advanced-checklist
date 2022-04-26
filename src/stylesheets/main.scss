@@ -4,8 +4,8 @@ body,
 html {
   background-color: transparent;
   background-color: var(--sn-stylekit-background-color);
-  margin: 15px;
-  padding: 0;
+  margin: 15px !important;
+  padding: 0 !important;
 }
 
 * {
@@ -44,7 +44,6 @@ reach-portal {
     @extend .border-main;
     @extend .rounded;
     @extend .box-shadow;
-    @extend .font-normal;
     @extend .min-w-55;
     @extend .mt-2;
     @extend .focus\:outline-none;
@@ -70,5 +69,53 @@ reach-portal {
 
   div[data-reach-menu-item] > .sn-icon {
     @extend .mr-2;
+  }
+
+  div[data-reach-dialog-overlay] {
+    align-items: center;
+    background: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: unset;
+    z-index: 1001;
+  }
+
+  div[data-reach-dialog-overlay]::before {
+    background-color: var(--sn-stylekit-contrast-background-color);
+    bottom: 0px;
+    content: '';
+    left: 0px;
+    opacity: 0.75;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+  }
+
+  div[data-reach-dialog-content] {
+    background: none;
+    flex-basis: 0;
+    margin: 0;
+    max-width: 600px;
+    min-width: 400px;
+    overflow: unset;
+    padding: 0;
+    position: relative;
+    width: auto;
+  }
+
+  div[data-reach-dialog-content] .sk-modal-content,
+  div[data-reach-dialog-content] .sn-component,
+  div[data-reach-dialog-content] .sk-panel {
+    height: 100%;
+  }
+
+  div[data-reach-alert-dialog-content] {
+    width: auto;
+  }
+
+  fieldset {
+    border: 0;
+    padding-left: 0;
   }
 }

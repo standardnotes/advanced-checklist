@@ -126,6 +126,24 @@ const tasksSlice = createSlice({
       const { group } = action.payload
       delete state.storage[group]
     },
+    tasksGroupMerged(
+      state,
+      action: PayloadAction<{
+        group: string
+        mergeWith: string
+      }>
+    ) {
+      const { group, mergeWith } = action.payload
+      if (group === mergeWith) {
+        return
+      }
+
+      state.storage[mergeWith] = [
+        ...state.storage[mergeWith],
+        ...state.storage[group],
+      ]
+      delete state.storage[group]
+    },
     tasksLoaded(state, action: PayloadAction<string>) {
       if (!action.payload && !state.initialized) {
         action.payload = '{}'
@@ -168,5 +186,6 @@ export const {
   tasksReordered,
   tasksGroupReordered,
   tasksGroupDeleted,
+  tasksGroupMerged,
 } = tasksSlice.actions
 export default tasksSlice.reducer

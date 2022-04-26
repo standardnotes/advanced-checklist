@@ -1,8 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react'
 import { testRender } from '../../testUtils'
 
-import { sleep } from '@standardnotes/utils'
-import * as Utils from '../../common/utils'
 import { RootState } from '../../app/store'
 import CompletedTasksActions from './CompletedTasksActions'
 import { deleteAllCompleted, openAllCompleted } from './tasks-slice'
@@ -39,38 +37,40 @@ it('should not render buttons if can not edit', () => {
   ).not.toBeInTheDocument()
 })
 
-it('should dispatch openAllCompleted action', async () => {
-  jest.spyOn(Utils, 'confirmDialog').mockResolvedValue(true)
-
+it('should dispatch openAllCompleted action', () => {
   const { mockStore } = testRender(<CompletedTasksActions group={group} />)
 
   const reOpenCompletedButton = screen.getByTestId('reopen-completed-button')
   fireEvent.click(reOpenCompletedButton)
 
-  expect(Utils.confirmDialog).toBeCalledWith({
-    text: `Are you sure you want to reopen completed tasks on the '<strong>${group}</strong>' group?`,
-  })
+  const confirmDialog = screen.getByTestId('reopen-all-tasks-dialog')
+  expect(confirmDialog).toBeInTheDocument()
+  expect(confirmDialog).toHaveTextContent(
+    `Are you sure you want to reopen completed tasks on the '${group}' group?`
+  )
 
-  await sleep(1)
+  const confirmButton = screen.getByTestId('confirm-dialog-button')
+  fireEvent.click(confirmButton)
 
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
   expect(dispatchedActions[0]).toMatchObject(openAllCompleted({ group }))
 })
 
-it('should dispatch deleteCompleted action', async () => {
-  jest.spyOn(Utils, 'confirmDialog').mockResolvedValue(true)
-
+it('should dispatch deleteCompleted action', () => {
   const { mockStore } = testRender(<CompletedTasksActions group={group} />)
 
   const deleteCompletedButton = screen.getByTestId('delete-completed-button')
   fireEvent.click(deleteCompletedButton)
 
-  expect(Utils.confirmDialog).toBeCalledWith({
-    text: `Are you sure you want to delete completed tasks on the '<strong>${group}</strong>' group?`,
-  })
+  const confirmDialog = screen.getByTestId('delete-completed-tasks-dialog')
+  expect(confirmDialog).toBeInTheDocument()
+  expect(confirmDialog).toHaveTextContent(
+    `Are you sure you want to delete completed tasks on the '${group}' group?`
+  )
 
-  await sleep(1)
+  const confirmButton = screen.getByTestId('confirm-dialog-button')
+  fireEvent.click(confirmButton)
 
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)

@@ -1,11 +1,15 @@
+import { useState } from 'react'
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button'
 import VisuallyHidden from '@reach/visually-hidden'
 
 import { useAppDispatch } from '../../app/hooks'
 import { tasksGroupDeleted } from './tasks-slice'
 
-import { confirmDialog } from '../../common/utils'
 import { MoreIcon, MergeIcon, TrashIcon } from '../../common/components/icons'
+
+import ConfirmDialog from '../../common/components/ConfirmDialog'
+
+import MergeTaskGroups from './MergeTaskGroups'
 
 type TaskGroupOptionsProps = {
   group: string
@@ -14,45 +18,68 @@ type TaskGroupOptionsProps = {
 const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
   const dispatch = useAppDispatch()
 
-  async function handleMoveToTrash() {
-    const confirmedAction = await confirmDialog({
-      title: 'Move to trash',
-      text: `Are you sure you want to move '<strong>${group}</strong>' to the trash?`,
-      confirmButtonText: 'Move to trash',
-      confirmButtonStyle: 'danger',
-    })
-    if (confirmedAction) {
-      dispatch(tasksGroupDeleted({ group }))
-    }
+  const [showMergeDialog, setShowMergeDialog] = useState(false)
+  const [showTrashDialog, setShowTrashDialog] = useState(false)
+
+  function handleOpenMergeDialog() {
+    setShowMergeDialog(true)
   }
 
-  function handleMerge() {
-    console.log('Show a prompt with available groups to merge.')
+  function handleCloseMergeDialog() {
+    setShowMergeDialog(false)
+  }
+
+  function handleOpenTrashDialog() {
+    setShowTrashDialog(true)
+  }
+
+  function handleCloseTrashDialog() {
+    setShowTrashDialog(false)
   }
 
   return (
-    <Menu>
-      <MenuButton
-        data-testid="task-group-options"
-        className="sn-icon-button border-contrast"
-      >
-        <VisuallyHidden>Options for '{group}' group</VisuallyHidden>
-        <MoreIcon />
-      </MenuButton>
-      <MenuList>
-        <MenuItem
-          data-testid="move-task-group-trash"
-          onSelect={handleMoveToTrash}
+    <>
+      <Menu>
+        <MenuButton
+          data-testid="task-group-options"
+          className="sn-icon-button border-contrast"
         >
-          <TrashIcon />
-          <span className="px-1">Move group to trash</span>
-        </MenuItem>
-        <MenuItem data-testid="merge-task-group" onSelect={handleMerge}>
-          <MergeIcon />
-          <span className="px-1">Merge into another group</span>
-        </MenuItem>
-      </MenuList>
-    </Menu>
+          <VisuallyHidden>Options for '{group}' group</VisuallyHidden>
+          <MoreIcon />
+        </MenuButton>
+        <MenuList>
+          <MenuItem
+            data-testid="move-task-group-trash"
+            onSelect={handleOpenTrashDialog}
+          >
+            <TrashIcon />
+            <span className="px-1">Move group to trash</span>
+          </MenuItem>
+          <MenuItem
+            data-testid="merge-task-group"
+            onSelect={handleOpenMergeDialog}
+          >
+            <MergeIcon />
+            <span className="px-1">Merge into another group</span>
+          </MenuItem>
+        </MenuList>
+      </Menu>
+      {showTrashDialog && (
+        <ConfirmDialog
+          testId="trash-task-group-dialog"
+          title="Move to trash"
+          confirmButtonText="Move to trash"
+          confirmButtonStyle="danger"
+          confirmButtonCb={() => dispatch(tasksGroupDeleted({ group }))}
+          cancelButtonCb={handleCloseTrashDialog}
+        >
+          Are you sure you want to move '<strong>{group}</strong>' to the trash?
+        </ConfirmDialog>
+      )}
+      {showMergeDialog && (
+        <MergeTaskGroups group={group} closeDialog={handleCloseMergeDialog} />
+      )}
+    </>
   )
 }
 

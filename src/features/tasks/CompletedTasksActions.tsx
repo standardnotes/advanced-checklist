@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { confirmDialog } from '../../common/utils'
+import ConfirmDialog from '../../common/components/ConfirmDialog'
+
 import { openAllCompleted, deleteAllCompleted } from './tasks-slice'
 
 const LinkButton = styled.button`
@@ -33,23 +35,8 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
 
   const canEdit = useAppSelector((state) => state.settings.canEdit)
 
-  async function handleReOpenCompleted() {
-    const confirmedAction = await confirmDialog({
-      text: `Are you sure you want to reopen completed tasks on the '<strong>${group}</strong>' group?`,
-    })
-    if (confirmedAction) {
-      dispatch(openAllCompleted({ group }))
-    }
-  }
-
-  async function handleDeleteCompleted() {
-    const confirmedAction = await confirmDialog({
-      text: `Are you sure you want to delete completed tasks on the '<strong>${group}</strong>' group?`,
-    })
-    if (confirmedAction) {
-      dispatch(deleteAllCompleted({ group }))
-    }
-  }
+  const [showReopenDialog, setShowReopenDialog] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   if (!canEdit) {
     return <></>
@@ -58,17 +45,39 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
   return (
     <div data-testid="completed-tasks-actions">
       <LinkButton
-        onClick={handleReOpenCompleted}
+        onClick={() => setShowReopenDialog(true)}
         data-testid="reopen-completed-button"
       >
         Reopen Completed
       </LinkButton>
       <LinkButton
-        onClick={handleDeleteCompleted}
+        onClick={() => setShowDeleteDialog(true)}
         data-testid="delete-completed-button"
       >
         Delete Completed
       </LinkButton>
+      {showReopenDialog && (
+        <ConfirmDialog
+          testId="reopen-all-tasks-dialog"
+          confirmButtonStyle="danger"
+          confirmButtonCb={() => dispatch(openAllCompleted({ group }))}
+          cancelButtonCb={() => setShowReopenDialog(false)}
+        >
+          Are you sure you want to reopen completed tasks on the '
+          <strong>{group}</strong>' group?
+        </ConfirmDialog>
+      )}
+      {showDeleteDialog && (
+        <ConfirmDialog
+          testId="delete-completed-tasks-dialog"
+          confirmButtonStyle="danger"
+          confirmButtonCb={() => dispatch(deleteAllCompleted({ group }))}
+          cancelButtonCb={() => setShowDeleteDialog(false)}
+        >
+          Are you sure you want to delete completed tasks on the '
+          <strong>{group}</strong>' group?
+        </ConfirmDialog>
+      )}
     </div>
   )
 }

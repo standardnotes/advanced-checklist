@@ -96,6 +96,7 @@
     ]
   },
   "devDependencies": {
+    "@reach/alert-dialog": "^0.16.2",
     "@reach/menu-button": "^0.16.2",
     "@reach/visually-hidden": "^0.16.0",
     "@reduxjs/toolkit": "^1.8.0",
@@ -119,7 +120,6 @@
     "husky": "^7.0.0",
     "lint-staged": "^12.3.5",
     "node-sass": "7.0.1",
-    "preact": "^10.7.1",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",

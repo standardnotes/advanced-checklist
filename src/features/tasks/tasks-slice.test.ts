@@ -10,6 +10,7 @@ import reducer, {
   tasksReordered,
   tasksGroupReordered,
   tasksGroupDeleted,
+  tasksGroupMerged,
 } from './tasks-slice'
 import type { TasksState, GroupedTaskPayload } from './tasks-slice'
 
@@ -714,6 +715,100 @@ it('should handle deleting groups', () => {
           id: 'yet-another-id',
           description: 'Yet another simple task',
           completed: true,
+        },
+      ],
+    },
+  }
+
+  expect(currentState).toEqual(expectedState)
+})
+
+it('should not merge the same group', () => {
+  const previousState: TasksState = {
+    storage: {
+      Test: [
+        {
+          id: 'some-id',
+          description: 'A simple task',
+          completed: true,
+        },
+      ],
+      Testing: [
+        {
+          id: 'another-id',
+          description: 'Another simple task',
+          completed: false,
+        },
+      ],
+      Tests: [
+        {
+          id: 'yet-another-id',
+          description: 'Yet another simple task',
+          completed: true,
+        },
+      ],
+    },
+  }
+
+  const currentState = reducer(
+    previousState,
+    tasksGroupMerged({ group: 'Testing', mergeWith: 'Testing' })
+  )
+
+  expect(currentState).toEqual(previousState)
+})
+
+it('should handle merging groups', () => {
+  const previousState: TasksState = {
+    storage: {
+      Test: [
+        {
+          id: 'some-id',
+          description: 'A simple task',
+          completed: true,
+        },
+      ],
+      Testing: [
+        {
+          id: 'another-id',
+          description: 'Another simple task',
+          completed: false,
+        },
+      ],
+      Tests: [
+        {
+          id: 'yet-another-id',
+          description: 'Yet another simple task',
+          completed: true,
+        },
+      ],
+    },
+  }
+
+  const currentState = reducer(
+    previousState,
+    tasksGroupMerged({ group: 'Testing', mergeWith: 'Tests' })
+  )
+
+  const expectedState = {
+    storage: {
+      Test: [
+        {
+          id: 'some-id',
+          description: 'A simple task',
+          completed: true,
+        },
+      ],
+      Tests: [
+        {
+          id: 'yet-another-id',
+          description: 'Yet another simple task',
+          completed: true,
+        },
+        {
+          id: 'another-id',
+          description: 'Another simple task',
+          completed: false,
         },
       ],
     },
