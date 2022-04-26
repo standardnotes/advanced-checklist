@@ -3,7 +3,7 @@ import styled from 'styled-components'
 const Header1 = styled.h1`
   color: var(--sn-stylekit-paragraph-text-color);
   display: inline;
-  font-size: 1.125rem;
+  font-size: 1.125rem !important;
   margin-right: 10px !important;
 `
 
