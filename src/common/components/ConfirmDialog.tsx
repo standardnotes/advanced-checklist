@@ -55,6 +55,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
                 <div className="flex my-1 mt-4">
                   <button
+                    data-testid="cancel-dialog-button"
                     className="sn-button small neutral"
                     onClick={cancelButtonCb}
                     ref={cancelRef}

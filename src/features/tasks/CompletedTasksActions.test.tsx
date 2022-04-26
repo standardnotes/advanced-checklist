@@ -76,3 +76,20 @@ it('should dispatch deleteCompleted action', () => {
   expect(dispatchedActions).toHaveLength(1)
   expect(dispatchedActions[0]).toMatchObject(deleteAllCompleted({ group }))
 })
+
+it('should dismiss dialogs', () => {
+  const { mockStore } = testRender(<CompletedTasksActions group={group} />)
+
+  const reOpenCompletedButton = screen.getByTestId('reopen-completed-button')
+  fireEvent.click(reOpenCompletedButton)
+
+  fireEvent.click(screen.getByTestId('cancel-dialog-button'))
+
+  const deleteCompletedButton = screen.getByTestId('delete-completed-button')
+  fireEvent.click(deleteCompletedButton)
+
+  fireEvent.click(screen.getByTestId('cancel-dialog-button'))
+
+  const dispatchedActions = mockStore.getActions()
+  expect(dispatchedActions).toHaveLength(0)
+})
