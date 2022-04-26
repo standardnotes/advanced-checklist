@@ -4,8 +4,9 @@ import styled from 'styled-components'
 const StyledTextArea = styled.textarea`
   background-color: transparent;
   border: none;
-  color: var(--sn-stylekit-editor-foreground-color);
+  color: inherit;
   font-size: var(--sn-stylekit-font-size-editor);
+  font-weight: inherit;
   outline: none;
   overflow: hidden;
   resize: none;

@@ -13,7 +13,7 @@ import TaskItem from './TaskItem'
 import { SubTitle } from '../../common/components'
 
 const SubContainer = styled.div`
-  color: var(--sn-stylekit-paragraph-text-color);
+  color: var(--sn-stylekit-foreground-color);
   margin-bottom: 16px;
 `
 
@@ -23,10 +23,8 @@ const getItemStyle = (
 ) => ({
   ...draggableStyle,
   ...(isDragging && {
-    backgroundColor: 'var(--sn-stylekit-shadow-color)',
-    borderColor: 'var(--sn-stylekit-border-color)',
-    borderStyle: 'dotted',
-    borderWidth: '3px',
+    color: 'var(--sn-stylekit-info-color)',
+    fontWeight: 500,
   }),
 })
 
