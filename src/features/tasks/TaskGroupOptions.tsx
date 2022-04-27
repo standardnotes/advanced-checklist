@@ -77,7 +77,7 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
         </ConfirmDialog>
       )}
       {showMergeDialog && (
-        <MergeTaskGroups group={group} closeDialog={handleCloseMergeDialog} />
+        <MergeTaskGroups group={group} handleClose={handleCloseMergeDialog} />
       )}
     </>
   )

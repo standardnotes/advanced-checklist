@@ -66,3 +66,49 @@ it('should open the merge task group dialog', () => {
 
   expect(screen.getByTestId('merge-task-group-dialog')).toBeInTheDocument()
 })
+
+it('should open the delete task group dialog', () => {
+  testRender(<TaskGroupOptions group={group} />)
+
+  const optionsButton = screen.getByTestId('task-group-options')
+  fireEvent.click(optionsButton)
+
+  const trashTaskGroup = screen.getByTestId('move-task-group-trash')
+  clickButton(trashTaskGroup)
+
+  expect(screen.getByTestId('trash-task-group-dialog')).toBeInTheDocument()
+})
+
+it('should close the delete task group dialog', () => {
+  testRender(<TaskGroupOptions group={group} />)
+
+  const optionsButton = screen.getByTestId('task-group-options')
+  fireEvent.click(optionsButton)
+
+  const trashTaskGroup = screen.getByTestId('move-task-group-trash')
+  clickButton(trashTaskGroup)
+
+  const cancelButton = screen.getByTestId('cancel-dialog-button')
+  clickButton(cancelButton)
+
+  expect(
+    screen.queryByTestId('trash-task-group-dialog')
+  ).not.toBeInTheDocument()
+})
+
+it('should close the merge task group dialog', () => {
+  testRender(<TaskGroupOptions group={group} />)
+
+  const optionsButton = screen.getByTestId('task-group-options')
+  fireEvent.click(optionsButton)
+
+  const mergeTaskGroup = screen.getByTestId('merge-task-group')
+  clickButton(mergeTaskGroup)
+
+  const cancelButton = screen.queryAllByRole('button')[0]
+  clickButton(cancelButton)
+
+  expect(
+    screen.queryByTestId('merge-task-group-dialog')
+  ).not.toBeInTheDocument()
+})

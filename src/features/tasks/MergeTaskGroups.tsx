@@ -12,12 +12,12 @@ import { tasksGroupMerged } from './tasks-slice'
 
 type MergeTaskGroupsProps = {
   group: string
-  closeDialog: () => void
+  handleClose: () => void
 }
 
 const MergeTaskGroups: React.FC<MergeTaskGroupsProps> = ({
   group,
-  closeDialog,
+  handleClose,
 }) => {
   const cancelRef = useRef<HTMLButtonElement>(null)
 
@@ -38,12 +38,12 @@ const MergeTaskGroups: React.FC<MergeTaskGroupsProps> = ({
 
   function handleMergeGroups() {
     if (!mergeWith) {
-      closeDialog()
+      handleClose()
       return
     }
 
     dispatch(tasksGroupMerged({ group, mergeWith }))
-    closeDialog()
+    handleClose()
   }
 
   return (
@@ -94,19 +94,17 @@ const MergeTaskGroups: React.FC<MergeTaskGroupsProps> = ({
                 <div className="flex my-1 mt-4">
                   <button
                     className="sn-button small neutral"
-                    onClick={closeDialog}
+                    onClick={handleClose}
                     ref={cancelRef}
                   >
                     {!mergeWith ? 'Close' : 'Cancel'}
                   </button>
-                  {mergeWith && (
-                    <button
-                      className="sn-button small ml-2 info"
-                      onClick={handleMergeGroups}
-                    >
-                      Merge groups
-                    </button>
-                  )}
+                  <button
+                    className="sn-button small ml-2 info"
+                    onClick={handleMergeGroups}
+                  >
+                    Merge groups
+                  </button>
                 </div>
               </div>
             </div>

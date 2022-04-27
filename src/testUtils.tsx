@@ -5,7 +5,7 @@ import configureStore from 'redux-mock-store'
 
 import { RootState } from './app/store'
 
-const defaultMockState: RootState = {
+export const defaultMockState: RootState = {
   tasks: {
     storage: {},
   },
@@ -16,7 +16,7 @@ const defaultMockState: RootState = {
   },
 }
 
-function testRender(
+export function testRender(
   ui: React.ReactElement,
   renderOptions?: RenderOptions,
   state?: Partial<RootState>
@@ -37,5 +37,3 @@ function testRender(
     mockStore,
   }
 }
-
-export { testRender, defaultMockState }
