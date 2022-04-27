@@ -100,7 +100,7 @@
     "@reach/menu-button": "^0.16.2",
     "@reach/visually-hidden": "^0.16.0",
     "@reduxjs/toolkit": "^1.8.0",
-    "@standardnotes/editor-kit": "2.2.4",
+    "@standardnotes/editor-kit": "2.2.5",
     "@standardnotes/stylekit": "5.23.0",
     "@standardnotes/utils": "^1.6.2",
     "@testing-library/dom": "^8.11.3",
