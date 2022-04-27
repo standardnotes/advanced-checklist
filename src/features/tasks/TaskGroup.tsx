@@ -35,6 +35,14 @@ const GroupSeparator: React.FC = () => {
   return <ThematicBreak data-testid="task-group-separator" />
 }
 
+const getGroupStyle = (isDragging: boolean) => ({
+  ...(isDragging && {
+    background: 'var(--sn-stylekit-background-color)',
+    boxShadow: '2px 3px 5px -2px var(--sn-stylekit-shadow-color)',
+    padding: '6px 6px 6px 0',
+  }),
+})
+
 type TaskGroupProps = {
   group: string
   tasks: TaskPayload[]
@@ -73,6 +81,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
         className={`flex items-center justify-between h-8 mt-1 ${
           isLast ? 'mb-3' : 'mb-1'
         }`}
+        style={getGroupStyle(isDragging)}
       >
         <div className="flex flex-grow items-center">
           {canEdit && (
@@ -110,7 +119,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
         <TaskItemList group={group} tasks={tasks} />
       </CollapsableContainer>
 
-      {!isLast && <GroupSeparator />}
+      {!isLast && !isDragging && <GroupSeparator />}
     </div>
   )
 }
