@@ -5,7 +5,7 @@ import configureStore from 'redux-mock-store'
 
 import { RootState } from './app/store'
 
-export const defaultMockState: RootState = {
+const defaultMockState: RootState = {
   tasks: {
     storage: {},
   },
