@@ -34,7 +34,6 @@
   /* When the mouse is held on the box */
   input:active ~ .checkmark {
     background-color: var(--sn-stylekit-info-color);
-    // border-color: var(--sn-stylekit-info-contrast-color);
   }
 
   /* Show the checkmark when checked */
