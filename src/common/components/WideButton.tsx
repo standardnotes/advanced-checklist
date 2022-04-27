@@ -5,6 +5,7 @@ export const WideButton = styled.button`
   border-radius: 4px;
   border: none;
   color: var(--sn-stylekit-contrast-foreground-color);
+  cursor: pointer;
   font-weight: 500;
   height: 32px;
   width: 100%;
