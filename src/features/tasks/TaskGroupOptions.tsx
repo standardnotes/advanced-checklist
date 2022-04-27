@@ -5,11 +5,17 @@ import VisuallyHidden from '@reach/visually-hidden'
 import { useAppDispatch } from '../../app/hooks'
 import { tasksGroupDeleted } from './tasks-slice'
 
-import { MoreIcon, MergeIcon, TrashIcon } from '../../common/components/icons'
+import {
+  MoreIcon,
+  MergeIcon,
+  TrashIcon,
+  RenameIcon,
+} from '../../common/components/icons'
 
 import ConfirmDialog from '../../common/components/ConfirmDialog'
 
 import MergeTaskGroups from './MergeTaskGroups'
+import RenameTaskGroups from './RenameTaskGroups'
 
 type TaskGroupOptionsProps = {
   group: string
@@ -20,6 +26,7 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
 
   const [showMergeDialog, setShowMergeDialog] = useState(false)
   const [showTrashDialog, setShowTrashDialog] = useState(false)
+  const [showRenameDialog, setShowRenameDialog] = useState(false)
 
   function handleOpenMergeDialog() {
     setShowMergeDialog(true)
@@ -35,6 +42,14 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
 
   function handleCloseTrashDialog() {
     setShowTrashDialog(false)
+  }
+
+  function handleOpenRenameDialog() {
+    setShowRenameDialog(true)
+  }
+
+  function handleCloseRenameDialog() {
+    setShowRenameDialog(false)
   }
 
   return (
@@ -62,6 +77,13 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
             <MergeIcon />
             <span className="px-1">Merge into another group</span>
           </MenuItem>
+          <MenuItem
+            data-testid="rename-task-group"
+            onSelect={handleOpenRenameDialog}
+          >
+            <RenameIcon />
+            <span className="px-1">Rename</span>
+          </MenuItem>
         </MenuList>
       </Menu>
       {showTrashDialog && (
@@ -78,6 +100,9 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
       )}
       {showMergeDialog && (
         <MergeTaskGroups group={group} handleClose={handleCloseMergeDialog} />
+      )}
+      {showRenameDialog && (
+        <RenameTaskGroups group={group} handleClose={handleCloseRenameDialog} />
       )}
     </>
   )

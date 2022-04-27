@@ -139,7 +139,7 @@ const tasksSlice = createSlice({
       }
 
       state.storage[mergeWith] = [
-        ...state.storage[mergeWith],
+        ...(state.storage[mergeWith] ?? []),
         ...state.storage[group],
       ]
       delete state.storage[group]
