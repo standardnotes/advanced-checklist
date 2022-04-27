@@ -19,7 +19,7 @@ type ConfirmDialogProps = {
   cancelButtonCb: () => void
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   testId,
   title = '',
   confirmButtonText = 'Confirm',
@@ -78,5 +78,3 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     </AlertDialog>
   )
 }
-
-export default ConfirmDialog

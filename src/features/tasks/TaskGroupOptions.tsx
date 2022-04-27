@@ -12,7 +12,7 @@ import {
   RenameIcon,
 } from '../../common/components/icons'
 
-import ConfirmDialog from '../../common/components/ConfirmDialog'
+import { ConfirmDialog } from '../../common/components'
 
 import MergeTaskGroups from './MergeTaskGroups'
 import RenameTaskGroups from './RenameTaskGroups'

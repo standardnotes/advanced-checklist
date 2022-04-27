@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import ConfirmDialog from '../../common/components/ConfirmDialog'
+import { ConfirmDialog } from '../../common/components'
 
 import { openAllCompleted, deleteAllCompleted } from './tasks-slice'
 
