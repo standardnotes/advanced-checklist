@@ -5,10 +5,11 @@ const StyledTextArea = styled.textarea`
   background-color: transparent;
   border: none;
   color: inherit;
-  font-size: var(--sn-stylekit-font-size-editor);
-  font-weight: inherit;
+  font-size: var(--sn-stylekit-font-size-h3);
+  font-weight: 300;
   outline: none;
   overflow: hidden;
+  padding-top: 5px;
   resize: none;
   width: 100%;
 `

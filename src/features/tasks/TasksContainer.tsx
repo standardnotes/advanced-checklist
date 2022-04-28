@@ -11,10 +11,16 @@ import { TaskPayload } from './tasks-slice'
 import TaskItem from './TaskItem'
 
 import { SubTitle } from '../../common/components'
+import { ClosedCircleIcon, OpenCircleIcon } from '../../common/components/icons'
 
-const SubContainer = styled.div`
+const SubTitleContainer = styled.div`
+  align-items: center;
+  display: flex;
+  gap: 14px;
+`
+
+const Wrapper = styled.div`
   color: var(--sn-stylekit-foreground-color);
-  margin-bottom: 16px;
 `
 
 const getItemStyle = (
@@ -49,8 +55,15 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
     <div data-testid={testId}>
       <Droppable droppableId={droppableId} isDropDisabled={!canEdit}>
         {(provided) => (
-          <SubContainer>
-            <SubTitle>{title}</SubTitle>
+          <Wrapper>
+            <SubTitleContainer>
+              {title === 'Open tasks' ? (
+                <OpenCircleIcon />
+              ) : (
+                <ClosedCircleIcon />
+              )}
+              <SubTitle>{title}</SubTitle>
+            </SubTitleContainer>
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {tasks.map((task, index) => {
                 const identifier = `${index}-${task.id}`
@@ -87,7 +100,7 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
               {provided.placeholder}
             </div>
             {children}
-          </SubContainer>
+          </Wrapper>
         )}
       </Droppable>
     </div>
