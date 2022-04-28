@@ -18,6 +18,7 @@ const Container = styled.div`
   align-items: center;
   display: flex;
   gap: 5px;
+  margin-bottom: 8px;
 `
 
 type CreateTaskProps = {
@@ -41,7 +42,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
 
   useEffect(() => {
     if (isRunningOnMobile) {
-      inputRef.current!.focus()
+      inputRef.current && inputRef.current.focus()
     }
   })
 
@@ -76,7 +77,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
         disabled={!canEdit}
         onChange={onTextChange}
         onKeyPress={handleKeyPress}
-        placeholder={'Type in your task, then press enter'}
+        placeholder={'Type a task and press enter'}
         ref={inputRef}
         spellCheck={spellCheckerEnabled}
         value={taskDraft}

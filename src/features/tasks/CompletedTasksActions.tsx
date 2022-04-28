@@ -6,7 +6,7 @@ import { ConfirmDialog } from '../../common/components'
 
 import { openAllCompleted, deleteAllCompleted } from './tasks-slice'
 
-const LinkButton = styled.button`
+const ActionButton = styled.button`
   background-color: var(--sn-stylekit-secondary-background-color);
   border-radius: 4px;
   border-style: none;
@@ -16,7 +16,7 @@ const LinkButton = styled.button`
   font-size: var(--sn-stylekit-font-size-h6);
   font-weight: 400;
   height: 25px;
-  margin: 10px 10px 0 0;
+  margin-right: 10px;
   opacity: 0.96;
   padding: 4px 10px 4px;
 
@@ -46,18 +46,18 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
 
   return (
     <div data-testid="completed-tasks-actions">
-      <LinkButton
+      <ActionButton
         onClick={() => setShowReopenDialog(true)}
         data-testid="reopen-completed-button"
       >
         Reopen Completed
-      </LinkButton>
-      <LinkButton
+      </ActionButton>
+      <ActionButton
         onClick={() => setShowDeleteDialog(true)}
         data-testid="delete-completed-button"
       >
         Delete Completed
-      </LinkButton>
+      </ActionButton>
       {showReopenDialog && (
         <ConfirmDialog
           testId="reopen-all-tasks-dialog"

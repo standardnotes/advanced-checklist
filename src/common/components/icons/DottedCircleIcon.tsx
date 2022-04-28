@@ -1,7 +1,7 @@
 export const DottedCircleIcon = () => {
   return (
     <svg
-      className="sn-icon no-fill block"
+      className="sn-icon no-fill stroke-neutral-color block"
       fill="none"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
@@ -12,8 +12,7 @@ export const DottedCircleIcon = () => {
         width="19"
         height="19"
         rx="9.5"
-        stroke="#BBBEC4"
-        stroke-dasharray="2 2"
+        strokeDasharray="2 2"
       />
     </svg>
   )

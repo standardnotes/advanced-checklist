@@ -6,9 +6,10 @@ const StyledInput = styled.input`
   border: none;
   color: var(--sn-stylekit-paragraph-text-color);
   font-size: var(--sn-stylekit-font-size-h3);
-  height: 30px;
+  height: 20px;
   margin: 6px 0 6px 0;
   outline: none;
+  width: 100%;
 
   /* Remove default shadow for iOS mobile */
   -webkit-appearance: none;

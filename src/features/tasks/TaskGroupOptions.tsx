@@ -28,30 +28,6 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
   const [showTrashDialog, setShowTrashDialog] = useState(false)
   const [showRenameDialog, setShowRenameDialog] = useState(false)
 
-  function handleOpenMergeDialog() {
-    setShowMergeDialog(true)
-  }
-
-  function handleCloseMergeDialog() {
-    setShowMergeDialog(false)
-  }
-
-  function handleOpenTrashDialog() {
-    setShowTrashDialog(true)
-  }
-
-  function handleCloseTrashDialog() {
-    setShowTrashDialog(false)
-  }
-
-  function handleOpenRenameDialog() {
-    setShowRenameDialog(true)
-  }
-
-  function handleCloseRenameDialog() {
-    setShowRenameDialog(false)
-  }
-
   return (
     <>
       <Menu>
@@ -65,21 +41,21 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
         <MenuList>
           <MenuItem
             data-testid="move-task-group-trash"
-            onSelect={handleOpenTrashDialog}
+            onSelect={() => setShowTrashDialog(true)}
           >
             <TrashIcon />
             <span className="px-1">Move group to trash</span>
           </MenuItem>
           <MenuItem
             data-testid="merge-task-group"
-            onSelect={handleOpenMergeDialog}
+            onSelect={() => setShowMergeDialog(true)}
           >
             <MergeIcon />
             <span className="px-1">Merge into another group</span>
           </MenuItem>
           <MenuItem
             data-testid="rename-task-group"
-            onSelect={handleOpenRenameDialog}
+            onSelect={() => setShowRenameDialog(true)}
           >
             <RenameIcon />
             <span className="px-1">Rename</span>
@@ -93,16 +69,22 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
           confirmButtonText="Move to trash"
           confirmButtonStyle="danger"
           confirmButtonCb={() => dispatch(tasksGroupDeleted({ group }))}
-          cancelButtonCb={handleCloseTrashDialog}
+          cancelButtonCb={() => setShowTrashDialog(false)}
         >
           Are you sure you want to move '<strong>{group}</strong>' to the trash?
         </ConfirmDialog>
       )}
       {showMergeDialog && (
-        <MergeTaskGroups group={group} handleClose={handleCloseMergeDialog} />
+        <MergeTaskGroups
+          group={group}
+          handleClose={() => setShowMergeDialog(false)}
+        />
       )}
       {showRenameDialog && (
-        <RenameTaskGroups group={group} handleClose={handleCloseRenameDialog} />
+        <RenameTaskGroups
+          group={group}
+          handleClose={() => setShowRenameDialog(false)}
+        />
       )}
     </>
   )

@@ -22,9 +22,10 @@ type ItemContainerProps = {
 }
 
 const Container = styled.div<ItemContainerProps>`
+  align-content: center;
+  align-items: center;
   display: flex;
   flex-direction: row;
-  margin-bottom: 8px;
 
   ${({ completed }) =>
     completed &&
@@ -65,8 +66,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
     /**
      * Set to 1px first to reset scroll height in case it shrunk.
      */
+    const heightOffset = 4
     textarea.style.height = '1px'
-    textarea.style.height = textarea.scrollHeight + 'px'
+    textarea.style.height = textarea.scrollHeight - heightOffset + 'px'
   }
 
   useEffect(() => {

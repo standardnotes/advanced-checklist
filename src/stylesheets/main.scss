@@ -37,6 +37,18 @@ html {
   .no-fill {
     fill: none;
   }
+
+  .stroke-info-color {
+    stroke: var(--sn-stylekit-info-color);
+  }
+
+  .stroke-neutral-color {
+    stroke: var(--sn-stylekit-neutral-color);
+  }
+
+  .fill-info-color {
+    fill: var(--sn-stylekit-info-color);
+  }
 }
 
 :root {

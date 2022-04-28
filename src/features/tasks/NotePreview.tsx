@@ -12,7 +12,9 @@ const TASKS_PREVIEW_LIMIT = 3
 const MAX_TASK_DESCRIPTION_LENGTH = 30
 
 const Header: React.FC = ({ children }) => {
-  return <b style={{ marginTop: '10px', width: '100%' }}>{children}</b>
+  return (
+    <strong style={{ marginTop: '10px', width: '100%' }}>{children}</strong>
+  )
 }
 
 const TaskListElement: React.FC = ({ children, ...props }) => {

@@ -6,10 +6,10 @@ const StyledTextArea = styled.textarea`
   border: none;
   color: inherit;
   font-size: var(--sn-stylekit-font-size-h3);
-  font-weight: 300;
+  font-weight: 400;
+  margin-left: 6px;
   outline: none;
   overflow: hidden;
-  padding-top: 5px;
   resize: none;
   width: 100%;
 `

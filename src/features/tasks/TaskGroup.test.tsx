@@ -48,14 +48,6 @@ it('renders the circular progress bar', () => {
   expect(screen.getByTestId('circular-progress-bar')).toBeInTheDocument()
 })
 
-it('renders a thematic break element', () => {
-  testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />
-  )
-
-  expect(screen.getByTestId('task-group-separator')).toBeInTheDocument()
-})
-
 it('does not render a thematic break element', () => {
   testRender(
     <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={true} />
@@ -122,4 +114,38 @@ it('hides group options if can not edit', () => {
   )
 
   expect(screen.queryByTestId('task-group-options')).not.toBeInTheDocument()
+})
+
+it('shows a reorder icon when on mobile', () => {
+  let defaultState: Partial<RootState> = {
+    settings: {
+      canEdit: false,
+      isRunningOnMobile: true,
+      spellCheckerEnabled: true,
+    },
+  }
+
+  testRender(
+    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />,
+    {},
+    defaultState
+  )
+
+  expect(screen.queryByTestId('reorder-icon')).not.toBeInTheDocument()
+
+  defaultState = {
+    settings: {
+      canEdit: true,
+      isRunningOnMobile: true,
+      spellCheckerEnabled: true,
+    },
+  }
+
+  testRender(
+    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />,
+    {},
+    defaultState
+  )
+
+  expect(screen.getByTestId('reorder-icon')).toBeInTheDocument()
 })
