@@ -9,6 +9,7 @@ const StyledInput = styled.input`
   height: 20px;
   margin: 6px 0 6px 0;
   outline: none;
+  padding: 0;
   width: 100%;
 
   /* Remove default shadow for iOS mobile */

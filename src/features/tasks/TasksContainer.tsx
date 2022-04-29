@@ -19,7 +19,11 @@ const InnerTasksContainer = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
-  gap: 5px;
+
+  & > *:not(:last-child) {
+    margin-bottom: 5px;
+  }
+
   ${({ type, items }) =>
     type === 'Completed' && items > 0 ? 'margin-bottom: 28px' : ''};
 `
@@ -33,7 +37,10 @@ const SubTitleContainer = styled.div`
   align-items: center;
   display: flex;
   margin-left: 6px;
-  gap: 14px;
+
+  & > *:first-child {
+    margin-right: 14px;
+  }
 `
 
 const Wrapper = styled.div`

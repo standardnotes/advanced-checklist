@@ -1,10 +1,4 @@
-import {
-  ChangeEvent,
-  createRef,
-  KeyboardEvent,
-  useEffect,
-  useState,
-} from 'react'
+import { ChangeEvent, createRef, KeyboardEvent, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styled from 'styled-components'
 
@@ -17,8 +11,12 @@ import { DottedCircleIcon } from '../../common/components/icons'
 const Container = styled.div`
   align-items: center;
   display: flex;
-  gap: 5px;
   margin-bottom: 8px;
+
+  & > *:first-child {
+    margin-left: 1px;
+    margin-right: 9px;
+  }
 `
 
 type CreateTaskProps = {
@@ -30,21 +28,12 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
 
   const dispatch = useAppDispatch()
 
-  const isRunningOnMobile = useAppSelector(
-    (state) => state.settings.isRunningOnMobile
-  )
   const spellCheckerEnabled = useAppSelector(
     (state) => state.settings.spellCheckerEnabled
   )
   const canEdit = useAppSelector((state) => state.settings.canEdit)
 
   const [taskDraft, setTaskDraft] = useState('')
-
-  useEffect(() => {
-    if (isRunningOnMobile) {
-      inputRef.current && inputRef.current.focus()
-    }
-  })
 
   function onTextChange(event: ChangeEvent<HTMLInputElement>) {
     const rawString = event.target.value

@@ -79,18 +79,3 @@ test('pressing enter when input box is not empty, should create a new task', () 
     })
   )
 })
-
-it('should focus input box if isRunningOnMobile is true', () => {
-  const defaultState: Partial<RootState> = {
-    settings: {
-      canEdit: true,
-      isRunningOnMobile: true,
-      spellCheckerEnabled: true,
-    },
-  }
-
-  testRender(<CreateTask group={defaultGroup} />, {}, defaultState)
-
-  const inputBox = screen.getByTestId('create-task-input')
-  expect(inputBox).toHaveFocus()
-})

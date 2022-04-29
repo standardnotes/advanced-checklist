@@ -74,8 +74,15 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
     setCollapsed(isDragging)
   }, [isDragging, setCollapsed])
 
+  /**
+   * We want to enable reordering groups via the reorder icon exclusively on mobile.
+   */
+  const taskGroupProps = {
+    ...(!isOnMobile ? props : {}),
+  }
+
   return (
-    <TaskGroupContainer ref={innerRef} style={style} {...props}>
+    <TaskGroupContainer ref={innerRef} style={style} {...taskGroupProps}>
       <div
         className={`flex items-center justify-between h-8 mt-1 ${
           isLast ? 'mb-3' : 'mb-1'
