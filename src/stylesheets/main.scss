@@ -2,9 +2,8 @@
 
 body,
 html {
-  background-color: transparent;
-  background-color: var(--sn-stylekit-background-color);
-  margin: 15px !important;
+  background-color: var(--sn-stylekit-secondary-background-color);
+  margin: 8px !important;
   padding: 0 !important;
 }
 
@@ -28,6 +27,27 @@ html {
 
   .mr-3 {
     margin-right: 0.75rem;
+  }
+
+  .sn-icon.sm {
+    height: 0.875rem;
+    width: 0.875rem;
+  }
+
+  .no-fill {
+    fill: none;
+  }
+
+  .stroke-info-color {
+    stroke: var(--sn-stylekit-info-color);
+  }
+
+  .stroke-neutral-color {
+    stroke: var(--sn-stylekit-neutral-color);
+  }
+
+  .fill-info-color {
+    fill: var(--sn-stylekit-info-color);
   }
 }
 

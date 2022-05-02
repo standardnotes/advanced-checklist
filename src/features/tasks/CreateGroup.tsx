@@ -3,7 +3,8 @@ import { ChangeEvent, createRef, KeyboardEvent, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { tasksGroupAdded } from './tasks-slice'
 
-import { BigTextInput, WideButton } from '../../common/components'
+import { TextInput, WideButton } from '../../common/components'
+import { AddIcon } from '../../common/components/icons'
 
 const CreateGroup: React.FC = () => {
   const inputRef = createRef<HTMLInputElement>()
@@ -46,10 +47,10 @@ const CreateGroup: React.FC = () => {
     <>
       {!isCreateMode ? (
         <WideButton data-testid="create-group-button" onClick={toggleMode}>
-          +
+          <AddIcon />
         </WideButton>
       ) : (
-        <BigTextInput
+        <TextInput
           testId="create-group-input"
           value={group}
           onChange={onTextChange}

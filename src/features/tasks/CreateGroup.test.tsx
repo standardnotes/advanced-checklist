@@ -8,7 +8,7 @@ import CreateGroup from './CreateGroup'
 it('renders a button by default', () => {
   testRender(<CreateGroup />)
 
-  expect(screen.getByTestId('create-group-button')).toHaveTextContent('+')
+  expect(screen.getByTestId('create-group-button')).toBeInTheDocument()
   expect(screen.queryByTestId('create-group-input')).not.toBeInTheDocument()
 })
 

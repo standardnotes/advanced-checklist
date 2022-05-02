@@ -9,7 +9,7 @@ import {
 
 import { useAppDispatch } from '../../app/hooks'
 import { tasksGroupMerged } from './tasks-slice'
-import { BigTextInput } from '../../common/components'
+import { TextInput } from '../../common/components'
 
 type RenameTaskGroupsProps = {
   group: string
@@ -51,7 +51,7 @@ const RenameTaskGroups: React.FC<RenameTaskGroupsProps> = ({
                 </AlertDialogLabel>
 
                 <AlertDialogDescription>
-                  <BigTextInput
+                  <TextInput
                     testId="new-group-name-input"
                     autoFocus
                     onChange={handleChange}

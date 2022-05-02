@@ -5,8 +5,9 @@ const StyledTextArea = styled.textarea`
   background-color: transparent;
   border: none;
   color: inherit;
-  font-size: var(--sn-stylekit-font-size-editor);
-  font-weight: inherit;
+  font-size: var(--sn-stylekit-font-size-h3);
+  font-weight: 400;
+  margin-left: 6px;
   outline: none;
   overflow: hidden;
   resize: none;

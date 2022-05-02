@@ -1,12 +1,15 @@
 import styled from 'styled-components'
 
 export const WideButton = styled.button`
-  background-color: var(--sn-stylekit-contrast-background-color);
-  border-radius: 4px;
-  border: none;
-  color: var(--sn-stylekit-contrast-foreground-color);
+  align-items: center;
+  background-color: var(--sn-stylekit-background-color);
+  border-radius: 8px;
+  border: 1px solid var(--sn-stylekit-border-color);
+  box-sizing: border-box;
+  color: var(--sn-stylekit-paragraph-text-color);
   cursor: pointer;
-  font-weight: 500;
+  display: flex;
   height: 32px;
+  justify-content: center;
   width: 100%;
 `

@@ -11,11 +11,54 @@ import { TaskPayload } from './tasks-slice'
 import TaskItem from './TaskItem'
 
 import { SubTitle } from '../../common/components'
+import { ClosedCircleIcon, OpenCircleIcon } from '../../common/components/icons'
 
-const SubContainer = styled.div`
-  color: var(--sn-stylekit-foreground-color);
-  margin-bottom: 16px;
+const InnerTasksContainer = styled.div<{
+  type: ContainerType
+  items: number
+}>`
+  display: flex;
+  flex-direction: column;
+
+  & > *:not(:last-child) {
+    margin-bottom: 5px;
+  }
+
+  ${({ type, items }) =>
+    type === 'Completed' && items > 0 ? 'margin-bottom: 28px' : ''};
 `
+
+const OuterContainer = styled.div<{ type: ContainerType; items: number }>`
+  ${({ type, items }) =>
+    type === 'Open' && items > 0 ? 'margin-bottom: 18px' : ''};
+`
+
+const SubTitleContainer = styled.div`
+  align-items: center;
+  display: flex;
+  margin-left: 6px;
+
+  & > *:first-child {
+    margin-right: 14px;
+  }
+`
+
+const Wrapper = styled.div`
+  color: var(--sn-stylekit-foreground-color);
+`
+
+const IconForContainer: React.FC<{ type: ContainerType }> = ({ type }) => {
+  switch (type) {
+    case 'Open':
+      return <OpenCircleIcon />
+    case 'Completed':
+      return <ClosedCircleIcon />
+  }
+}
+
+const SubTitleForContainer: React.FC<{ type: ContainerType }> = ({ type }) => {
+  return <SubTitle>{type} tasks</SubTitle>
+}
 
 const getItemStyle = (
   isDragging: boolean,
@@ -28,30 +71,40 @@ const getItemStyle = (
   }),
 })
 
+type ContainerType = 'Open' | 'Completed'
+
 type TasksContainerProps = {
-  title: string
-  tasks: TaskPayload[]
   group: string
+  tasks: TaskPayload[]
+  type: ContainerType
   testId?: string
 }
 
 const TasksContainer: React.FC<TasksContainerProps> = ({
   group,
   tasks,
-  title,
+  type,
   testId,
   children,
 }) => {
   const canEdit = useAppSelector((state) => state.settings.canEdit)
-  const droppableId = title.replace(' ', '-').toLowerCase()
+  const droppableId = `${type.toLowerCase()}-tasks-droppable`
 
   return (
-    <div data-testid={testId}>
+    <OuterContainer data-testid={testId} type={type} items={tasks.length}>
       <Droppable droppableId={droppableId} isDropDisabled={!canEdit}>
         {(provided) => (
-          <SubContainer>
-            <SubTitle>{title}</SubTitle>
-            <div {...provided.droppableProps} ref={provided.innerRef}>
+          <Wrapper>
+            <SubTitleContainer>
+              <IconForContainer type={type} />
+              <SubTitleForContainer type={type} />
+            </SubTitleContainer>
+            <InnerTasksContainer
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              type={type}
+              items={tasks.length}
+            >
               {tasks.map((task, index) => {
                 const identifier = `${index}-${task.id}`
                 return (
@@ -85,12 +138,12 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
                 )
               })}
               {provided.placeholder}
-            </div>
+            </InnerTasksContainer>
             {children}
-          </SubContainer>
+          </Wrapper>
         )}
       </Droppable>
-    </div>
+    </OuterContainer>
   )
 }
 

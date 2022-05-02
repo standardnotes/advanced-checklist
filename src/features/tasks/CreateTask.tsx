@@ -1,16 +1,23 @@
-import {
-  ChangeEvent,
-  createRef,
-  KeyboardEvent,
-  useEffect,
-  useState,
-} from 'react'
+import { ChangeEvent, createRef, KeyboardEvent, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import styled from 'styled-components'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { taskAdded } from './tasks-slice'
 
-import { BigTextInput } from '../../common/components'
+import { TextInput } from '../../common/components'
+import { DottedCircleIcon } from '../../common/components/icons'
+
+const Container = styled.div`
+  align-items: center;
+  display: flex;
+  margin-bottom: 8px;
+
+  & > *:first-child {
+    margin-left: 1px;
+    margin-right: 9px;
+  }
+`
 
 type CreateTaskProps = {
   group: string
@@ -21,21 +28,12 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
 
   const dispatch = useAppDispatch()
 
-  const isRunningOnMobile = useAppSelector(
-    (state) => state.settings.isRunningOnMobile
-  )
   const spellCheckerEnabled = useAppSelector(
     (state) => state.settings.spellCheckerEnabled
   )
   const canEdit = useAppSelector((state) => state.settings.canEdit)
 
   const [taskDraft, setTaskDraft] = useState('')
-
-  useEffect(() => {
-    if (isRunningOnMobile) {
-      inputRef.current!.focus()
-    }
-  })
 
   function onTextChange(event: ChangeEvent<HTMLInputElement>) {
     const rawString = event.target.value
@@ -61,16 +59,19 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
   }
 
   return (
-    <BigTextInput
-      testId="create-task-input"
-      disabled={!canEdit}
-      onChange={onTextChange}
-      onKeyPress={handleKeyPress}
-      placeholder={'Type in your task, then press enter'}
-      ref={inputRef}
-      spellCheck={spellCheckerEnabled}
-      value={taskDraft}
-    />
+    <Container>
+      <DottedCircleIcon />
+      <TextInput
+        testId="create-task-input"
+        disabled={!canEdit}
+        onChange={onTextChange}
+        onKeyPress={handleKeyPress}
+        placeholder={'Type a task and press enter'}
+        ref={inputRef}
+        spellCheck={spellCheckerEnabled}
+        value={taskDraft}
+      />
+    </Container>
   )
 }
 

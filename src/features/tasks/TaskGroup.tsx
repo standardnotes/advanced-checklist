@@ -15,13 +15,21 @@ import {
   GenericInlineText,
   MainTitle,
   RoundButton,
-  ThematicBreak,
 } from '../../common/components'
 import {
   ChevronDownIcon,
   ReorderIcon,
   ChevronUpIcon,
 } from '../../common/components/icons'
+
+const TaskGroupContainer = styled.div`
+  background-color: var(--sn-stylekit-background-color);
+  border: 1px solid var(--sn-stylekit-border-color);
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 16px;
+  margin-bottom: 9px;
+`
 
 type CollapsableContainerProps = {
   collapsed: boolean
@@ -31,24 +39,13 @@ const CollapsableContainer = styled.div<CollapsableContainerProps>`
   display: ${({ collapsed }) => (collapsed ? 'none' : 'block')};
 `
 
-const GroupSeparator: React.FC = () => {
-  return <ThematicBreak data-testid="task-group-separator" />
-}
-
-const getGroupStyle = (isDragging: boolean) => ({
-  ...(isDragging && {
-    background: 'var(--sn-stylekit-background-color)',
-    boxShadow: '2px 3px 5px -2px var(--sn-stylekit-shadow-color)',
-    padding: '6px 6px 6px 0',
-  }),
-})
-
 type TaskGroupProps = {
   group: string
   tasks: TaskPayload[]
   isLast: boolean
   isDragging: boolean
   innerRef?: (element?: HTMLElement | null | undefined) => any
+  style?: React.CSSProperties
 }
 
 const TaskGroup: React.FC<TaskGroupProps> = ({
@@ -57,6 +54,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
   isLast,
   isDragging,
   innerRef,
+  style,
   ...props
 }) => {
   const completedTasks = tasks.filter((task) => task.completed).length
@@ -66,6 +64,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
   const [collapsed, setCollapsed] = useState(isDragging)
 
   const canEdit = useAppSelector((state) => state.settings.canEdit)
+  const isOnMobile = useAppSelector((state) => state.settings.isRunningOnMobile)
 
   function handleCollapse() {
     setCollapsed(!collapsed)
@@ -75,16 +74,22 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
     setCollapsed(isDragging)
   }, [isDragging, setCollapsed])
 
+  /**
+   * We want to enable reordering groups via the reorder icon exclusively on mobile.
+   */
+  const taskGroupProps = {
+    ...(!isOnMobile ? props : {}),
+  }
+
   return (
-    <div ref={innerRef}>
+    <TaskGroupContainer ref={innerRef} style={style} {...taskGroupProps}>
       <div
         className={`flex items-center justify-between h-8 mt-1 ${
           isLast ? 'mb-3' : 'mb-1'
         }`}
-        style={getGroupStyle(isDragging)}
       >
         <div className="flex flex-grow items-center">
-          {canEdit && (
+          {canEdit && isOnMobile && (
             <div className="mr-3" {...props}>
               <ReorderIcon highlight={isDragging} />
             </div>
@@ -118,9 +123,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
         <CreateTask group={group} />
         <TaskItemList group={group} tasks={tasks} />
       </CollapsableContainer>
-
-      {!isLast && !isDragging && <GroupSeparator />}
-    </div>
+    </TaskGroupContainer>
   )
 }
 
