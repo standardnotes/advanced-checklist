@@ -1,4 +1,10 @@
-import { ChangeEvent, createRef, KeyboardEvent, useState } from 'react'
+import {
+  ChangeEvent,
+  createRef,
+  FocusEvent,
+  KeyboardEvent,
+  useState,
+} from 'react'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { tasksGroupAdded } from './tasks-slice'
@@ -25,7 +31,12 @@ const CreateGroup: React.FC = () => {
     setIsCreateMode(!isCreateMode)
   }
 
-  function onTextChange(event: ChangeEvent<HTMLInputElement>) {
+  function handleBlur(event: FocusEvent<HTMLInputElement>) {
+    setIsCreateMode(false)
+    setGroup('')
+  }
+
+  function handleTextChange(event: ChangeEvent<HTMLInputElement>) {
     setGroup(event.target.value)
   }
 
@@ -55,7 +66,8 @@ const CreateGroup: React.FC = () => {
         <TextInput
           testId="create-group-input"
           value={group}
-          onChange={onTextChange}
+          onBlur={handleBlur}
+          onChange={handleTextChange}
           onKeyPress={handleKeyPress}
           placeholder="Name your task group and press enter"
           ref={inputRef}

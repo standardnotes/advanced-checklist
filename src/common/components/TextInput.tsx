@@ -1,4 +1,4 @@
-import { ChangeEvent, forwardRef, KeyboardEvent } from 'react'
+import { ChangeEvent, FocusEvent, forwardRef, KeyboardEvent } from 'react'
 import styled from 'styled-components'
 
 type StyledInputProps = {
@@ -37,6 +37,7 @@ type TextInputProps = {
   spellCheck?: boolean
   testId?: string
   textSize?: 'normal' | 'big'
+  onBlur?: (event: FocusEvent<HTMLInputElement>) => void
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void
   onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void
 }
@@ -52,6 +53,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       spellCheck,
       testId,
       textSize = 'normal',
+      onBlur,
       onChange,
       onKeyPress,
     },
@@ -64,6 +66,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         data-testid={testId}
         dir={dir}
         disabled={disabled}
+        onBlur={onBlur}
         onChange={onChange}
         onKeyPress={onKeyPress}
         placeholder={placeholder}
