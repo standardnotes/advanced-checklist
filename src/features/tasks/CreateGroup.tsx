@@ -18,6 +18,8 @@ const CreateGroup: React.FC = () => {
   const spellCheckerEnabled = useAppSelector(
     (state) => state.settings.spellCheckerEnabled
   )
+  const groupedTasks = useAppSelector((state) => state.tasks.storage)
+  const taskGroupCount = Object.keys(groupedTasks).length
 
   function toggleMode() {
     setIsCreateMode(!isCreateMode)
@@ -45,7 +47,7 @@ const CreateGroup: React.FC = () => {
 
   return (
     <>
-      {!isCreateMode ? (
+      {!isCreateMode && taskGroupCount > 0 ? (
         <WideButton data-testid="create-group-button" onClick={toggleMode}>
           <AddIcon />
         </WideButton>
@@ -58,6 +60,7 @@ const CreateGroup: React.FC = () => {
           placeholder="Name your task group and press enter"
           ref={inputRef}
           spellCheck={spellCheckerEnabled}
+          textSize="big"
           autoFocus
         />
       )}

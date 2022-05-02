@@ -1,12 +1,18 @@
 import { ChangeEvent, forwardRef, KeyboardEvent } from 'react'
 import styled from 'styled-components'
 
-const StyledInput = styled.input`
+type StyledInputProps = {
+  textSize: 'normal' | 'big'
+}
+
+const StyledInput = styled.input<StyledInputProps>`
   background-color: unset;
   border: none;
   color: var(--sn-stylekit-paragraph-text-color);
-  font-size: var(--sn-stylekit-font-size-h3);
-  height: 20px;
+  font-size: ${({ textSize }) =>
+    textSize === 'big' ? '1.125rem' : 'var(--sn-stylekit-font-size-h3)'};
+  font-weight: ${({ textSize }) => (textSize === 'big' ? '500' : '400')};
+  height: auto;
   margin: 6px 0 6px 0;
   outline: none;
   padding: 0;
@@ -30,6 +36,7 @@ type TextInputProps = {
   placeholder?: string
   spellCheck?: boolean
   testId?: string
+  textSize?: 'normal' | 'big'
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void
   onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void
 }
@@ -44,6 +51,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       placeholder,
       spellCheck,
       testId,
+      textSize = 'normal',
       onChange,
       onKeyPress,
     },
@@ -61,6 +69,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         placeholder={placeholder}
         ref={ref}
         spellCheck={spellCheck}
+        textSize={textSize}
         value={value}
       />
     )
