@@ -11,7 +11,6 @@ import { TaskPayload } from './tasks-slice'
 import TaskItem from './TaskItem'
 
 import { SubTitle } from '../../common/components'
-import { ClosedCircleIcon, OpenCircleIcon } from '../../common/components/icons'
 
 const InnerTasksContainer = styled.div<{
   type: ContainerType
@@ -36,7 +35,6 @@ const OuterContainer = styled.div<{ type: ContainerType; items: number }>`
 const SubTitleContainer = styled.div`
   align-items: center;
   display: flex;
-  margin-left: 6px;
 
   & > *:first-child {
     margin-right: 14px;
@@ -46,15 +44,6 @@ const SubTitleContainer = styled.div`
 const Wrapper = styled.div`
   color: var(--sn-stylekit-foreground-color);
 `
-
-const IconForContainer: React.FC<{ type: ContainerType }> = ({ type }) => {
-  switch (type) {
-    case 'Open':
-      return <OpenCircleIcon />
-    case 'Completed':
-      return <ClosedCircleIcon />
-  }
-}
 
 const SubTitleForContainer: React.FC<{ type: ContainerType }> = ({ type }) => {
   return <SubTitle>{type} tasks</SubTitle>
@@ -96,7 +85,6 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
         {(provided) => (
           <Wrapper>
             <SubTitleContainer>
-              <IconForContainer type={type} />
               <SubTitleForContainer type={type} />
             </SubTitleContainer>
             <InnerTasksContainer
