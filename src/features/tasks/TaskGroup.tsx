@@ -89,7 +89,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
             </div>
           )}
           <MainTitle highlight={isDragging}>{group}</MainTitle>
-          <CircularProgressBar size={22} percentage={percentageCompleted} />
+          <CircularProgressBar size={18} percentage={percentageCompleted} />
           <GenericInlineText data-testid="task-group-stats">
             {completedTasks}/{totalTasks}
           </GenericInlineText>
