@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const ProgressBarBackground = styled.circle`
   fill: none;
-  stroke: var(--sn-stylekit-contrast-background-color);
+  stroke: var(--sn-stylekit-contrast-border-color);
 `
 
 const ProgressBarStroke = styled.circle`
