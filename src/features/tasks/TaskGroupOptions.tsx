@@ -25,7 +25,7 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
   const dispatch = useAppDispatch()
 
   const [showMergeDialog, setShowMergeDialog] = useState(false)
-  const [showTrashDialog, setShowTrashDialog] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showRenameDialog, setShowRenameDialog] = useState(false)
 
   return (
@@ -40,11 +40,11 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
         </MenuButton>
         <MenuList>
           <MenuItem
-            data-testid="move-task-group-trash"
-            onSelect={() => setShowTrashDialog(true)}
+            data-testid="delete-task-group"
+            onSelect={() => setShowDeleteDialog(true)}
           >
             <TrashIcon />
-            <span className="px-1">Move group to trash</span>
+            <span className="px-1">Delete group</span>
           </MenuItem>
           <MenuItem
             data-testid="merge-task-group"
@@ -62,16 +62,16 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
           </MenuItem>
         </MenuList>
       </Menu>
-      {showTrashDialog && (
+      {showDeleteDialog && (
         <ConfirmDialog
-          testId="trash-task-group-dialog"
-          title="Move to trash"
-          confirmButtonText="Move to trash"
+          testId="delete-task-group-dialog"
+          title="Delete group"
+          confirmButtonText="Delete"
           confirmButtonStyle="danger"
           confirmButtonCb={() => dispatch(tasksGroupDeleted({ group }))}
-          cancelButtonCb={() => setShowTrashDialog(false)}
+          cancelButtonCb={() => setShowDeleteDialog(false)}
         >
-          Are you sure you want to move '<strong>{group}</strong>' to the trash?
+          Are you sure you want to delete the group '<strong>{group}</strong>'?
         </ConfirmDialog>
       )}
       {showMergeDialog && (
