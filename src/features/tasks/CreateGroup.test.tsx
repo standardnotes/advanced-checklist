@@ -5,11 +5,13 @@ import { testRender } from '../../testUtils'
 import { tasksGroupAdded } from './tasks-slice'
 import CreateGroup from './CreateGroup'
 
+const defaultTasksState = { tasks: { storage: { test: [] } } }
+
 it('renders a button by default', () => {
   testRender(<CreateGroup />)
 
-  expect(screen.getByTestId('create-group-button')).toBeInTheDocument()
-  expect(screen.queryByTestId('create-group-input')).not.toBeInTheDocument()
+  expect(screen.queryByTestId('create-group-button')).not.toBeInTheDocument()
+  expect(screen.getByTestId('create-group-input')).toBeInTheDocument()
 })
 
 it('renders nothing if user can not edit', () => {
@@ -28,7 +30,7 @@ it('renders nothing if user can not edit', () => {
 })
 
 it('renders an input box when the button is clicked', () => {
-  testRender(<CreateGroup />)
+  testRender(<CreateGroup />, {}, defaultTasksState)
 
   const button = screen.getByTestId('create-group-button')
   fireEvent.click(button)
@@ -43,9 +45,6 @@ it('renders an input box when the button is clicked', () => {
 it('changes the input box text', () => {
   testRender(<CreateGroup />)
 
-  const button = screen.getByTestId('create-group-button')
-  fireEvent.click(button)
-
   const inputBox = screen.getByTestId('create-group-input') as HTMLInputElement
   fireEvent.change(inputBox, { target: { value: 'This is the new text' } })
 
@@ -53,7 +52,7 @@ it('changes the input box text', () => {
 })
 
 test('pressing enter when input box is empty, should not create a new group', () => {
-  const { mockStore } = testRender(<CreateGroup />)
+  const { mockStore } = testRender(<CreateGroup />, {}, defaultTasksState)
 
   let button = screen.getByTestId('create-group-button')
   fireEvent.click(button)
@@ -77,7 +76,7 @@ test('pressing enter when input box is empty, should not create a new group', ()
 
 test('pressing enter should create a new group', () => {
   const group = 'My group name'
-  const { mockStore } = testRender(<CreateGroup />)
+  const { mockStore } = testRender(<CreateGroup />, {}, defaultTasksState)
 
   let button = screen.getByTestId('create-group-button')
   fireEvent.click(button)
