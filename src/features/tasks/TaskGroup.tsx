@@ -64,6 +64,8 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
   const canEdit = useAppSelector((state) => state.settings.canEdit)
   const isOnMobile = useAppSelector((state) => state.settings.isRunningOnMobile)
 
+  const allTasksCompleted = totalTasks === completedTasks
+
   function handleCollapse() {
     setCollapsed(!collapsed)
   }
@@ -88,7 +90,12 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
               <ReorderIcon highlight={isDragging} />
             </div>
           )}
-          <MainTitle highlight={isDragging}>{group}</MainTitle>
+          <MainTitle
+            crossed={allTasksCompleted && collapsed}
+            highlight={isDragging}
+          >
+            {group}
+          </MainTitle>
           <CircularProgressBar size={18} percentage={percentageCompleted} />
           <GenericInlineText data-testid="task-group-stats">
             {completedTasks}/{totalTasks}
