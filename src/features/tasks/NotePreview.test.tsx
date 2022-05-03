@@ -41,12 +41,12 @@ it('should render without tasks', () => {
 
   render(<NotePreview groupedTasks={groupedTasks} />)
 
-  const header = screen.getByText('0/0 tasks completed')
+  const header = screen.getByText('0/0 completed')
   expect(header).toBeVisible()
 
-  const progressBar = screen.getByRole('progressbar') as HTMLProgressElement
-  expect(progressBar.max).toBe(100)
-  expect(progressBar.value).toBe(0)
+  // const progressBar = screen.getByRole('progressbar') as HTMLProgressElement
+  // expect(progressBar.max).toBe(100)
+  // expect(progressBar.value).toBe(0)
 
   const taskList = screen.queryAllByRole('list')
   expect(taskList).toHaveLength(0)
@@ -63,12 +63,12 @@ it('should render with tasks', () => {
 
   render(<NotePreview groupedTasks={groupedTasks} />)
 
-  const header = screen.getByText('2/4 tasks completed')
+  const header = screen.getByText('2/4 completed')
   expect(header).toBeVisible()
 
-  const progressBar = screen.getByRole('progressbar') as HTMLProgressElement
-  expect(progressBar.max).toBe(100)
-  expect(progressBar.value).toBe(50)
+  // const progressBar = screen.getByRole('progressbar') as HTMLProgressElement
+  // expect(progressBar.max).toBe(100)
+  // expect(progressBar.value).toBe(50)
 
   const taskList = screen.getByRole('list')
   const taskListElements = within(taskList).getAllByRole('listitem')
@@ -85,7 +85,7 @@ it('should render a summary of the remaining open task', () => {
 
   render(<NotePreview groupedTasks={groupedTasks} />)
 
-  const remainingTaskSummary = screen.getByText('And 1 other open task')
+  const remainingTaskSummary = screen.getByText('And 1 other group')
   expect(remainingTaskSummary).toBeVisible()
 })
 
@@ -104,6 +104,6 @@ it('should render a summary of the remaining open task(s)', () => {
 
   render(<NotePreview groupedTasks={groupedTasks} />)
 
-  const remainingTaskSummary = screen.getByText('And 2 other open tasks')
+  const remainingTaskSummary = screen.getByText('And 2 other groups')
   expect(remainingTaskSummary).toBeVisible()
 })
