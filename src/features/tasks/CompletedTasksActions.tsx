@@ -14,7 +14,7 @@ const ActionButton = styled.button`
   cursor: pointer;
   display: inline;
   font-size: var(--sn-stylekit-font-size-h6);
-  font-weight: 400;
+  font-weight: 500;
   height: 25px;
   margin-right: 10px;
   opacity: 0.96;
