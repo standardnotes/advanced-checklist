@@ -20,17 +20,13 @@ const tasks: TaskPayload[] = [
 ]
 
 it('renders the group name', () => {
-  testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />
-  )
+  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
 
   expect(screen.getByText(group)).toBeVisible()
 })
 
 it('renders the number of completed tasks and total tasks', () => {
-  testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />
-  )
+  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
 
   const completedTasks = tasks.filter((task) => task.completed).length
   const totalTasks = tasks.length
@@ -41,41 +37,31 @@ it('renders the number of completed tasks and total tasks', () => {
 })
 
 it('renders the circular progress bar', () => {
-  testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />
-  )
+  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
 
   expect(screen.getByTestId('circular-progress-bar')).toBeInTheDocument()
 })
 
 it('does not render a thematic break element', () => {
-  testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={true} />
-  )
+  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
 
   expect(screen.queryByTestId('task-group-separator')).not.toBeInTheDocument()
 })
 
 it('renders the element that is used to create a new task', () => {
-  testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />
-  )
+  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
 
   expect(screen.getByTestId('create-task-input')).toBeInTheDocument()
 })
 
 it('renders the element that is used to display the list of tasks', () => {
-  testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />
-  )
+  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
 
   expect(screen.getByTestId('task-list')).toBeInTheDocument()
 })
 
 it('collapses the group', () => {
-  testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />
-  )
+  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
 
   const createTask = screen.getByTestId('create-task-input')
   const taskItemList = screen.getByTestId('task-list')
@@ -91,9 +77,7 @@ it('collapses the group', () => {
 })
 
 it('shows group options', () => {
-  testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />
-  )
+  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
 
   expect(screen.getByTestId('task-group-options')).toBeInTheDocument()
 })
@@ -108,7 +92,7 @@ it('hides group options if can not edit', () => {
   }
 
   testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />,
+    <TaskGroup group={group} tasks={tasks} isDragging={false} />,
     {},
     defaultState
   )
@@ -126,7 +110,7 @@ it('shows a reorder icon when on mobile', () => {
   }
 
   testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />,
+    <TaskGroup group={group} tasks={tasks} isDragging={false} />,
     {},
     defaultState
   )
@@ -142,7 +126,7 @@ it('shows a reorder icon when on mobile', () => {
   }
 
   testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} isLast={false} />,
+    <TaskGroup group={group} tasks={tasks} isDragging={false} />,
     {},
     defaultState
   )
