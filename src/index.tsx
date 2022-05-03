@@ -81,7 +81,7 @@ const TaskEditor: React.FC = () => {
         <NotePreview groupedTasks={groupedTasks} />
       )
       const plainPreview = getPlainPreview(groupedTasks)
-      currentNote.content.text = JSON.stringify(groupedTasks)
+      currentNote.content.text = JSON.stringify(groupedTasks, null, 2)
       currentNote.content.preview_html = htmlPreview
       currentNote.content.preview_plain = plainPreview
     })
