@@ -73,7 +73,6 @@ const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
                             tasks={tasks}
                             group={group}
                             innerRef={innerRef}
-                            isLast={index + 1 === length}
                             isDragging={isDragging}
                             {...dragHandleProps}
                             {...restDraggableProps}

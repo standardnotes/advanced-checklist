@@ -42,7 +42,6 @@ const CollapsableContainer = styled.div<CollapsableContainerProps>`
 type TaskGroupProps = {
   group: string
   tasks: TaskPayload[]
-  isLast: boolean
   isDragging: boolean
   innerRef?: (element?: HTMLElement | null | undefined) => any
   style?: React.CSSProperties
@@ -51,7 +50,6 @@ type TaskGroupProps = {
 const TaskGroup: React.FC<TaskGroupProps> = ({
   group,
   tasks,
-  isLast,
   isDragging,
   innerRef,
   style,
@@ -83,11 +81,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
 
   return (
     <TaskGroupContainer ref={innerRef} style={style} {...taskGroupProps}>
-      <div
-        className={`flex items-center justify-between h-8 mt-1 ${
-          isLast ? 'mb-3' : 'mb-1'
-        }`}
-      >
+      <div className="flex items-center justify-between h-8 mt-1 mb-1">
         <div className="flex flex-grow items-center">
           {canEdit && isOnMobile && (
             <div className="mr-3" {...props}>
