@@ -98,3 +98,18 @@ test('pressing enter should create a new group', () => {
   expect(inputBox).not.toBeInTheDocument()
   expect(button).toBeInTheDocument()
 })
+
+test('the create new group button is shown if the input box loses focus', () => {
+  testRender(<CreateGroup />, {}, defaultTasksState)
+
+  let button = screen.getByTestId('create-group-button')
+  fireEvent.click(button)
+
+  const inputBox = screen.getByTestId('create-group-input')
+  fireEvent.blur(inputBox)
+
+  button = screen.getByTestId('create-group-button')
+
+  expect(inputBox).not.toBeInTheDocument()
+  expect(button).toBeInTheDocument()
+})
