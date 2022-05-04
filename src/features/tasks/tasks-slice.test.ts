@@ -12,6 +12,7 @@ import reducer, {
   tasksGroupDeleted,
   tasksGroupMerged,
   tasksGroupCollapsed,
+  tasksGroupDraft,
 } from './tasks-slice'
 import type { TasksState, GroupPayload } from './tasks-slice'
 
@@ -1030,6 +1031,86 @@ it('should handle collapsing groups', () => {
       },
       {
         name: 'Tests',
+        tasks: [
+          {
+            id: 'yet-another-id',
+            description: 'Yet another simple task',
+            completed: true,
+          },
+        ],
+      },
+    ],
+  }
+
+  expect(currentState).toEqual(expectedState)
+})
+
+it('should handle saving task draft for groups', () => {
+  const previousState: TasksState = {
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+          },
+        ],
+      },
+      {
+        name: 'Tests',
+        tasks: [
+          {
+            id: 'yet-another-id',
+            description: 'Yet another simple task',
+            completed: true,
+          },
+        ],
+      },
+    ],
+  }
+
+  const currentState = reducer(
+    previousState,
+    tasksGroupDraft({ groupName: 'Tests', draft: 'Remember to ...' })
+  )
+
+  const expectedState = {
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+          },
+        ],
+      },
+      {
+        name: 'Tests',
+        draft: 'Remember to ...',
         tasks: [
           {
             id: 'yet-another-id',
