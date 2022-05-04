@@ -7,7 +7,7 @@ import { RootState } from './app/store'
 
 const defaultMockState: RootState = {
   tasks: {
-    storage: {},
+    groups: [],
   },
   settings: {
     canEdit: true,
