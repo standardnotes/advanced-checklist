@@ -8,7 +8,7 @@ import { deleteAllCompleted, openAllCompleted } from './tasks-slice'
 const group = 'default group'
 
 it('renders two buttons', () => {
-  testRender(<CompletedTasksActions group={group} />)
+  testRender(<CompletedTasksActions groupName={group} />)
 
   expect(screen.getByTestId('reopen-completed-button')).toHaveTextContent(
     'Reopen Completed'
@@ -27,7 +27,7 @@ it('should not render buttons if can not edit', () => {
     },
   }
 
-  testRender(<CompletedTasksActions group={group} />, {}, defaultState)
+  testRender(<CompletedTasksActions groupName={group} />, {}, defaultState)
 
   expect(
     screen.queryByTestId('reopen-completed-button')
@@ -38,7 +38,7 @@ it('should not render buttons if can not edit', () => {
 })
 
 it('should dispatch openAllCompleted action', () => {
-  const { mockStore } = testRender(<CompletedTasksActions group={group} />)
+  const { mockStore } = testRender(<CompletedTasksActions groupName={group} />)
 
   const reOpenCompletedButton = screen.getByTestId('reopen-completed-button')
   fireEvent.click(reOpenCompletedButton)
@@ -54,11 +54,13 @@ it('should dispatch openAllCompleted action', () => {
 
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
-  expect(dispatchedActions[0]).toMatchObject(openAllCompleted({ group }))
+  expect(dispatchedActions[0]).toMatchObject(
+    openAllCompleted({ groupName: group })
+  )
 })
 
 it('should dispatch deleteCompleted action', () => {
-  const { mockStore } = testRender(<CompletedTasksActions group={group} />)
+  const { mockStore } = testRender(<CompletedTasksActions groupName={group} />)
 
   const deleteCompletedButton = screen.getByTestId('delete-completed-button')
   fireEvent.click(deleteCompletedButton)
@@ -74,11 +76,13 @@ it('should dispatch deleteCompleted action', () => {
 
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
-  expect(dispatchedActions[0]).toMatchObject(deleteAllCompleted({ group }))
+  expect(dispatchedActions[0]).toMatchObject(
+    deleteAllCompleted({ groupName: group })
+  )
 })
 
 it('should dismiss dialogs', () => {
-  const { mockStore } = testRender(<CompletedTasksActions group={group} />)
+  const { mockStore } = testRender(<CompletedTasksActions groupName={group} />)
 
   const reOpenCompletedButton = screen.getByTestId('reopen-completed-button')
   fireEvent.click(reOpenCompletedButton)

@@ -24,8 +24,8 @@ const CreateGroup: React.FC = () => {
   const spellCheckerEnabled = useAppSelector(
     (state) => state.settings.spellCheckerEnabled
   )
-  const groupedTasks = useAppSelector((state) => state.tasks.storage)
-  const taskGroupCount = Object.keys(groupedTasks).length
+  const groupedTasks = useAppSelector((state) => state.tasks.groups)
+  const taskGroupCount = groupedTasks.length
 
   function toggleMode() {
     setIsCreateMode(!isCreateMode)

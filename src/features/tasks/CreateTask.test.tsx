@@ -11,7 +11,10 @@ jest.mock('uuid', () => {
   }
 })
 
-const defaultGroup = 'My default group'
+const defaultGroup = {
+  name: 'My default group',
+  tasks: [],
+}
 
 it('renders a button by default', () => {
   testRender(<CreateTask group={defaultGroup} />)
@@ -75,7 +78,7 @@ test('pressing enter when input box is not empty, should create a new task', () 
   expect(dispatchedActions[0]).toMatchObject(
     taskAdded({
       task: { id: 'my-fake-uuid', description: 'My awesome task' },
-      group: defaultGroup,
+      groupName: defaultGroup.name,
     })
   )
 })

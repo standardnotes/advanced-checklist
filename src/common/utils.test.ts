@@ -1,12 +1,12 @@
-import { TaskPayload } from '../features/tasks/tasks-slice'
+import { GroupPayload, TaskPayload } from '../features/tasks/tasks-slice'
 import {
   arrayMoveMutable,
   arrayMoveImmutable,
   getPercentage,
   groupTasksByCompletedStatus,
-  getTaskArrayFromGroupedTasks,
   truncateText,
   getPlainPreview,
+  getTaskArrayFromGroupedTasks,
 } from './utils'
 
 describe('arrayMoveMutable', () => {
@@ -139,10 +139,16 @@ describe('getTaskArrayFromGroupedTasks', () => {
       },
     ]
 
-    const groupedTasks = {
-      Work: workTasks,
-      Personal: personalTasks,
-    }
+    const groupedTasks: GroupPayload[] = [
+      {
+        name: 'Work',
+        tasks: workTasks,
+      },
+      {
+        name: 'Personal',
+        tasks: personalTasks,
+      },
+    ]
 
     const taskArray = getTaskArrayFromGroupedTasks(groupedTasks)
 
@@ -197,13 +203,21 @@ describe('getPlainPreview', () => {
       },
     ]
 
-    const groupedTasks = {
-      Work: workTasks,
-      Personal: personalTasks,
-    }
+    const groupedTasks: GroupPayload[] = [
+      {
+        name: 'Work',
+        tasks: workTasks,
+      },
+      {
+        name: 'Personal',
+        tasks: personalTasks,
+      },
+    ]
 
     expect(getPlainPreview(groupedTasks)).toBe('3/5 tasks completed')
-    expect(getPlainPreview({})).toBe('0/0 tasks completed')
-    expect(getPlainPreview({ Test: [] })).toBe('0/0 tasks completed')
+    expect(getPlainPreview([])).toBe('0/0 tasks completed')
+    expect(getPlainPreview([{ name: 'Test', tasks: [] }])).toBe(
+      '0/0 tasks completed'
+    )
   })
 })

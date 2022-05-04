@@ -37,12 +37,12 @@ const Container = styled.div<ItemContainerProps>`
 
 export type TaskItemProps = {
   task: TaskPayload
-  group: string
+  groupName: string
   innerRef?: (element?: HTMLElement | null | undefined) => any
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
-  group,
+  groupName,
   task,
   innerRef,
   ...props
@@ -76,7 +76,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
   })
 
   function toggleCheckboxChange() {
-    dispatch(taskToggled({ id: task.id, group }))
+    dispatch(taskToggled({ id: task.id, groupName }))
   }
 
   function onTextChange(event: ChangeEvent<HTMLTextAreaElement>) {
@@ -87,7 +87,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
     // Delete task if empty and enter pressed
     if (event.key === 'Enter') {
       if (description.length === 0) {
-        dispatch(taskDeleted({ id: task.id, group }))
+        dispatch(taskDeleted({ id: task.id, groupName }))
         event.preventDefault()
       }
     }
@@ -109,12 +109,12 @@ const TaskItem: React.FC<TaskItemProps> = ({
   useDidMount(() => {
     const timeoutId = setTimeout(() => {
       if (description !== task.description) {
-        dispatch(taskModified({ task: { ...task, description }, group }))
+        dispatch(taskModified({ task: { ...task, description }, groupName }))
       }
     }, 500)
 
     return () => clearTimeout(timeoutId)
-  }, [description, group])
+  }, [description, groupName])
 
   return (
     <Container

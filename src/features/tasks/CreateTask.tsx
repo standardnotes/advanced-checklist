@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import styled from 'styled-components'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { taskAdded } from './tasks-slice'
+import { GroupPayload, taskAdded, tasksGroupDraft } from './tasks-slice'
 
 import { TextInput } from '../../common/components'
 import { DottedCircleIcon } from '../../common/components/icons'
@@ -20,7 +20,7 @@ const Container = styled.div`
 `
 
 type CreateTaskProps = {
-  group: string
+  group: GroupPayload
 }
 
 const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
@@ -33,10 +33,12 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
   )
   const canEdit = useAppSelector((state) => state.settings.canEdit)
 
-  const [taskDraft, setTaskDraft] = useState('')
+  const groupName = group.name
+  const [taskDraft, setTaskDraft] = useState<string>(group.draft ?? '')
 
   function onTextChange(event: ChangeEvent<HTMLInputElement>) {
     const rawString = event.target.value
+    dispatch(tasksGroupDraft({ groupName, draft: rawString }))
     setTaskDraft(rawString)
   }
 
@@ -48,7 +50,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
       }
 
       dispatch(
-        taskAdded({ task: { id: uuidv4(), description: rawString }, group })
+        taskAdded({ task: { id: uuidv4(), description: rawString }, groupName })
       )
       setTaskDraft('')
     }

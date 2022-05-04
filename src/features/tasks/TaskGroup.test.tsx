@@ -1,35 +1,38 @@
 import { screen, fireEvent } from '@testing-library/react'
 
 import { RootState } from '../../app/store'
-import { TaskPayload } from './tasks-slice'
 import { testRender } from '../../testUtils'
 import TaskGroup from './TaskGroup'
 
-const group = 'default group'
-const tasks: TaskPayload[] = [
-  {
-    id: 'test-1',
-    description: 'Testing',
-    completed: false,
-  },
-  {
-    id: 'test-2',
-    description: 'Testing',
-    completed: false,
-  },
-]
+const defaultGroup = {
+  name: 'default group',
+  tasks: [
+    {
+      id: 'test-1',
+      description: 'Testing',
+      completed: false,
+    },
+    {
+      id: 'test-2',
+      description: 'Testing',
+      completed: false,
+    },
+  ],
+}
 
 it('renders the group name', () => {
-  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
+  testRender(<TaskGroup group={defaultGroup} isDragging={false} />)
 
-  expect(screen.getByText(group)).toBeVisible()
+  expect(screen.getByText(defaultGroup.name)).toBeVisible()
 })
 
 it('renders the number of completed tasks and total tasks', () => {
-  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
+  testRender(<TaskGroup group={defaultGroup} isDragging={false} />)
 
-  const completedTasks = tasks.filter((task) => task.completed).length
-  const totalTasks = tasks.length
+  const completedTasks = defaultGroup.tasks.filter(
+    (task) => task.completed
+  ).length
+  const totalTasks = defaultGroup.tasks.length
 
   expect(screen.getByTestId('task-group-stats')).toHaveTextContent(
     `${completedTasks}/${totalTasks}`
@@ -37,31 +40,31 @@ it('renders the number of completed tasks and total tasks', () => {
 })
 
 it('renders the circular progress bar', () => {
-  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
+  testRender(<TaskGroup group={defaultGroup} isDragging={false} />)
 
   expect(screen.getByTestId('circular-progress-bar')).toBeInTheDocument()
 })
 
 it('does not render a thematic break element', () => {
-  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
+  testRender(<TaskGroup group={defaultGroup} isDragging={false} />)
 
   expect(screen.queryByTestId('task-group-separator')).not.toBeInTheDocument()
 })
 
 it('renders the element that is used to create a new task', () => {
-  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
+  testRender(<TaskGroup group={defaultGroup} isDragging={false} />)
 
   expect(screen.getByTestId('create-task-input')).toBeInTheDocument()
 })
 
 it('renders the element that is used to display the list of tasks', () => {
-  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
+  testRender(<TaskGroup group={defaultGroup} isDragging={false} />)
 
   expect(screen.getByTestId('task-list')).toBeInTheDocument()
 })
 
 it('collapses the group', () => {
-  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
+  testRender(<TaskGroup group={defaultGroup} isDragging={false} />)
 
   const createTask = screen.getByTestId('create-task-input')
   const taskItemList = screen.getByTestId('task-list')
@@ -77,7 +80,7 @@ it('collapses the group', () => {
 })
 
 it('shows group options', () => {
-  testRender(<TaskGroup group={group} tasks={tasks} isDragging={false} />)
+  testRender(<TaskGroup group={defaultGroup} isDragging={false} />)
 
   expect(screen.getByTestId('task-group-options')).toBeInTheDocument()
 })
@@ -92,7 +95,7 @@ it('hides group options if can not edit', () => {
   }
 
   testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} />,
+    <TaskGroup group={defaultGroup} isDragging={false} />,
     {},
     defaultState
   )
@@ -110,7 +113,7 @@ it('shows a reorder icon when on mobile', () => {
   }
 
   testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} />,
+    <TaskGroup group={defaultGroup} isDragging={false} />,
     {},
     defaultState
   )
@@ -126,7 +129,7 @@ it('shows a reorder icon when on mobile', () => {
   }
 
   testRender(
-    <TaskGroup group={group} tasks={tasks} isDragging={false} />,
+    <TaskGroup group={defaultGroup} isDragging={false} />,
     {},
     defaultState
   )

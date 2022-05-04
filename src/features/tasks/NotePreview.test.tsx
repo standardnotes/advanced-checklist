@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import NotePreview from './NotePreview'
+import { GroupPayload } from './tasks-slice'
 
 const workTasks = [
   {
@@ -37,7 +38,7 @@ const miscTasks = [
 ]
 
 it('should render without tasks', () => {
-  const groupedTasks = {}
+  const groupedTasks: GroupPayload[] = []
 
   render(<NotePreview groupedTasks={groupedTasks} />)
 
@@ -56,10 +57,16 @@ it('should render without tasks', () => {
 })
 
 it('should render with tasks', () => {
-  const groupedTasks = {
-    Work: workTasks,
-    Personal: personalTasks,
-  }
+  const groupedTasks = [
+    {
+      name: 'Work',
+      tasks: workTasks,
+    },
+    {
+      name: 'Personal',
+      tasks: personalTasks,
+    },
+  ]
 
   render(<NotePreview groupedTasks={groupedTasks} />)
 
@@ -77,11 +84,20 @@ it('should render with tasks', () => {
 })
 
 it('should render a summary of the remaining open task', () => {
-  const groupedTasks = {
-    Work: workTasks,
-    Personal: personalTasks,
-    Misc: miscTasks,
-  }
+  const groupedTasks = [
+    {
+      name: 'Work',
+      tasks: workTasks,
+    },
+    {
+      name: 'Personal',
+      tasks: personalTasks,
+    },
+    {
+      name: 'Misc',
+      tasks: miscTasks,
+    },
+  ]
 
   render(<NotePreview groupedTasks={groupedTasks} />)
 
@@ -90,17 +106,29 @@ it('should render a summary of the remaining open task', () => {
 })
 
 it('should render a summary of the remaining open task(s)', () => {
-  const groupedTasks = {
-    Work: workTasks,
-    Personal: personalTasks,
-    Misc: miscTasks,
-    Groceries: [
-      {
-        id: 'test-e-1',
-        description: 'Test #7',
-      },
-    ],
-  }
+  const groupedTasks = [
+    {
+      name: 'Work',
+      tasks: workTasks,
+    },
+    {
+      name: 'Personal',
+      tasks: personalTasks,
+    },
+    {
+      name: 'Misc',
+      tasks: miscTasks,
+    },
+    {
+      name: 'Groceries',
+      tasks: [
+        {
+          id: 'test-e-1',
+          description: 'Test #7',
+        },
+      ],
+    },
+  ]
 
   render(<NotePreview groupedTasks={groupedTasks} />)
 

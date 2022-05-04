@@ -8,10 +8,10 @@ import {
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import TaskGroup from './TaskGroup'
-import { GroupedTaskPayload, tasksGroupReordered } from './tasks-slice'
+import { GroupPayload, tasksGroupReordered } from './tasks-slice'
 
 type TaskGroupListProps = {
-  groupedTasks: GroupedTaskPayload
+  groupedTasks: GroupPayload[]
 }
 
 const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
@@ -47,9 +47,8 @@ const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
         >
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {Object.keys(groupedTasks).map((group, index, { length }) => {
-                const identifier = `${index}-${group}`
-                const tasks = groupedTasks[group]
+              {groupedTasks.map((group, index) => {
+                const identifier = `${index}-${group.name}`
                 return (
                   <Draggable
                     key={identifier}
@@ -70,7 +69,6 @@ const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
                         >
                           <TaskGroup
                             key={identifier}
-                            tasks={tasks}
                             group={group}
                             innerRef={innerRef}
                             isDragging={isDragging}

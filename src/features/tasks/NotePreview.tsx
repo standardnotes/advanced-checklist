@@ -1,57 +1,83 @@
 import {
+  getPercentage,
   getTaskArrayFromGroupedTasks,
   groupTasksByCompletedStatus,
   truncateText,
 } from '../../common/utils'
-import { GroupedTaskPayload, TaskPayload } from './tasks-slice'
+import { GroupPayload, TaskPayload } from './tasks-slice'
 
-const GROUPS_PREVIEW_LIMIT = 3
-const MAX_GROUP_DESCRIPTION_LENGTH = 30
+import { ProgressBar } from '../../common/components'
 
-type NotePreviewProps = {
-  groupedTasks: GroupedTaskPayload
+const TASKS_PREVIEW_LIMIT = 3
+const MAX_TASK_DESCRIPTION_LENGTH = 30
+
+const Header: React.FC = ({ children }) => {
+  return (
+    <strong style={{ marginTop: '10px', width: '100%' }}>{children}</strong>
+  )
 }
 
-const NotePreview: React.FC<NotePreviewProps> = ({ groupedTasks }) => {
-  const groups = Object.keys(groupedTasks)
-  const groupsToPreview = groups.slice(
-    0,
-    Math.min(groups.length, GROUPS_PREVIEW_LIMIT)
+const TaskListElement: React.FC = ({ children, ...props }) => {
+  return (
+    <li style={{ marginBottom: '5px' }} {...props}>
+      {children}
+    </li>
   )
-  if (groupsToPreview.length === 0) {
+}
+
+type TaskListProps = {
+  openTasks: TaskPayload[]
+}
+
+const TaskList: React.FC<TaskListProps> = ({ openTasks }) => {
+  const tasksToPreview = openTasks.slice(
+    0,
+    Math.min(openTasks.length, TASKS_PREVIEW_LIMIT)
+  )
+  if (tasksToPreview.length === 0) {
     return <></>
   }
 
-  const remainingGroups = groups.length - groupsToPreview.length
-  const groupNoun = remainingGroups > 1 ? 'groups' : 'group'
-
-  const allTasks: TaskPayload[] = getTaskArrayFromGroupedTasks(groupedTasks)
-  const { completedTasks } = groupTasksByCompletedStatus(allTasks)
+  const remainingTasks = openTasks.length - tasksToPreview.length
+  const taskNoun = remainingTasks > 1 ? 'tasks' : 'task'
 
   return (
     <>
-      <div style={{ marginTop: '5px' }}>
-        {completedTasks.length}/{allTasks.length} completed
-      </div>
-      <div style={{ marginTop: '8px' }}>
-        {groupsToPreview.map((groupName, index) => {
-          const allTasks: TaskPayload[] = groupedTasks[groupName]
-          const { completedTasks } = groupTasksByCompletedStatus(allTasks)
-          return (
-            <p key={`group-${index}`} style={{ marginBottom: '5px' }}>
-              {truncateText(groupName, MAX_GROUP_DESCRIPTION_LENGTH)}{' '}
-              {completedTasks.length}/{allTasks.length}
-            </p>
-          )
-        })}
-      </div>
-      {groups.length > groupsToPreview.length && (
-        <div style={{ marginTop: '8px' }}>
-          <b>
-            And {remainingGroups} other {groupNoun}
-          </b>
-        </div>
+      <ul style={{ paddingLeft: '20px', marginTop: '10px' }}>
+        {tasksToPreview.map((task, index) => (
+          <TaskListElement key={`task-${index}`}>
+            {truncateText(task.description, MAX_TASK_DESCRIPTION_LENGTH)}
+          </TaskListElement>
+        ))}
+      </ul>
+      {openTasks.length > tasksToPreview.length && (
+        <b>
+          And {remainingTasks} other open {taskNoun}
+        </b>
       )}
+    </>
+  )
+}
+
+type NotePreviewProps = {
+  groupedTasks: GroupPayload[]
+}
+
+const NotePreview: React.FC<NotePreviewProps> = ({ groupedTasks }) => {
+  const allTasks: TaskPayload[] = getTaskArrayFromGroupedTasks(groupedTasks)
+  const { openTasks, completedTasks } = groupTasksByCompletedStatus(allTasks)
+  const completedPercentage = getPercentage(
+    allTasks.length,
+    completedTasks.length
+  )
+
+  return (
+    <>
+      <Header>
+        {completedTasks.length}/{allTasks.length} tasks completed
+      </Header>
+      <ProgressBar max={100} value={completedPercentage} />
+      <TaskList openTasks={openTasks} />
     </>
   )
 }

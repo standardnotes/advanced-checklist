@@ -5,7 +5,7 @@ import { testRender } from '../../testUtils'
 import { tasksGroupAdded } from './tasks-slice'
 import CreateGroup from './CreateGroup'
 
-const defaultTasksState = { tasks: { storage: { test: [] } } }
+const defaultTasksState = { tasks: { groups: [{ name: 'test', tasks: [] }] } }
 
 it('renders a button by default', () => {
   testRender(<CreateGroup />)

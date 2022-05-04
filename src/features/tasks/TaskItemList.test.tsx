@@ -1,25 +1,26 @@
 import { screen, within } from '@testing-library/react'
 
-import { TaskPayload } from './tasks-slice'
 import { testRender } from '../../testUtils'
 import TaskItemList from './TaskItemList'
 
-const group = 'default group'
-const tasks: TaskPayload[] = [
-  {
-    id: 'test-1',
-    description: 'Testing #1',
-    completed: false,
-  },
-  {
-    id: 'test-2',
-    description: 'Testing #2',
-    completed: false,
-  },
-]
+const defaultGroup = {
+  name: 'default group',
+  tasks: [
+    {
+      id: 'test-1',
+      description: 'Testing #1',
+      completed: false,
+    },
+    {
+      id: 'test-2',
+      description: 'Testing #2',
+      completed: false,
+    },
+  ],
+}
 
 it('renders the open tasks container', async () => {
-  testRender(<TaskItemList group={group} tasks={tasks} />)
+  testRender(<TaskItemList group={defaultGroup} />)
 
   const openTasksContainer = screen.getByTestId('open-tasks-container')
 
@@ -34,16 +35,19 @@ it('renders the open tasks container', async () => {
 })
 
 it('renders the completed tasks container', () => {
-  const tasksIncludesCompleted = [
-    ...tasks,
-    {
-      id: 'test-3',
-      description: 'Testing #3',
-      completed: true,
-    },
-  ]
+  const groupWithCompletedTask = {
+    name: 'a new group',
+    tasks: [
+      ...defaultGroup.tasks,
+      {
+        id: 'test-3',
+        description: 'Testing #3',
+        completed: true,
+      },
+    ],
+  }
 
-  testRender(<TaskItemList group={group} tasks={tasksIncludesCompleted} />)
+  testRender(<TaskItemList group={groupWithCompletedTask} />)
 
   const completedTasksContainer = screen.getByTestId(
     'completed-tasks-container'

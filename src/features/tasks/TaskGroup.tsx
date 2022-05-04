@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { useAppSelector } from '../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { getPercentage } from '../../common/utils'
-import { TaskPayload } from './tasks-slice'
+import { GroupPayload, tasksGroupCollapsed } from './tasks-slice'
 
 import CreateTask from './CreateTask'
 import TaskItemList from './TaskItemList'
@@ -40,8 +40,7 @@ const CollapsableContainer = styled.div<CollapsableContainerProps>`
 `
 
 type TaskGroupProps = {
-  group: string
-  tasks: TaskPayload[]
+  group: GroupPayload
   isDragging: boolean
   innerRef?: (element?: HTMLElement | null | undefined) => any
   style?: React.CSSProperties
@@ -49,28 +48,34 @@ type TaskGroupProps = {
 
 const TaskGroup: React.FC<TaskGroupProps> = ({
   group,
-  tasks,
   isDragging,
   innerRef,
   style,
   ...props
 }) => {
-  const completedTasks = tasks.filter((task) => task.completed).length
-  const totalTasks = tasks.length
+  const dispatch = useAppDispatch()
+
+  const completedTasks = group.tasks.filter((task) => task.completed).length
+  const totalTasks = group.tasks.length
   const percentageCompleted = getPercentage(completedTasks, totalTasks)
 
-  const [collapsed, setCollapsed] = useState(isDragging)
+  const [collapsed, setCollapsed] = useState<boolean>(!!group.collapsed)
 
   const canEdit = useAppSelector((state) => state.settings.canEdit)
   const isOnMobile = useAppSelector((state) => state.settings.isRunningOnMobile)
 
+  const allTasksCompleted = totalTasks > 0 && totalTasks === completedTasks
+
+  const groupName = group.name
+
   function handleCollapse() {
+    dispatch(tasksGroupCollapsed({ groupName, collapsed: !collapsed }))
     setCollapsed(!collapsed)
   }
 
   useEffect(() => {
-    setCollapsed(isDragging)
-  }, [isDragging, setCollapsed])
+    !group.collapsed && setCollapsed(isDragging)
+  }, [group, isDragging, setCollapsed])
 
   /**
    * We want to enable reordering groups via the reorder icon exclusively on mobile.
@@ -88,8 +93,13 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
               <ReorderIcon highlight={isDragging} />
             </div>
           )}
-          <MainTitle highlight={isDragging}>{group}</MainTitle>
-          <CircularProgressBar size={22} percentage={percentageCompleted} />
+          <MainTitle
+            crossed={allTasksCompleted && collapsed}
+            highlight={isDragging}
+          >
+            {groupName}
+          </MainTitle>
+          <CircularProgressBar size={18} percentage={percentageCompleted} />
           <GenericInlineText data-testid="task-group-stats">
             {completedTasks}/{totalTasks}
           </GenericInlineText>
@@ -98,7 +108,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
           <div className="flex items-center">
             {canEdit && (
               <div className="ml-3">
-                <TaskGroupOptions group={group} />
+                <TaskGroupOptions groupName={groupName} />
               </div>
             )}
             <div className="ml-3">
@@ -115,7 +125,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
 
       <CollapsableContainer collapsed={collapsed}>
         <CreateTask group={group} />
-        <TaskItemList group={group} tasks={tasks} />
+        <TaskItemList group={group} />
       </CollapsableContainer>
     </TaskGroupContainer>
   )

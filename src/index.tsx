@@ -25,7 +25,7 @@ const TaskEditor: React.FC = () => {
   const editorKit = useRef<EditorKit>()
 
   const initialized = useAppSelector((state) => state.tasks.initialized)
-  const groupedTasks = useAppSelector((state) => state.tasks.storage)
+  const groupedTasks = useAppSelector((state) => state.tasks.groups)
 
   const dispatch = useAppDispatch()
 
@@ -76,12 +76,12 @@ const TaskEditor: React.FC = () => {
     }
 
     editorKit.current!.saveItemWithPresave(currentNote, () => {
-      const groupedTasks = store.getState().tasks.storage
+      const groupedTasks = store.getState().tasks.groups
       const htmlPreview = renderToString(
         <NotePreview groupedTasks={groupedTasks} />
       )
       const plainPreview = getPlainPreview(groupedTasks)
-      currentNote.content.text = JSON.stringify(groupedTasks)
+      currentNote.content.text = JSON.stringify(groupedTasks, null, 2)
       currentNote.content.preview_html = htmlPreview
       currentNote.content.preview_plain = plainPreview
     })

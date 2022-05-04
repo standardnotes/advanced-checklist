@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { arrayMoveImmutable } from '../../common/utils'
 
 export type TasksState = {
-  storage: GroupedTaskPayload
+  groups: GroupPayload[]
   initialized?: boolean
 }
 
 const initialState: TasksState = {
-  storage: {},
+  groups: [],
 }
 
 export type TaskPayload = {
@@ -16,8 +16,11 @@ export type TaskPayload = {
   completed?: boolean
 }
 
-export type GroupedTaskPayload = {
-  [group: string]: TaskPayload[]
+export type GroupPayload = {
+  name: string
+  collapsed?: boolean
+  draft?: string
+  tasks: TaskPayload[]
 }
 
 const tasksSlice = createSlice({
@@ -26,75 +29,116 @@ const tasksSlice = createSlice({
   reducers: {
     taskAdded(
       state,
-      action: PayloadAction<{ task: TaskPayload; group: string }>
+      action: PayloadAction<{ task: TaskPayload; groupName: string }>
     ) {
-      const { group, task } = action.payload
-      if (!state.storage[group]) {
-        state.storage[group] = []
+      const { groupName, task } = action.payload
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        state.groups.push({
+          name: groupName,
+          tasks: [
+            {
+              ...task,
+              completed: false,
+            },
+          ],
+        })
+        return
       }
-
-      state.storage[group].unshift({
+      delete group.draft
+      group.tasks.unshift({
         ...task,
         completed: false,
       })
     },
     taskModified(
       state,
-      action: PayloadAction<{ task: TaskPayload; group: string }>
+      action: PayloadAction<{ task: TaskPayload; groupName: string }>
     ) {
-      const { task, group } = action.payload
-      const currentTask = state.storage[group].find(
-        (item) => item.id === task.id
-      )
+      const { groupName, task } = action.payload
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        state.groups.push({
+          name: groupName,
+          tasks: [task],
+        })
+        return
+      }
+      const currentTask = group.tasks.find((item) => item.id === task.id)
       currentTask && (currentTask.description = task.description)
     },
-    taskDeleted(state, action: PayloadAction<{ id: string; group: string }>) {
-      const { id, group } = action.payload
-      const tasks = state.storage[group].filter((task) => task.id !== id)
-      state.storage[group] = tasks
+    taskDeleted(
+      state,
+      action: PayloadAction<{ id: string; groupName: string }>
+    ) {
+      const { id, groupName } = action.payload
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        return
+      }
+      group.tasks = group.tasks.filter((task) => task.id !== id)
     },
-    taskToggled(state, action: PayloadAction<{ id: string; group: string }>) {
-      const { id, group } = action.payload
-      const task = state.storage[group].find((task) => task.id === id)
+    taskToggled(
+      state,
+      action: PayloadAction<{ id: string; groupName: string }>
+    ) {
+      const { id, groupName } = action.payload
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        return
+      }
+      const task = group.tasks.find((task) => task.id === id)
       task && (task.completed = !task.completed)
     },
-    openAllCompleted(state, action: PayloadAction<{ group: string }>) {
-      const { group } = action.payload
-      Object.values(state.storage[group]).forEach(
-        (task) => (task.completed = false)
-      )
-    },
-    deleteAllCompleted(state, action: PayloadAction<{ group: string }>) {
-      const { group } = action.payload
-      const tasks = state.storage[group].filter(
-        (task) => task.completed === false
-      )
-      state.storage[group] = tasks
-    },
-    tasksGroupAdded(state, action: PayloadAction<string>) {
-      if (!state.storage[action.payload]) {
-        state.storage[action.payload] = []
+    openAllCompleted(state, action: PayloadAction<{ groupName: string }>) {
+      const { groupName } = action.payload
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        return
       }
+      group.tasks.forEach((task) => (task.completed = false))
+    },
+    deleteAllCompleted(state, action: PayloadAction<{ groupName: string }>) {
+      const { groupName } = action.payload
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        return
+      }
+      group.tasks = group.tasks.filter((task) => task.completed === false)
     },
     tasksReordered(
       state,
       action: PayloadAction<{
-        group: string
+        groupName: string
         swapTaskIndex: number
         withTaskIndex: number
         isSameSection: boolean
       }>
     ) {
-      const { group, swapTaskIndex, withTaskIndex, isSameSection } =
+      const { groupName, swapTaskIndex, withTaskIndex, isSameSection } =
         action.payload
       if (!isSameSection) {
         return
       }
-      state.storage[group] = arrayMoveImmutable(
-        state.storage[group],
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        return
+      }
+      group.tasks = arrayMoveImmutable(
+        group.tasks,
         swapTaskIndex,
         withTaskIndex
       )
+    },
+    tasksGroupAdded(state, action: PayloadAction<string>) {
+      const group = state.groups.find((item) => item.name === action.payload)
+      if (group) {
+        return
+      }
+      state.groups.push({
+        name: action.payload,
+        tasks: [],
+      })
     },
     tasksGroupReordered(
       state,
@@ -104,67 +148,99 @@ const tasksSlice = createSlice({
       }>
     ) {
       const { swapGroupIndex, withGroupIndex } = action.payload
-      const orderedGroups = arrayMoveImmutable(
-        Object.keys(state.storage),
+      state.groups = arrayMoveImmutable(
+        state.groups,
         swapGroupIndex,
         withGroupIndex
-      )
-      state.storage = orderedGroups.reduce(
-        (acc, key) => ({
-          ...acc,
-          [key]: state.storage[key],
-        }),
-        {}
       )
     },
     tasksGroupDeleted(
       state,
       action: PayloadAction<{
-        group: string
+        groupName: string
       }>
     ) {
-      const { group } = action.payload
-      delete state.storage[group]
+      const { groupName } = action.payload
+      state.groups = state.groups.filter((item) => item.name !== groupName)
     },
     tasksGroupMerged(
       state,
       action: PayloadAction<{
-        group: string
+        groupName: string
         mergeWith: string
       }>
     ) {
-      const { group, mergeWith } = action.payload
-      if (group === mergeWith) {
+      const { groupName, mergeWith } = action.payload
+      if (groupName === mergeWith) {
         return
       }
-
-      state.storage[mergeWith] = [
-        ...(state.storage[mergeWith] ?? []),
-        ...state.storage[group],
-      ]
-      delete state.storage[group]
+      const groupA = state.groups.find((item) => item.name === groupName)
+      if (!groupA) {
+        return
+      }
+      const groupB = state.groups.find((item) => item.name === mergeWith)
+      if (!groupB) {
+        return
+      }
+      state.groups = state.groups
+        .filter((item) => item.name !== groupName)
+        .map((item) => {
+          const tasks = groupB.tasks.concat(groupA.tasks)
+          if (item.name === mergeWith) {
+            return {
+              ...item,
+              tasks,
+            }
+          }
+          return item
+        })
+    },
+    tasksGroupCollapsed(
+      state,
+      action: PayloadAction<{
+        groupName: string
+        collapsed: boolean
+      }>
+    ) {
+      const { groupName, collapsed } = action.payload
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        return
+      }
+      group.collapsed = collapsed
+    },
+    tasksGroupDraft(
+      state,
+      action: PayloadAction<{
+        groupName: string
+        draft: string
+      }>
+    ) {
+      const { groupName, draft } = action.payload
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        return
+      }
+      group.draft = draft
     },
     tasksLoaded(state, action: PayloadAction<string>) {
       if (!action.payload && !state.initialized) {
-        action.payload = '{}'
+        action.payload = '[]'
       }
 
       try {
         const newState: TasksState = {
-          storage: {},
+          groups: [],
           initialized: true,
         }
-        const tasksPayloads = JSON.parse(action.payload) as GroupedTaskPayload
+        const groupsPayloads = JSON.parse(action.payload) as GroupPayload[]
 
-        Object.keys(tasksPayloads).forEach((group) => {
-          newState.storage[group] = []
-          Object.values(tasksPayloads[group]).forEach((task) => {
-            newState.storage[group].push(task)
-          })
+        groupsPayloads.forEach((group) => {
+          newState.groups.push(group)
         })
 
         if (newState !== initialState) {
-          state.storage = newState.storage
+          state.groups = newState.groups
           state.initialized = newState.initialized
         }
       } catch (e) {
@@ -187,5 +263,7 @@ export const {
   tasksGroupReordered,
   tasksGroupDeleted,
   tasksGroupMerged,
+  tasksGroupCollapsed,
+  tasksGroupDraft,
 } = tasksSlice.actions
 export default tasksSlice.reducer
