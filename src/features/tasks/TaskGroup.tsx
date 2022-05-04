@@ -124,7 +124,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
       </div>
 
       <CollapsableContainer collapsed={collapsed}>
-        <CreateTask groupName={groupName} />
+        <CreateTask group={group} />
         <TaskItemList group={group} />
       </CollapsableContainer>
     </TaskGroupContainer>

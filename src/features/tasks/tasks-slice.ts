@@ -45,6 +45,7 @@ const tasksSlice = createSlice({
         })
         return
       }
+      delete group.draft
       group.tasks.unshift({
         ...task,
         completed: false,
@@ -208,6 +209,20 @@ const tasksSlice = createSlice({
       }
       group.collapsed = collapsed
     },
+    tasksGroupDraft(
+      state,
+      action: PayloadAction<{
+        groupName: string
+        draft: string
+      }>
+    ) {
+      const { groupName, draft } = action.payload
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        return
+      }
+      group.draft = draft
+    },
     tasksLoaded(state, action: PayloadAction<string>) {
       if (!action.payload && !state.initialized) {
         action.payload = '[]'
@@ -249,5 +264,6 @@ export const {
   tasksGroupDeleted,
   tasksGroupMerged,
   tasksGroupCollapsed,
+  tasksGroupDraft,
 } = tasksSlice.actions
 export default tasksSlice.reducer
