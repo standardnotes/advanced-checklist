@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { useAppSelector } from '../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { getPercentage } from '../../common/utils'
-import { GroupPayload } from './tasks-slice'
+import { GroupPayload, tasksGroupCollapsed } from './tasks-slice'
 
 import CreateTask from './CreateTask'
 import TaskItemList from './TaskItemList'
@@ -53,24 +53,29 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
   style,
   ...props
 }) => {
+  const dispatch = useAppDispatch()
+
   const completedTasks = group.tasks.filter((task) => task.completed).length
   const totalTasks = group.tasks.length
   const percentageCompleted = getPercentage(completedTasks, totalTasks)
 
-  const [collapsed, setCollapsed] = useState(isDragging)
+  const [collapsed, setCollapsed] = useState<boolean>(!!group.collapsed)
 
   const canEdit = useAppSelector((state) => state.settings.canEdit)
   const isOnMobile = useAppSelector((state) => state.settings.isRunningOnMobile)
 
-  const allTasksCompleted = totalTasks === completedTasks
+  const allTasksCompleted = totalTasks > 0 && totalTasks === completedTasks
+
+  const groupName = group.name
 
   function handleCollapse() {
+    dispatch(tasksGroupCollapsed({ groupName, collapsed: !collapsed }))
     setCollapsed(!collapsed)
   }
 
   useEffect(() => {
-    setCollapsed(isDragging)
-  }, [isDragging, setCollapsed])
+    !group.collapsed && setCollapsed(isDragging)
+  }, [group, isDragging, setCollapsed])
 
   /**
    * We want to enable reordering groups via the reorder icon exclusively on mobile.
@@ -92,7 +97,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
             crossed={allTasksCompleted && collapsed}
             highlight={isDragging}
           >
-            {group.name}
+            {groupName}
           </MainTitle>
           <CircularProgressBar size={18} percentage={percentageCompleted} />
           <GenericInlineText data-testid="task-group-stats">
@@ -103,7 +108,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
           <div className="flex items-center">
             {canEdit && (
               <div className="ml-3">
-                <TaskGroupOptions groupName={group.name} />
+                <TaskGroupOptions groupName={groupName} />
               </div>
             )}
             <div className="ml-3">
@@ -119,7 +124,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
       </div>
 
       <CollapsableContainer collapsed={collapsed}>
-        <CreateTask groupName={group.name} />
+        <CreateTask groupName={groupName} />
         <TaskItemList group={group} />
       </CollapsableContainer>
     </TaskGroupContainer>

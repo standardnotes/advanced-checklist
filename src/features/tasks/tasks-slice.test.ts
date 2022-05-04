@@ -11,6 +11,7 @@ import reducer, {
   tasksGroupReordered,
   tasksGroupDeleted,
   tasksGroupMerged,
+  tasksGroupCollapsed,
 } from './tasks-slice'
 import type { TasksState, GroupPayload } from './tasks-slice'
 
@@ -954,6 +955,86 @@ it('should handle merging groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+          },
+        ],
+      },
+    ],
+  }
+
+  expect(currentState).toEqual(expectedState)
+})
+
+it('should handle collapsing groups', () => {
+  const previousState: TasksState = {
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+          },
+        ],
+      },
+      {
+        name: 'Tests',
+        tasks: [
+          {
+            id: 'yet-another-id',
+            description: 'Yet another simple task',
+            completed: true,
+          },
+        ],
+      },
+    ],
+  }
+
+  const currentState = reducer(
+    previousState,
+    tasksGroupCollapsed({ groupName: 'Testing', collapsed: true })
+  )
+
+  const expectedState = {
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        collapsed: true,
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+          },
+        ],
+      },
+      {
+        name: 'Tests',
+        tasks: [
+          {
+            id: 'yet-another-id',
+            description: 'Yet another simple task',
+            completed: true,
           },
         ],
       },

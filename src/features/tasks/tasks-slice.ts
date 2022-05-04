@@ -105,16 +105,6 @@ const tasksSlice = createSlice({
       }
       group.tasks = group.tasks.filter((task) => task.completed === false)
     },
-    tasksGroupAdded(state, action: PayloadAction<string>) {
-      const group = state.groups.find((item) => item.name === action.payload)
-      if (group) {
-        return
-      }
-      state.groups.push({
-        name: action.payload,
-        tasks: [],
-      })
-    },
     tasksReordered(
       state,
       action: PayloadAction<{
@@ -138,6 +128,16 @@ const tasksSlice = createSlice({
         swapTaskIndex,
         withTaskIndex
       )
+    },
+    tasksGroupAdded(state, action: PayloadAction<string>) {
+      const group = state.groups.find((item) => item.name === action.payload)
+      if (group) {
+        return
+      }
+      state.groups.push({
+        name: action.payload,
+        tasks: [],
+      })
     },
     tasksGroupReordered(
       state,
@@ -194,6 +194,20 @@ const tasksSlice = createSlice({
           return item
         })
     },
+    tasksGroupCollapsed(
+      state,
+      action: PayloadAction<{
+        groupName: string
+        collapsed: boolean
+      }>
+    ) {
+      const { groupName, collapsed } = action.payload
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        return
+      }
+      group.collapsed = collapsed
+    },
     tasksLoaded(state, action: PayloadAction<string>) {
       if (!action.payload && !state.initialized) {
         action.payload = '[]'
@@ -234,5 +248,6 @@ export const {
   tasksGroupReordered,
   tasksGroupDeleted,
   tasksGroupMerged,
+  tasksGroupCollapsed,
 } = tasksSlice.actions
 export default tasksSlice.reducer
