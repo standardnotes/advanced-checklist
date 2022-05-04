@@ -9,7 +9,7 @@ import {
 import { testRender } from '../../testUtils'
 import TaskItem from './TaskItem'
 
-const group = 'default group'
+const groupName = 'default group'
 const task: TaskPayload = {
   id: 'test-1',
   description: 'Testing #1',
@@ -17,14 +17,16 @@ const task: TaskPayload = {
 }
 
 it('renders a check box and textarea input', async () => {
-  testRender(<TaskItem group={group} task={task} />)
+  testRender(<TaskItem groupName={groupName} task={task} />)
 
   expect(screen.getByTestId('check-box-input')).toBeInTheDocument()
   expect(screen.getByTestId('text-area-input')).toBeInTheDocument()
 })
 
 test('clicking the check box should toggle the task as open/completed', () => {
-  const { mockStore } = testRender(<TaskItem group={group} task={task} />)
+  const { mockStore } = testRender(
+    <TaskItem groupName={groupName} task={task} />
+  )
 
   const checkBox = screen.getByTestId('check-box-input')
   fireEvent.click(checkBox)
@@ -35,7 +37,7 @@ test('clicking the check box should toggle the task as open/completed', () => {
   expect(dispatchedActions[0]).toMatchObject(
     taskToggled({
       id: task.id,
-      group,
+      groupName,
     })
   )
 
@@ -47,7 +49,7 @@ test('clicking the check box should toggle the task as open/completed', () => {
   expect(dispatchedActions[1]).toMatchObject(
     taskToggled({
       id: task.id,
-      group,
+      groupName,
     })
   )
 })
@@ -57,7 +59,9 @@ test('changing the textarea input text should update the task description', asyn
 
   const newTaskDescription = 'My new task'
 
-  const { mockStore } = testRender(<TaskItem group={group} task={task} />)
+  const { mockStore } = testRender(
+    <TaskItem groupName={groupName} task={task} />
+  )
 
   const textAreaInput = screen.getByTestId(
     'text-area-input'
@@ -84,13 +88,15 @@ test('changing the textarea input text should update the task description', asyn
         ...task,
         description: newTaskDescription,
       },
-      group,
+      groupName,
     })
   )
 })
 
 test('clearing the textarea input text should delete the task', () => {
-  const { mockStore } = testRender(<TaskItem group={group} task={task} />)
+  const { mockStore } = testRender(
+    <TaskItem groupName={groupName} task={task} />
+  )
 
   const textAreaInput = screen.getByTestId('text-area-input')
   fireEvent.change(textAreaInput, {
@@ -109,13 +115,15 @@ test('clearing the textarea input text should delete the task', () => {
   expect(dispatchedActions[0]).toMatchObject(
     taskDeleted({
       id: task.id,
-      group,
+      groupName,
     })
   )
 })
 
 test('pressing enter should not update the task description', () => {
-  const { mockStore } = testRender(<TaskItem group={group} task={task} />)
+  const { mockStore } = testRender(
+    <TaskItem groupName={groupName} task={task} />
+  )
 
   const textAreaInput = screen.getByTestId('text-area-input')
   fireEvent.keyPress(textAreaInput, {

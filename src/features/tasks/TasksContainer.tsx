@@ -63,14 +63,14 @@ const getItemStyle = (
 type ContainerType = 'Open' | 'Completed'
 
 type TasksContainerProps = {
-  group: string
+  groupName: string
   tasks: TaskPayload[]
   type: ContainerType
   testId?: string
 }
 
 const TasksContainer: React.FC<TasksContainerProps> = ({
-  group,
+  groupName,
   tasks,
   type,
   testId,
@@ -115,7 +115,7 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
                           <TaskItem
                             key={identifier}
                             task={task}
-                            group={group}
+                            groupName={groupName}
                             innerRef={innerRef}
                             {...dragHandleProps}
                           />

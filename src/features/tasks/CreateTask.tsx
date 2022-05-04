@@ -20,10 +20,10 @@ const Container = styled.div`
 `
 
 type CreateTaskProps = {
-  group: string
+  groupName: string
 }
 
-const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
+const CreateTask: React.FC<CreateTaskProps> = ({ groupName }) => {
   const inputRef = createRef<HTMLInputElement>()
 
   const dispatch = useAppDispatch()
@@ -48,7 +48,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
       }
 
       dispatch(
-        taskAdded({ task: { id: uuidv4(), description: rawString }, group })
+        taskAdded({ task: { id: uuidv4(), description: rawString }, groupName })
       )
       setTaskDraft('')
     }

@@ -12,12 +12,12 @@ import { tasksGroupMerged } from './tasks-slice'
 import { TextInput } from '../../common/components'
 
 type RenameTaskGroupsProps = {
-  group: string
+  groupName: string
   handleClose: () => void
 }
 
 const RenameTaskGroups: React.FC<RenameTaskGroupsProps> = ({
-  group,
+  groupName,
   handleClose,
 }) => {
   const cancelRef = useRef<HTMLButtonElement>(null)
@@ -32,7 +32,7 @@ const RenameTaskGroups: React.FC<RenameTaskGroupsProps> = ({
   }
 
   function handleRenameGroup() {
-    dispatch(tasksGroupMerged({ group, mergeWith: renameTo }))
+    dispatch(tasksGroupMerged({ groupName, mergeWith: renameTo }))
     handleClose()
   }
 
@@ -47,7 +47,7 @@ const RenameTaskGroups: React.FC<RenameTaskGroupsProps> = ({
             <div className="sk-panel-content">
               <div className="sk-panel-section">
                 <AlertDialogLabel className="sk-h3 sk-panel-section-title">
-                  Renaming the group '<strong>{group}</strong>':
+                  Renaming the group '<strong>{groupName}</strong>':
                 </AlertDialogLabel>
 
                 <AlertDialogDescription>

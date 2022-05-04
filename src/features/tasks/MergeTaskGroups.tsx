@@ -11,22 +11,20 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { tasksGroupMerged } from './tasks-slice'
 
 type MergeTaskGroupsProps = {
-  group: string
+  groupName: string
   handleClose: () => void
 }
 
 const MergeTaskGroups: React.FC<MergeTaskGroupsProps> = ({
-  group,
+  groupName,
   handleClose,
 }) => {
   const cancelRef = useRef<HTMLButtonElement>(null)
 
   const dispatch = useAppDispatch()
 
-  const groupedTasks = useAppSelector((state) => state.tasks.storage)
-  const mergeableGroups = Object.keys(groupedTasks).filter(
-    (item) => item !== group
-  )
+  const groupedTasks = useAppSelector((state) => state.tasks.groups)
+  const mergeableGroups = groupedTasks.filter((item) => item.name !== groupName)
 
   const [mergeWith, setMergeWith] = useState<string>()
 
@@ -42,7 +40,7 @@ const MergeTaskGroups: React.FC<MergeTaskGroupsProps> = ({
       return
     }
 
-    dispatch(tasksGroupMerged({ group, mergeWith }))
+    dispatch(tasksGroupMerged({ groupName, mergeWith }))
     handleClose()
   }
 
@@ -65,19 +63,22 @@ const MergeTaskGroups: React.FC<MergeTaskGroupsProps> = ({
                     <AlertDialogDescription className="sk-panel-row">
                       <p className="color-foreground">
                         Select which group you want to merge '
-                        <strong>{group}</strong>' into:
+                        <strong>{groupName}</strong>' into:
                       </p>
                     </AlertDialogDescription>
                     <fieldset className="flex flex-col" onChange={handleChange}>
                       {mergeableGroups.map((item) => (
-                        <label key={item} className="flex items-center mb-1">
+                        <label
+                          key={item.name}
+                          className="flex items-center mb-1"
+                        >
                           <input
                             type="radio"
-                            value={item}
-                            checked={item === mergeWith}
+                            value={item.name}
+                            checked={item.name === mergeWith}
                             readOnly
                           />
-                          {item}
+                          {item.name}
                         </label>
                       ))}
                     </fieldset>
@@ -86,7 +87,7 @@ const MergeTaskGroups: React.FC<MergeTaskGroupsProps> = ({
                   <AlertDialogDescription>
                     <p className="color-foreground">
                       There are no other groups to merge '
-                      <strong>{group}</strong>' with.
+                      <strong>{groupName}</strong>' with.
                     </p>
                   </AlertDialogDescription>
                 )}

@@ -11,20 +11,23 @@ it('renders the alert dialog when no groups are available to merge', () => {
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
-      storage: {
-        Test: [
-          {
-            id: 'some-id',
-            description: 'A simple task',
-            completed: true,
-          },
-        ],
-      },
+      groups: [
+        {
+          name: 'Test',
+          tasks: [
+            {
+              id: 'some-id',
+              description: 'A simple task',
+              completed: true,
+            },
+          ],
+        },
+      ],
     },
   }
 
   testRender(
-    <MergeTaskGroups group={defaultGroup} handleClose={handleClose} />,
+    <MergeTaskGroups groupName={defaultGroup} handleClose={handleClose} />,
     {},
     defaultState
   )
@@ -46,34 +49,43 @@ it('renders the alert dialog when there are groups available to merge', () => {
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
-      storage: {
-        Test: [
-          {
-            id: 'some-id',
-            description: 'A simple task',
-            completed: true,
-          },
-        ],
-        Testing: [
-          {
-            id: 'another-id',
-            description: 'Another simple task',
-            completed: false,
-          },
-        ],
-        Tests: [
-          {
-            id: 'yet-another-id',
-            description: 'Yet another simple task',
-            completed: true,
-          },
-        ],
-      },
+      groups: [
+        {
+          name: 'Test',
+          tasks: [
+            {
+              id: 'some-id',
+              description: 'A simple task',
+              completed: true,
+            },
+          ],
+        },
+        {
+          name: 'Testing',
+          tasks: [
+            {
+              id: 'another-id',
+              description: 'Another simple task',
+              completed: false,
+            },
+          ],
+        },
+        {
+          name: 'Tests',
+          tasks: [
+            {
+              id: 'yet-another-id',
+              description: 'Yet another simple task',
+              completed: true,
+            },
+          ],
+        },
+      ],
     },
   }
 
   testRender(
-    <MergeTaskGroups group={defaultGroup} handleClose={handleClose} />,
+    <MergeTaskGroups groupName={defaultGroup} handleClose={handleClose} />,
     {},
     defaultState
   )
@@ -103,34 +115,43 @@ it('should close the dialog if no group is selected and the Merge button is clic
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
-      storage: {
-        Test: [
-          {
-            id: 'some-id',
-            description: 'A simple task',
-            completed: true,
-          },
-        ],
-        Testing: [
-          {
-            id: 'another-id',
-            description: 'Another simple task',
-            completed: false,
-          },
-        ],
-        Tests: [
-          {
-            id: 'yet-another-id',
-            description: 'Yet another simple task',
-            completed: true,
-          },
-        ],
-      },
+      groups: [
+        {
+          name: 'Test',
+          tasks: [
+            {
+              id: 'some-id',
+              description: 'A simple task',
+              completed: true,
+            },
+          ],
+        },
+        {
+          name: 'Testing',
+          tasks: [
+            {
+              id: 'another-id',
+              description: 'Another simple task',
+              completed: false,
+            },
+          ],
+        },
+        {
+          name: 'Tests',
+          tasks: [
+            {
+              id: 'yet-another-id',
+              description: 'Yet another simple task',
+              completed: true,
+            },
+          ],
+        },
+      ],
     },
   }
 
   const { mockStore } = testRender(
-    <MergeTaskGroups group={defaultGroup} handleClose={handleClose} />,
+    <MergeTaskGroups groupName={defaultGroup} handleClose={handleClose} />,
     {},
     defaultState
   )
@@ -152,34 +173,43 @@ it('should dispatch the action to merge groups', () => {
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
-      storage: {
-        Test: [
-          {
-            id: 'some-id',
-            description: 'A simple task',
-            completed: true,
-          },
-        ],
-        Testing: [
-          {
-            id: 'another-id',
-            description: 'Another simple task',
-            completed: false,
-          },
-        ],
-        Tests: [
-          {
-            id: 'yet-another-id',
-            description: 'Yet another simple task',
-            completed: true,
-          },
-        ],
-      },
+      groups: [
+        {
+          name: 'Test',
+          tasks: [
+            {
+              id: 'some-id',
+              description: 'A simple task',
+              completed: true,
+            },
+          ],
+        },
+        {
+          name: 'Testing',
+          tasks: [
+            {
+              id: 'another-id',
+              description: 'Another simple task',
+              completed: false,
+            },
+          ],
+        },
+        {
+          name: 'Tests',
+          tasks: [
+            {
+              id: 'yet-another-id',
+              description: 'Yet another simple task',
+              completed: true,
+            },
+          ],
+        },
+      ],
     },
   }
 
   const { mockStore } = testRender(
-    <MergeTaskGroups group={defaultGroup} handleClose={handleClose} />,
+    <MergeTaskGroups groupName={defaultGroup} handleClose={handleClose} />,
     {},
     defaultState
   )
@@ -207,7 +237,7 @@ it('should dispatch the action to merge groups', () => {
   dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
   expect(dispatchedActions[0]).toMatchObject(
-    tasksGroupMerged({ group: defaultGroup, mergeWith: 'Testing' })
+    tasksGroupMerged({ groupName: defaultGroup, mergeWith: 'Testing' })
   )
   expect(handleClose).toHaveBeenCalledTimes(1)
 })

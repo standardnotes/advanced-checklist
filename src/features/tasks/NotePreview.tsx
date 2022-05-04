@@ -4,7 +4,7 @@ import {
   groupTasksByCompletedStatus,
   truncateText,
 } from '../../common/utils'
-import { GroupedTaskPayload, TaskPayload } from './tasks-slice'
+import { GroupPayload, TaskPayload } from './tasks-slice'
 
 import { ProgressBar } from '../../common/components'
 
@@ -60,7 +60,7 @@ const TaskList: React.FC<TaskListProps> = ({ openTasks }) => {
 }
 
 type NotePreviewProps = {
-  groupedTasks: GroupedTaskPayload
+  groupedTasks: GroupPayload[]
 }
 
 const NotePreview: React.FC<NotePreviewProps> = ({ groupedTasks }) => {

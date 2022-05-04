@@ -14,7 +14,7 @@ jest.mock('uuid', () => {
 const defaultGroup = 'My default group'
 
 it('renders a button by default', () => {
-  testRender(<CreateTask group={defaultGroup} />)
+  testRender(<CreateTask groupName={defaultGroup} />)
 
   const inputBox = screen.queryByTestId('create-task-input')
   expect(inputBox).toBeInTheDocument()
@@ -30,13 +30,13 @@ it('should not render input if can not edit', () => {
     },
   }
 
-  testRender(<CreateTask group={defaultGroup} />, {}, defaultState)
+  testRender(<CreateTask groupName={defaultGroup} />, {}, defaultState)
 
   expect(screen.queryByTestId('create-task-input')).not.toBeInTheDocument()
 })
 
 it('changes the input box value', () => {
-  testRender(<CreateTask group={defaultGroup} />)
+  testRender(<CreateTask groupName={defaultGroup} />)
 
   const inputBox = screen.getByTestId('create-task-input') as HTMLInputElement
   fireEvent.change(inputBox, { target: { value: 'This is a simple task' } })
@@ -45,7 +45,7 @@ it('changes the input box value', () => {
 })
 
 test('pressing enter when input box is empty, should not create a new task', () => {
-  const { mockStore } = testRender(<CreateTask group={defaultGroup} />)
+  const { mockStore } = testRender(<CreateTask groupName={defaultGroup} />)
 
   const inputBox = screen.getByTestId('create-task-input')
   fireEvent.keyPress(inputBox, {
@@ -60,7 +60,7 @@ test('pressing enter when input box is empty, should not create a new task', () 
 })
 
 test('pressing enter when input box is not empty, should create a new task', () => {
-  const { mockStore } = testRender(<CreateTask group={defaultGroup} />)
+  const { mockStore } = testRender(<CreateTask groupName={defaultGroup} />)
 
   const inputBox = screen.getByTestId('create-task-input')
   fireEvent.keyPress(inputBox, {
@@ -75,7 +75,7 @@ test('pressing enter when input box is not empty, should create a new task', () 
   expect(dispatchedActions[0]).toMatchObject(
     taskAdded({
       task: { id: 'my-fake-uuid', description: 'My awesome task' },
-      group: defaultGroup,
+      groupName: defaultGroup,
     })
   )
 })

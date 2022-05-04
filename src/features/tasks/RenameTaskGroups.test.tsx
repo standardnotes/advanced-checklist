@@ -11,20 +11,23 @@ it('renders the alert dialog with an input box', () => {
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
-      storage: {
-        [defaultGroup]: [
-          {
-            id: 'some-id',
-            description: 'A simple task',
-            completed: true,
-          },
-        ],
-      },
+      groups: [
+        {
+          name: defaultGroup,
+          tasks: [
+            {
+              id: 'some-id',
+              description: 'A simple task',
+              completed: true,
+            },
+          ],
+        },
+      ],
     },
   }
 
   testRender(
-    <RenameTaskGroups group={defaultGroup} handleClose={handleClose} />,
+    <RenameTaskGroups groupName={defaultGroup} handleClose={handleClose} />,
     {},
     defaultState
   )
@@ -42,27 +45,33 @@ it('should dispatch the action to merge groups', () => {
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
-      storage: {
-        [defaultGroup]: [
-          {
-            id: 'some-id',
-            description: 'A simple task',
-            completed: true,
-          },
-        ],
-        Testing: [
-          {
-            id: 'another-id',
-            description: 'Another simple task',
-            completed: false,
-          },
-        ],
-      },
+      groups: [
+        {
+          name: defaultGroup,
+          tasks: [
+            {
+              id: 'some-id',
+              description: 'A simple task',
+              completed: true,
+            },
+          ],
+        },
+        {
+          name: 'Testing',
+          tasks: [
+            {
+              id: 'another-id',
+              description: 'Another simple task',
+              completed: false,
+            },
+          ],
+        },
+      ],
     },
   }
 
   const { mockStore } = testRender(
-    <RenameTaskGroups group={defaultGroup} handleClose={handleClose} />,
+    <RenameTaskGroups groupName={defaultGroup} handleClose={handleClose} />,
     {},
     defaultState
   )
@@ -90,7 +99,7 @@ it('should dispatch the action to merge groups', () => {
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
   expect(dispatchedActions[0]).toMatchObject(
-    tasksGroupMerged({ group: defaultGroup, mergeWith: newGroupName })
+    tasksGroupMerged({ groupName: defaultGroup, mergeWith: newGroupName })
   )
   expect(handleClose).toHaveBeenCalledTimes(1)
 })

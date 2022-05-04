@@ -27,11 +27,11 @@ const ActionButton = styled.button`
 `
 
 type CompletedTasksActionsProps = {
-  group: string
+  groupName: string
 }
 
 const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
-  group,
+  groupName,
 }) => {
   const dispatch = useAppDispatch()
 
@@ -62,22 +62,22 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
         <ConfirmDialog
           testId="reopen-all-tasks-dialog"
           confirmButtonStyle="danger"
-          confirmButtonCb={() => dispatch(openAllCompleted({ group }))}
+          confirmButtonCb={() => dispatch(openAllCompleted({ groupName }))}
           cancelButtonCb={() => setShowReopenDialog(false)}
         >
           Are you sure you want to reopen completed tasks on the '
-          <strong>{group}</strong>' group?
+          <strong>{groupName}</strong>' group?
         </ConfirmDialog>
       )}
       {showDeleteDialog && (
         <ConfirmDialog
           testId="delete-completed-tasks-dialog"
           confirmButtonStyle="danger"
-          confirmButtonCb={() => dispatch(deleteAllCompleted({ group }))}
+          confirmButtonCb={() => dispatch(deleteAllCompleted({ groupName }))}
           cancelButtonCb={() => setShowDeleteDialog(false)}
         >
           Are you sure you want to delete completed tasks on the '
-          <strong>{group}</strong>' group?
+          <strong>{groupName}</strong>' group?
         </ConfirmDialog>
       )}
     </div>

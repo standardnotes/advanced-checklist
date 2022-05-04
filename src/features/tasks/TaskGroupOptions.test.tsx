@@ -12,39 +12,39 @@ function clickButton(element: HTMLElement) {
   fireEvent.mouseUp(element)
 }
 
-const group = 'default group'
+const groupName = 'default group'
 
 it('renders an options menu', () => {
-  testRender(<TaskGroupOptions group={group} />)
+  testRender(<TaskGroupOptions groupName={groupName} />)
 
   const optionsButton = screen.getByTestId('task-group-options')
   expect(optionsButton).toBeInTheDocument()
 
-  const moveGroupToTrash = screen.getByTestId('move-task-group-trash')
+  const deleteTaskGroup = screen.getByTestId('delete-task-group')
   const mergeTaskGroup = screen.getByTestId('merge-task-group')
 
-  expect(moveGroupToTrash).not.toBeVisible()
+  expect(deleteTaskGroup).not.toBeVisible()
   expect(mergeTaskGroup).not.toBeVisible()
 
   clickButton(optionsButton)
 
-  expect(moveGroupToTrash).toBeVisible()
+  expect(deleteTaskGroup).toBeVisible()
   expect(mergeTaskGroup).toBeVisible()
 })
 
 it('should dispatch tasksGroupDeleted action', () => {
-  const { mockStore } = testRender(<TaskGroupOptions group={group} />)
+  const { mockStore } = testRender(<TaskGroupOptions groupName={groupName} />)
 
   const optionsButton = screen.getByTestId('task-group-options')
   fireEvent.click(optionsButton)
 
-  const moveGroupToTrash = screen.getByTestId('move-task-group-trash')
-  clickButton(moveGroupToTrash)
+  const deleteTaskGroup = screen.getByTestId('delete-task-group')
+  clickButton(deleteTaskGroup)
 
-  const confirmDialog = screen.getByTestId('trash-task-group-dialog')
+  const confirmDialog = screen.getByTestId('delete-task-group-dialog')
   expect(confirmDialog).toBeInTheDocument()
   expect(confirmDialog).toHaveTextContent(
-    `Are you sure you want to move '${group}' to the trash?`
+    `Are you sure you want to delete the group '${groupName}'?`
   )
 
   const confirmButton = screen.getByTestId('confirm-dialog-button')
@@ -52,11 +52,11 @@ it('should dispatch tasksGroupDeleted action', () => {
 
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
-  expect(dispatchedActions[0]).toMatchObject(tasksGroupDeleted({ group }))
+  expect(dispatchedActions[0]).toMatchObject(tasksGroupDeleted({ groupName }))
 })
 
 it('should open the merge task group dialog', () => {
-  testRender(<TaskGroupOptions group={group} />)
+  testRender(<TaskGroupOptions groupName={groupName} />)
 
   const optionsButton = screen.getByTestId('task-group-options')
   fireEvent.click(optionsButton)
@@ -68,19 +68,19 @@ it('should open the merge task group dialog', () => {
 })
 
 it('should open the delete task group dialog', () => {
-  testRender(<TaskGroupOptions group={group} />)
+  testRender(<TaskGroupOptions groupName={groupName} />)
 
   const optionsButton = screen.getByTestId('task-group-options')
   fireEvent.click(optionsButton)
 
-  const trashTaskGroup = screen.getByTestId('move-task-group-trash')
-  clickButton(trashTaskGroup)
+  const deleteTaskGroup = screen.getByTestId('delete-task-group')
+  clickButton(deleteTaskGroup)
 
-  expect(screen.getByTestId('trash-task-group-dialog')).toBeInTheDocument()
+  expect(screen.getByTestId('delete-task-group-dialog')).toBeInTheDocument()
 })
 
 it('should open the rename task group dialog', () => {
-  testRender(<TaskGroupOptions group={group} />)
+  testRender(<TaskGroupOptions groupName={groupName} />)
 
   const optionsButton = screen.getByTestId('task-group-options')
   fireEvent.click(optionsButton)
@@ -92,13 +92,13 @@ it('should open the rename task group dialog', () => {
 })
 
 it('should close the delete task group dialog', () => {
-  testRender(<TaskGroupOptions group={group} />)
+  testRender(<TaskGroupOptions groupName={groupName} />)
 
   const optionsButton = screen.getByTestId('task-group-options')
   fireEvent.click(optionsButton)
 
-  const trashTaskGroup = screen.getByTestId('move-task-group-trash')
-  clickButton(trashTaskGroup)
+  const deleteTaskGroup = screen.getByTestId('delete-task-group')
+  clickButton(deleteTaskGroup)
 
   const cancelButton = screen.getByTestId('cancel-dialog-button')
   clickButton(cancelButton)
@@ -109,7 +109,7 @@ it('should close the delete task group dialog', () => {
 })
 
 it('should close the merge task group dialog', () => {
-  testRender(<TaskGroupOptions group={group} />)
+  testRender(<TaskGroupOptions groupName={groupName} />)
 
   const optionsButton = screen.getByTestId('task-group-options')
   fireEvent.click(optionsButton)
@@ -126,7 +126,7 @@ it('should close the merge task group dialog', () => {
 })
 
 it('should close the rename task group dialog', () => {
-  testRender(<TaskGroupOptions group={group} />)
+  testRender(<TaskGroupOptions groupName={groupName} />)
 
   const optionsButton = screen.getByTestId('task-group-options')
   fireEvent.click(optionsButton)

@@ -3,20 +3,19 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 
 import { useAppDispatch } from '../../app/hooks'
 import { groupTasksByCompletedStatus } from '../../common/utils'
-import { TaskPayload, tasksReordered } from './tasks-slice'
+import { GroupPayload, tasksReordered } from './tasks-slice'
 
 import TasksContainer from './TasksContainer'
 import CompletedTasksActions from './CompletedTasksActions'
 
 type TaskItemListProps = {
-  group: string
-  tasks: TaskPayload[]
+  group: GroupPayload
 }
 
-const TaskItemList: React.FC<TaskItemListProps> = ({ tasks, group }) => {
+const TaskItemList: React.FC<TaskItemListProps> = ({ group }) => {
   const dispatch = useAppDispatch()
 
-  const { openTasks, completedTasks } = groupTasksByCompletedStatus(tasks)
+  const { openTasks, completedTasks } = groupTasksByCompletedStatus(group.tasks)
 
   function onDragEnd(result: DropResult) {
     const droppedOutsideList = !result.destination
@@ -31,7 +30,7 @@ const TaskItemList: React.FC<TaskItemListProps> = ({ tasks, group }) => {
 
     dispatch(
       tasksReordered({
-        group,
+        groupName: group.name,
         swapTaskIndex: source.index,
         withTaskIndex: destination.index,
         isSameSection: source.droppableId === destination.droppableId,
@@ -46,16 +45,18 @@ const TaskItemList: React.FC<TaskItemListProps> = ({ tasks, group }) => {
           testId="open-tasks-container"
           type="Open"
           tasks={openTasks}
-          group={group}
+          groupName={group.name}
         />
 
         <TasksContainer
           testId="completed-tasks-container"
           type="Completed"
           tasks={completedTasks}
-          group={group}
+          groupName={group.name}
         >
-          {completedTasks.length > 0 && <CompletedTasksActions group={group} />}
+          {completedTasks.length > 0 && (
+            <CompletedTasksActions groupName={group.name} />
+          )}
         </TasksContainer>
       </DragDropContext>
     </div>

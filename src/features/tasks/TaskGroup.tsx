@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { useAppSelector } from '../../app/hooks'
 import { getPercentage } from '../../common/utils'
-import { TaskPayload } from './tasks-slice'
+import { GroupPayload } from './tasks-slice'
 
 import CreateTask from './CreateTask'
 import TaskItemList from './TaskItemList'
@@ -40,8 +40,7 @@ const CollapsableContainer = styled.div<CollapsableContainerProps>`
 `
 
 type TaskGroupProps = {
-  group: string
-  tasks: TaskPayload[]
+  group: GroupPayload
   isDragging: boolean
   innerRef?: (element?: HTMLElement | null | undefined) => any
   style?: React.CSSProperties
@@ -49,14 +48,13 @@ type TaskGroupProps = {
 
 const TaskGroup: React.FC<TaskGroupProps> = ({
   group,
-  tasks,
   isDragging,
   innerRef,
   style,
   ...props
 }) => {
-  const completedTasks = tasks.filter((task) => task.completed).length
-  const totalTasks = tasks.length
+  const completedTasks = group.tasks.filter((task) => task.completed).length
+  const totalTasks = group.tasks.length
   const percentageCompleted = getPercentage(completedTasks, totalTasks)
 
   const [collapsed, setCollapsed] = useState(isDragging)
@@ -94,7 +92,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
             crossed={allTasksCompleted && collapsed}
             highlight={isDragging}
           >
-            {group}
+            {group.name}
           </MainTitle>
           <CircularProgressBar size={18} percentage={percentageCompleted} />
           <GenericInlineText data-testid="task-group-stats">
@@ -105,7 +103,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
           <div className="flex items-center">
             {canEdit && (
               <div className="ml-3">
-                <TaskGroupOptions group={group} />
+                <TaskGroupOptions groupName={group.name} />
               </div>
             )}
             <div className="ml-3">
@@ -121,8 +119,8 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
       </div>
 
       <CollapsableContainer collapsed={collapsed}>
-        <CreateTask group={group} />
-        <TaskItemList group={group} tasks={tasks} />
+        <CreateTask groupName={group.name} />
+        <TaskItemList group={group} />
       </CollapsableContainer>
     </TaskGroupContainer>
   )

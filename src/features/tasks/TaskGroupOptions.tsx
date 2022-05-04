@@ -18,10 +18,10 @@ import MergeTaskGroups from './MergeTaskGroups'
 import RenameTaskGroups from './RenameTaskGroups'
 
 type TaskGroupOptionsProps = {
-  group: string
+  groupName: string
 }
 
-const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
+const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ groupName }) => {
   const dispatch = useAppDispatch()
 
   const [showMergeDialog, setShowMergeDialog] = useState(false)
@@ -35,7 +35,7 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
           data-testid="task-group-options"
           className="sn-icon-button border-contrast"
         >
-          <VisuallyHidden>Options for '{group}' group</VisuallyHidden>
+          <VisuallyHidden>Options for '{groupName}' group</VisuallyHidden>
           <MoreIcon />
         </MenuButton>
         <MenuList>
@@ -68,21 +68,22 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ group }) => {
           title="Delete group"
           confirmButtonText="Delete"
           confirmButtonStyle="danger"
-          confirmButtonCb={() => dispatch(tasksGroupDeleted({ group }))}
+          confirmButtonCb={() => dispatch(tasksGroupDeleted({ groupName }))}
           cancelButtonCb={() => setShowDeleteDialog(false)}
         >
-          Are you sure you want to delete the group '<strong>{group}</strong>'?
+          Are you sure you want to delete the group '
+          <strong>{groupName}</strong>'?
         </ConfirmDialog>
       )}
       {showMergeDialog && (
         <MergeTaskGroups
-          group={group}
+          groupName={groupName}
           handleClose={() => setShowMergeDialog(false)}
         />
       )}
       {showRenameDialog && (
         <RenameTaskGroups
-          group={group}
+          groupName={groupName}
           handleClose={() => setShowRenameDialog(false)}
         />
       )}
