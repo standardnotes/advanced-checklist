@@ -1,4 +1,4 @@
-import { GroupedTaskPayload, TaskPayload } from '../features/tasks/tasks-slice'
+import { GroupPayload, TaskPayload } from '../features/tasks/tasks-slice'
 
 export function arrayMoveMutable(
   array: any[],
@@ -43,12 +43,12 @@ export function groupTasksByCompletedStatus(tasks: TaskPayload[]) {
 }
 
 export function getTaskArrayFromGroupedTasks(
-  groupedTasks: GroupedTaskPayload
+  groupedTasks: GroupPayload[]
 ): TaskPayload[] {
   let taskArray: TaskPayload[] = []
 
-  Object.keys(groupedTasks).forEach((group) => {
-    taskArray = taskArray.concat(groupedTasks[group])
+  groupedTasks.forEach((group) => {
+    taskArray = taskArray.concat(group.tasks)
   })
 
   return taskArray
@@ -61,7 +61,7 @@ export function truncateText(text: string, limit: number = 50) {
   return text.substring(0, limit) + '...'
 }
 
-export function getPlainPreview(groupedTasks: GroupedTaskPayload) {
+export function getPlainPreview(groupedTasks: GroupPayload[]) {
   const allTasks = getTaskArrayFromGroupedTasks(groupedTasks)
   const { openTasks } = groupTasksByCompletedStatus(allTasks)
 
