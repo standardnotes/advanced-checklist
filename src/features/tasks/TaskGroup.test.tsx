@@ -11,11 +11,13 @@ const defaultGroup = {
       id: 'test-1',
       description: 'Testing',
       completed: false,
+      createdAt: new Date(),
     },
     {
       id: 'test-2',
       description: 'Testing',
       completed: false,
+      createdAt: new Date(),
     },
   ],
 }
