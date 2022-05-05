@@ -73,7 +73,8 @@
     "coveragePathIgnorePatterns": [
       "<rootDir>/src/mockData.ts",
       "<rootDir>/src/app/hooks.ts",
-      "<rootDir>/src/app/store.ts"
+      "<rootDir>/src/app/store.ts",
+      "<rootDir>/src/app/listenerMiddleware.ts"
     ],
     "coverageReporters": [
       "text",
