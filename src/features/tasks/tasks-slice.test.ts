@@ -1017,11 +1017,74 @@ it('should handle merging groups', () => {
         name: 'Tests',
         tasks: [
           {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+            createdAt: expect.any(Date),
+          },
+          {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
             createdAt: expect.any(Date),
           },
+        ],
+      },
+    ],
+  }
+
+  expect(currentState).toEqual(expectedState)
+})
+
+it('should handle merging to a group that does not exist (renaming)', () => {
+  const previousState: TasksState = {
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: new Date(),
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+            createdAt: new Date(),
+          },
+        ],
+      },
+    ],
+  }
+
+  const currentState = reducer(
+    previousState,
+    tasksGroupMerged({ groupName: 'Testing', mergeWith: 'Tested' })
+  )
+
+  const expectedState = {
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: expect.any(Date),
+          },
+        ],
+      },
+      {
+        name: 'Tested',
+        tasks: [
           {
             id: 'another-id',
             description: 'Another simple task',

@@ -192,16 +192,18 @@ const tasksSlice = createSlice({
       }
       const groupB = state.groups.find((item) => item.name === mergeWith)
       if (!groupB) {
-        return
+        state.groups.push({
+          name: mergeWith,
+          tasks: [],
+        })
       }
       state.groups = state.groups
         .filter((item) => item.name !== groupName)
         .map((item) => {
-          const tasks = groupB.tasks.concat(groupA.tasks)
           if (item.name === mergeWith) {
             return {
-              ...item,
-              tasks,
+              name: mergeWith,
+              tasks: [...groupA.tasks, ...(groupB?.tasks ?? [])],
             }
           }
           return item
