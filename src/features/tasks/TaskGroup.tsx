@@ -55,6 +55,8 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
 }) => {
   const dispatch = useAppDispatch()
 
+  const groupName = group.name
+
   const completedTasks = group.tasks.filter((task) => task.completed).length
   const totalTasks = group.tasks.length
   const percentageCompleted = getPercentage(completedTasks, totalTasks)
@@ -66,8 +68,6 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
 
   const allTasksCompleted = totalTasks > 0 && totalTasks === completedTasks
 
-  const groupName = group.name
-
   function handleCollapse() {
     dispatch(tasksGroupCollapsed({ groupName, collapsed: !collapsed }))
     setCollapsed(!collapsed)
@@ -75,7 +75,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
 
   useEffect(() => {
     !group.collapsed && setCollapsed(isDragging)
-  }, [group, isDragging, setCollapsed])
+  }, [group.collapsed, isDragging, setCollapsed])
 
   /**
    * We want to enable reordering groups via the reorder icon exclusively on mobile.
