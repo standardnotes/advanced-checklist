@@ -1,6 +1,6 @@
 import '@reach/dialog/styles.css'
 
-import React, { useRef, useState } from 'react'
+import React, { KeyboardEvent, useRef, useState } from 'react'
 import {
   AlertDialog,
   AlertDialogLabel,
@@ -31,6 +31,16 @@ const RenameTaskGroups: React.FC<RenameTaskGroupsProps> = ({
     setRenameTo(newName)
   }
 
+  function handleKeyPress(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') {
+      const rawString = (event.target as HTMLInputElement).value
+      if (rawString.length === 0) {
+        return
+      }
+      handleRenameGroup()
+    }
+  }
+
   function handleRenameGroup() {
     dispatch(tasksGroupMerged({ groupName, mergeWith: renameTo }))
     handleClose()
@@ -55,6 +65,7 @@ const RenameTaskGroups: React.FC<RenameTaskGroupsProps> = ({
                     testId="new-group-name-input"
                     autoFocus
                     onChange={handleChange}
+                    onKeyPress={handleKeyPress}
                     placeholder="Type the new group name"
                     value={renameTo}
                   />

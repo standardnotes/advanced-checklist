@@ -19,6 +19,7 @@ it('renders the alert dialog with an input box', () => {
               id: 'some-id',
               description: 'A simple task',
               completed: true,
+              createdAt: new Date(),
             },
           ],
         },
@@ -53,6 +54,7 @@ it('should dispatch the action to merge groups', () => {
               id: 'some-id',
               description: 'A simple task',
               completed: true,
+              createdAt: new Date(),
             },
           ],
         },
@@ -63,6 +65,7 @@ it('should dispatch the action to merge groups', () => {
               id: 'another-id',
               description: 'Another simple task',
               completed: false,
+              createdAt: new Date(),
             },
           ],
         },
@@ -81,6 +84,7 @@ it('should dispatch the action to merge groups', () => {
   const inputBox = screen.getByTestId(
     'new-group-name-input'
   ) as HTMLInputElement
+
   fireEvent.change(inputBox, { target: { value: newGroupName } })
 
   expect(inputBox.value).toBe(newGroupName)
@@ -95,6 +99,65 @@ it('should dispatch the action to merge groups', () => {
   expect(mergeButton).toHaveTextContent('Rename')
 
   fireEvent.click(mergeButton)
+
+  const dispatchedActions = mockStore.getActions()
+  expect(dispatchedActions).toHaveLength(1)
+  expect(dispatchedActions[0]).toMatchObject(
+    tasksGroupMerged({ groupName: defaultGroup, mergeWith: newGroupName })
+  )
+  expect(handleClose).toHaveBeenCalledTimes(1)
+})
+
+it('should dispatch the action to merge groups on Enter press', () => {
+  const defaultGroup = 'Test'
+  const defaultState: Partial<RootState> = {
+    tasks: {
+      groups: [
+        {
+          name: defaultGroup,
+          tasks: [
+            {
+              id: 'some-id',
+              description: 'A simple task',
+              completed: true,
+              createdAt: new Date(),
+            },
+          ],
+        },
+        {
+          name: 'Testing',
+          tasks: [
+            {
+              id: 'another-id',
+              description: 'Another simple task',
+              completed: false,
+              createdAt: new Date(),
+            },
+          ],
+        },
+      ],
+    },
+  }
+
+  const { mockStore } = testRender(
+    <RenameTaskGroups groupName={defaultGroup} handleClose={handleClose} />,
+    {},
+    defaultState
+  )
+
+  const newGroupName = 'My new group name'
+
+  const inputBox = screen.getByTestId(
+    'new-group-name-input'
+  ) as HTMLInputElement
+
+  fireEvent.change(inputBox, { target: { value: newGroupName } })
+  fireEvent.keyPress(inputBox, {
+    key: 'Enter',
+    code: 'Enter',
+    charCode: 13,
+    target: { value: newGroupName },
+  })
 
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
