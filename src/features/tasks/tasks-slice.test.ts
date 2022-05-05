@@ -13,6 +13,7 @@ import reducer, {
   tasksGroupMerged,
   tasksGroupCollapsed,
   tasksGroupDraft,
+  tasksGroupLastActive,
 } from './tasks-slice'
 import type { TasksState, GroupPayload } from './tasks-slice'
 
@@ -1116,6 +1117,67 @@ it('should handle saving task draft for groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+          },
+        ],
+      },
+    ],
+  }
+
+  expect(currentState).toEqual(expectedState)
+})
+
+it('should handle setting a group as last active', () => {
+  const previousState: TasksState = {
+    groups: [
+      {
+        name: 'Test',
+        lastActive: true,
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+          },
+        ],
+      },
+    ],
+  }
+
+  const currentState = reducer(
+    previousState,
+    tasksGroupLastActive({ groupName: 'Testing' })
+  )
+
+  const expectedState = {
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        lastActive: true,
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
           },
         ],
       },

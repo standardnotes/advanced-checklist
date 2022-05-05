@@ -20,6 +20,7 @@ export type GroupPayload = {
   name: string
   collapsed?: boolean
   draft?: string
+  lastActive?: boolean
   tasks: TaskPayload[]
 }
 
@@ -223,6 +224,21 @@ const tasksSlice = createSlice({
       }
       group.draft = draft
     },
+    tasksGroupLastActive(
+      state,
+      action: PayloadAction<{
+        groupName: string
+      }>
+    ) {
+      const { groupName } = action.payload
+      state.groups.forEach((item) => {
+        if (item.name === groupName) {
+          item.lastActive = true
+          return
+        }
+        item.lastActive && delete item.lastActive
+      })
+    },
     tasksLoaded(state, action: PayloadAction<string>) {
       if (!action.payload && !state.initialized) {
         action.payload = '[]'
@@ -265,5 +281,6 @@ export const {
   tasksGroupMerged,
   tasksGroupCollapsed,
   tasksGroupDraft,
+  tasksGroupLastActive,
 } = tasksSlice.actions
 export default tasksSlice.reducer

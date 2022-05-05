@@ -72,6 +72,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
         ref={inputRef}
         spellCheck={spellCheckerEnabled}
         value={taskDraft}
+        autoFocus={group.lastActive}
       />
     </Container>
   )
