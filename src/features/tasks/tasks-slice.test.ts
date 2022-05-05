@@ -25,7 +25,7 @@ it('should return the initial state', () => {
   ).toEqual({ groups: [] })
 })
 
-it('should handle a task being added', () => {
+it('should handle a task being added to a non-existing group', () => {
   const previousState: TasksState = { groups: [] }
 
   expect(
@@ -37,45 +37,7 @@ it('should handle a task being added', () => {
       })
     )
   ).toEqual({
-    groups: [
-      {
-        name: 'Test',
-        tasks: [
-          {
-            id: 'some-id',
-            description: 'A simple task',
-            completed: false,
-          },
-        ],
-      },
-    ],
-  })
-})
-
-it('should set completed to false when adding a new task', () => {
-  const previousState: TasksState = { groups: [] }
-
-  expect(
-    reducer(
-      previousState,
-      taskAdded({
-        task: { id: 'some-id', description: 'A simple task', completed: true },
-        groupName: 'Test',
-      })
-    )
-  ).toEqual({
-    groups: [
-      {
-        name: 'Test',
-        tasks: [
-          {
-            id: 'some-id',
-            description: 'A simple task',
-            completed: false,
-          },
-        ],
-      },
-    ],
+    groups: [],
   })
 })
 
@@ -89,6 +51,7 @@ it('should handle a task being added to the existing tasks store', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -112,11 +75,13 @@ it('should handle a task being added to the existing tasks store', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
           {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -134,6 +99,7 @@ it('should handle an existing task being modified', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -157,6 +123,8 @@ it('should handle an existing task being modified', () => {
             id: 'some-id',
             description: 'Task description changed',
             completed: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
           },
         ],
       },
@@ -174,6 +142,7 @@ it('should not modify tasks if an invalid id is provided', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -197,6 +166,7 @@ it('should not modify tasks if an invalid id is provided', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -214,6 +184,7 @@ it('should keep completed field as-is, if task is modified', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -227,7 +198,6 @@ it('should keep completed field as-is, if task is modified', () => {
         task: {
           id: 'some-id',
           description: 'New description',
-          completed: true,
         },
         groupName: 'Test',
       })
@@ -241,6 +211,8 @@ it('should keep completed field as-is, if task is modified', () => {
             id: 'some-id',
             description: 'New description',
             completed: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
           },
         ],
       },
@@ -258,6 +230,7 @@ it('should handle an existing task being toggled', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -275,6 +248,46 @@ it('should handle an existing task being toggled', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+            completedAt: expect.any(Date),
+          },
+        ],
+      },
+    ],
+  })
+})
+
+it('should handle an existing completed task being toggled', () => {
+  const previousState: TasksState = {
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: new Date(),
+          },
+        ],
+      },
+    ],
+  }
+
+  expect(
+    reducer(previousState, taskToggled({ id: 'some-id', groupName: 'Test' }))
+  ).toEqual({
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
           },
         ],
       },
@@ -292,11 +305,13 @@ it('should handle an existing task being deleted', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -314,6 +329,7 @@ it('should handle an existing task being deleted', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -331,16 +347,19 @@ it('should handle opening all tasks that are marked as completed', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -358,16 +377,19 @@ it('should handle opening all tasks that are marked as completed', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -385,16 +407,19 @@ it('should handle clear all completed tasks', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -412,6 +437,7 @@ it('should handle clear all completed tasks', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -429,6 +455,7 @@ it('should handle loading tasks into the tasks store, if an invalid payload is p
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -451,6 +478,7 @@ it('should initialize the storage with an empty object', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -473,6 +501,7 @@ it('should not initialize the storage again with an empty object', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -496,16 +525,19 @@ it('should handle loading tasks into the tasks store, with a valid payload', () 
           id: 'some-id',
           description: 'A simple task',
           completed: true,
+          createdAt: new Date(),
         },
         {
           id: 'another-id',
           description: 'Another simple task',
           completed: false,
+          createdAt: new Date(),
         },
         {
           id: 'yet-another-id',
           description: 'Yet another simple task',
           completed: true,
+          createdAt: new Date(),
         },
       ],
     },
@@ -522,16 +554,19 @@ it('should handle loading tasks into the tasks store, with a valid payload', () 
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(String),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(String),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(String),
           },
         ],
       },
@@ -562,6 +597,7 @@ it('should handle adding an existing task group', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -583,16 +619,19 @@ it('should handle reordering tasks from the same section', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -618,16 +657,19 @@ it('should handle reordering tasks from the same section', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
           {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -645,16 +687,19 @@ it('should handle reordering tasks from different sections', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -680,16 +725,19 @@ it('should handle reordering tasks from different sections', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -698,6 +746,8 @@ it('should handle reordering tasks from different sections', () => {
 })
 
 it('should handle reordering task groups', () => {
+  const defaultCreatedAt = new Date()
+
   const previousState: TasksState = {
     groups: [
       {
@@ -707,6 +757,7 @@ it('should handle reordering task groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -717,6 +768,7 @@ it('should handle reordering task groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -727,6 +779,7 @@ it('should handle reordering task groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -750,6 +803,7 @@ it('should handle reordering task groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -760,6 +814,7 @@ it('should handle reordering task groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -770,6 +825,7 @@ it('should handle reordering task groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -789,6 +845,7 @@ it('should handle deleting groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -799,6 +856,7 @@ it('should handle deleting groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -809,6 +867,7 @@ it('should handle deleting groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -829,6 +888,7 @@ it('should handle deleting groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -839,6 +899,7 @@ it('should handle deleting groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -858,6 +919,7 @@ it('should not merge the same group', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -868,6 +930,7 @@ it('should not merge the same group', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -878,6 +941,7 @@ it('should not merge the same group', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -902,6 +966,7 @@ it('should handle merging groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -912,6 +977,7 @@ it('should handle merging groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -922,6 +988,7 @@ it('should handle merging groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -942,6 +1009,7 @@ it('should handle merging groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -952,11 +1020,13 @@ it('should handle merging groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -976,6 +1046,7 @@ it('should handle collapsing groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -986,6 +1057,7 @@ it('should handle collapsing groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -996,6 +1068,7 @@ it('should handle collapsing groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -1016,6 +1089,7 @@ it('should handle collapsing groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -1027,6 +1101,7 @@ it('should handle collapsing groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -1037,6 +1112,7 @@ it('should handle collapsing groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -1056,6 +1132,7 @@ it('should handle saving task draft for groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -1066,6 +1143,7 @@ it('should handle saving task draft for groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -1076,6 +1154,7 @@ it('should handle saving task draft for groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -1096,6 +1175,7 @@ it('should handle saving task draft for groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -1106,6 +1186,7 @@ it('should handle saving task draft for groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -1117,6 +1198,7 @@ it('should handle saving task draft for groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -1137,6 +1219,7 @@ it('should handle setting a group as last active', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -1147,6 +1230,7 @@ it('should handle setting a group as last active', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -1167,6 +1251,7 @@ it('should handle setting a group as last active', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -1178,6 +1263,7 @@ it('should handle setting a group as last active', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },

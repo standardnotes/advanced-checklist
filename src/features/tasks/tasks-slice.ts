@@ -14,6 +14,9 @@ export type TaskPayload = {
   id: string
   description: string
   completed?: boolean
+  createdAt: Date
+  updatedAt?: Date
+  completedAt?: Date
 }
 
 export type GroupPayload = {
@@ -30,43 +33,40 @@ const tasksSlice = createSlice({
   reducers: {
     taskAdded(
       state,
-      action: PayloadAction<{ task: TaskPayload; groupName: string }>
+      action: PayloadAction<{
+        task: { id: string; description: string }
+        groupName: string
+      }>
     ) {
       const { groupName, task } = action.payload
       const group = state.groups.find((item) => item.name === groupName)
       if (!group) {
-        state.groups.push({
-          name: groupName,
-          tasks: [
-            {
-              ...task,
-              completed: false,
-            },
-          ],
-        })
         return
       }
       delete group.draft
       group.tasks.unshift({
         ...task,
         completed: false,
+        createdAt: new Date(),
       })
     },
     taskModified(
       state,
-      action: PayloadAction<{ task: TaskPayload; groupName: string }>
+      action: PayloadAction<{
+        task: { id: string; description: string }
+        groupName: string
+      }>
     ) {
       const { groupName, task } = action.payload
       const group = state.groups.find((item) => item.name === groupName)
       if (!group) {
-        state.groups.push({
-          name: groupName,
-          tasks: [task],
-        })
         return
       }
       const currentTask = group.tasks.find((item) => item.id === task.id)
-      currentTask && (currentTask.description = task.description)
+      if (currentTask) {
+        currentTask.description = task.description
+        currentTask.updatedAt = new Date()
+      }
     },
     taskDeleted(
       state,
@@ -88,8 +88,16 @@ const tasksSlice = createSlice({
       if (!group) {
         return
       }
-      const task = group.tasks.find((task) => task.id === id)
-      task && (task.completed = !task.completed)
+      const currentTask = group.tasks.find((task) => task.id === id)
+      if (currentTask) {
+        currentTask.completed = !currentTask.completed
+        currentTask.updatedAt = new Date()
+        if (currentTask.completed) {
+          currentTask.completedAt = new Date()
+        } else {
+          delete currentTask.completedAt
+        }
+      }
     },
     openAllCompleted(state, action: PayloadAction<{ groupName: string }>) {
       const { groupName } = action.payload
@@ -97,7 +105,10 @@ const tasksSlice = createSlice({
       if (!group) {
         return
       }
-      group.tasks.forEach((task) => (task.completed = false))
+      group.tasks.forEach((task) => {
+        task.completed = false
+        delete task.completedAt
+      })
     },
     deleteAllCompleted(state, action: PayloadAction<{ groupName: string }>) {
       const { groupName } = action.payload
