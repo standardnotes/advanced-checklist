@@ -34,10 +34,7 @@ const RenameTaskGroups: React.FC<RenameTaskGroupsProps> = ({
   function handleKeyPress(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
       const rawString = (event.target as HTMLInputElement).value
-      if (rawString.length === 0) {
-        return
-      }
-      handleRenameGroup()
+      rawString.length > 0 && handleRenameGroup()
     }
   }
 
