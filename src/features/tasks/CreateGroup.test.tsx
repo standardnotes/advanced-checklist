@@ -5,7 +5,17 @@ import { testRender } from '../../testUtils'
 import { tasksGroupAdded } from './tasks-slice'
 import CreateGroup from './CreateGroup'
 
-const defaultTasksState = { tasks: { groups: [{ name: 'test', tasks: [] }] } }
+const defaultTasksState = {
+  tasks: {
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'test',
+        tasks: [],
+      },
+    ],
+  },
+}
 
 it('renders a button by default', () => {
   testRender(<CreateGroup />)

@@ -2,11 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { arrayMoveImmutable } from '../../common/utils'
 
 export type TasksState = {
+  schemaVersion: string
   groups: GroupPayload[]
   initialized?: boolean
 }
 
 const initialState: TasksState = {
+  schemaVersion: '1.0.0',
   groups: [],
 }
 
@@ -254,21 +256,14 @@ const tasksSlice = createSlice({
     },
     tasksLoaded(state, action: PayloadAction<string>) {
       if (!action.payload && !state.initialized) {
-        action.payload = '[]'
+        action.payload = '{}'
       }
 
       try {
-        const newState: TasksState = {
-          groups: [],
-          initialized: true,
-        }
-        const groupsPayloads = JSON.parse(action.payload) as GroupPayload[]
-
-        groupsPayloads.forEach((group) => {
-          newState.groups.push(group)
-        })
+        const newState = JSON.parse(action.payload) as TasksState
 
         if (newState !== initialState) {
+          state.schemaVersion = newState.schemaVersion
           state.groups = newState.groups
           state.initialized = newState.initialized
         }

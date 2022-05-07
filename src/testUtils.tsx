@@ -7,6 +7,7 @@ import { RootState } from './app/store'
 
 const defaultMockState: RootState = {
   tasks: {
+    schemaVersion: '1.0.0',
     groups: [],
   },
   settings: {

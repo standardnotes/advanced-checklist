@@ -26,7 +26,7 @@ it('should return the initial state', () => {
 })
 
 it('should handle a task being added to a non-existing group', () => {
-  const previousState: TasksState = { groups: [] }
+  const previousState: TasksState = { schemaVersion: '1.0.0', groups: [] }
 
   expect(
     reducer(
@@ -43,6 +43,7 @@ it('should handle a task being added to a non-existing group', () => {
 
 it('should handle a task being added to the existing tasks store', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -91,6 +92,7 @@ it('should handle a task being added to the existing tasks store', () => {
 
 it('should handle an existing task being modified', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -134,6 +136,7 @@ it('should handle an existing task being modified', () => {
 
 it('should not modify tasks if an invalid id is provided', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -176,6 +179,7 @@ it('should not modify tasks if an invalid id is provided', () => {
 
 it('should keep completed field as-is, if task is modified', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -222,6 +226,7 @@ it('should keep completed field as-is, if task is modified', () => {
 
 it('should handle an existing task being toggled', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -260,6 +265,7 @@ it('should handle an existing task being toggled', () => {
 
 it('should handle an existing completed task being toggled', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -297,6 +303,7 @@ it('should handle an existing completed task being toggled', () => {
 
 it('should handle an existing task being deleted', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -339,6 +346,7 @@ it('should handle an existing task being deleted', () => {
 
 it('should handle opening all tasks that are marked as completed', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -399,6 +407,7 @@ it('should handle opening all tasks that are marked as completed', () => {
 
 it('should handle clear all completed tasks', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -447,6 +456,7 @@ it('should handle clear all completed tasks', () => {
 
 it('should handle loading tasks into the tasks store, if an invalid payload is provided', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -470,6 +480,7 @@ it('should handle loading tasks into the tasks store, if an invalid payload is p
 
 it('should initialize the storage with an empty object', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -493,6 +504,7 @@ it('should initialize the storage with an empty object', () => {
 
 it('should not initialize the storage again with an empty object', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -514,6 +526,7 @@ it('should not initialize the storage again with an empty object', () => {
 
 it('should handle loading tasks into the tasks store, with a valid payload', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [],
   }
 
@@ -575,7 +588,7 @@ it('should handle loading tasks into the tasks store, with a valid payload', () 
 })
 
 it('should handle adding a new task group', () => {
-  const previousState: TasksState = { groups: [] }
+  const previousState: TasksState = { schemaVersion: '1.0.0', groups: [] }
 
   expect(reducer(previousState, tasksGroupAdded('New group'))).toEqual({
     groups: [
@@ -589,6 +602,7 @@ it('should handle adding a new task group', () => {
 
 it('should handle adding an existing task group', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Existing group',
@@ -611,6 +625,7 @@ it('should handle adding an existing task group', () => {
 
 it('should handle reordering tasks from the same section', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -679,6 +694,7 @@ it('should handle reordering tasks from the same section', () => {
 
 it('should handle reordering tasks from different sections', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -749,6 +765,7 @@ it('should handle reordering task groups', () => {
   const defaultCreatedAt = new Date()
 
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -837,6 +854,7 @@ it('should handle reordering task groups', () => {
 
 it('should handle deleting groups', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -911,6 +929,7 @@ it('should handle deleting groups', () => {
 
 it('should not merge the same group', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -958,6 +977,7 @@ it('should not merge the same group', () => {
 
 it('should handle merging groups', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -1038,6 +1058,7 @@ it('should handle merging groups', () => {
 
 it('should handle merging to a group that does not exist (renaming)', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -1101,6 +1122,7 @@ it('should handle merging to a group that does not exist (renaming)', () => {
 
 it('should handle collapsing groups', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -1187,6 +1209,7 @@ it('should handle collapsing groups', () => {
 
 it('should handle saving task draft for groups', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -1273,6 +1296,7 @@ it('should handle saving task draft for groups', () => {
 
 it('should handle setting a group as last active', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',

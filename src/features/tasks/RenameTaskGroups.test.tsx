@@ -11,6 +11,7 @@ it('renders the alert dialog with an input box', () => {
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
+      schemaVersion: '1.0.0',
       groups: [
         {
           name: defaultGroup,
@@ -46,6 +47,7 @@ it('should dispatch the action to merge groups', () => {
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
+      schemaVersion: '1.0.0',
       groups: [
         {
           name: defaultGroup,
@@ -112,6 +114,7 @@ it('should dispatch the action to merge groups on Enter press', () => {
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
+      schemaVersion: '1.0.0',
       groups: [
         {
           name: defaultGroup,
