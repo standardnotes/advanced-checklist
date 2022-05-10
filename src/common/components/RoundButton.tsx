@@ -9,11 +9,7 @@ export const RoundButton: React.FC<RoundButtonProps> = ({
   children,
 }) => {
   return (
-    <button
-      data-testid={testId}
-      className="sn-icon-button border-contrast"
-      onClick={onClick}
-    >
+    <button data-testid={testId} className="sn-icon-button" onClick={onClick}>
       {children}
     </button>
   )
