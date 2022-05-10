@@ -260,12 +260,16 @@ const tasksSlice = createSlice({
       }
 
       try {
-        const newState = JSON.parse(action.payload) as TasksState
+        const parsedState = JSON.parse(action.payload) as TasksState
+        const newState: TasksState = {
+          schemaVersion: parsedState.schemaVersion ?? '1.0.0',
+          groups: parsedState.groups ?? [],
+        }
 
         if (newState !== initialState) {
           state.schemaVersion = newState.schemaVersion
           state.groups = newState.groups
-          state.initialized = newState.initialized
+          state.initialized = true
         }
       } catch (e) {
         return
