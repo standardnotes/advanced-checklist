@@ -64,7 +64,6 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
   const [collapsed, setCollapsed] = useState<boolean>(!!group.collapsed)
 
   const canEdit = useAppSelector((state) => state.settings.canEdit)
-  const isOnMobile = useAppSelector((state) => state.settings.isRunningOnMobile)
 
   const allTasksCompleted = totalTasks > 0 && totalTasks === completedTasks
 
@@ -77,18 +76,11 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
     !group.collapsed && setCollapsed(isDragging)
   }, [group.collapsed, isDragging, setCollapsed])
 
-  /**
-   * We want to enable reordering groups via the reorder icon exclusively on mobile.
-   */
-  const taskGroupProps = {
-    ...(!isOnMobile ? props : {}),
-  }
-
   return (
-    <TaskGroupContainer ref={innerRef} style={style} {...taskGroupProps}>
+    <TaskGroupContainer ref={innerRef} style={style}>
       <div className="flex items-center justify-between h-8 mt-1 mb-1">
         <div className="flex flex-grow items-center">
-          {canEdit && isOnMobile && (
+          {canEdit && (
             <div className="mr-3" {...props}>
               <ReorderIcon highlight={isDragging} />
             </div>
