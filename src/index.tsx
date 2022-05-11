@@ -24,7 +24,7 @@ const TaskEditor: React.FC = () => {
   const note = useRef<any>()
   const editorKit = useRef<EditorKit>()
 
-  const initialized = useAppSelector((state) => state.tasks.initialized)
+  const initialized = !!useAppSelector((state) => state.tasks.initialized)
   const groupedTasks = useAppSelector((state) => state.tasks.groups)
 
   const dispatch = useAppDispatch()
@@ -94,6 +94,10 @@ const TaskEditor: React.FC = () => {
     const unsubscribe = store.subscribe(() => saveNote())
     return unsubscribe
   })
+
+  if (!initialized) {
+    return <></>
+  }
 
   return (
     <>
