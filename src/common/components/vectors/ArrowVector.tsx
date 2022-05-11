@@ -1,7 +1,12 @@
-export const ArrowVector = () => {
+type ArrowVectorProps = {
+  style?: React.CSSProperties
+}
+
+export const ArrowVector: React.FC<ArrowVectorProps> = ({ style }) => {
   return (
     <svg
       className="fill-info-color"
+      style={style}
       width="157"
       height="367"
       viewBox="0 0 157 367"
