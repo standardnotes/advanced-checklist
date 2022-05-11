@@ -9,7 +9,7 @@ const GROUPS_PREVIEW_LIMIT = 3
 const MAX_GROUP_DESCRIPTION_LENGTH = 30
 
 const Title: React.FC = ({ children }) => {
-  return <p className="mt-2 w-full">{children}</p>
+  return <p className="mt-2 w-full font-medium">{children}</p>
 }
 
 type GroupSummaryProps = {
@@ -39,7 +39,7 @@ const GroupSummary: React.FC<GroupSummaryProps> = ({ groupedTasks }) => {
           ).length
 
           return (
-            <p key={`task-${index}`} className="mb-1">
+            <p key={`group-${index}`} className="mb-1">
               {truncateText(group.name, MAX_GROUP_DESCRIPTION_LENGTH)}
               <span className="px-2 neutral">
                 {totalCompletedTasks}/{totalTasks}
