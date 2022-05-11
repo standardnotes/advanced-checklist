@@ -24,20 +24,27 @@ const InputContainer = styled.div`
 `
 
 const TutorialContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   position: relative;
 `
 
 const Tutorial = styled.div`
-  left: 25%;
+  align-items: center;
+  align-content: center;
+  display: flex;
+  flex-direction: column;
   position: absolute;
+  width: 100%;
   z-index: 100;
 `
 
 const TutorialText = styled.div`
   color: var(--sn-stylekit-paragraph-text-color);
   font-size: var(--sn-stylekit-font-size-h2);
+  margin: 0;
   text-align: center;
-  width: 70%;
+  width: 194px;
 `
 
 const BaseEmptyContainer = styled.div`
@@ -134,7 +141,7 @@ const CreateGroup: React.FC = () => {
           {taskGroupCount === 0 && (
             <TutorialContainer>
               <Tutorial>
-                <ArrowVector />
+                <ArrowVector style={{ marginRight: 140, marginBottom: 12 }} />
                 <TutorialText>
                   Get started by naming your first task group
                 </TutorialText>
