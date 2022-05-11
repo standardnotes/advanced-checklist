@@ -5,12 +5,65 @@ import {
   KeyboardEvent,
   useState,
 } from 'react'
+import styled from 'styled-components'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { tasksGroupAdded } from './tasks-slice'
 
 import { TextInput, WideButton } from '../../common/components'
 import { AddIcon } from '../../common/components/icons'
+import { ArrowVector } from '../../common/components/vectors'
+
+const InputContainer = styled.div`
+  background-color: var(--sn-stylekit-background-color);
+  border: 1px solid var(--sn-stylekit-border-color);
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 16px;
+  margin-bottom: 9px;
+`
+
+const TutorialContainer = styled.div`
+  position: relative;
+`
+
+const Tutorial = styled.div`
+  left: 25%;
+  position: absolute;
+  z-index: 100;
+`
+
+const TutorialText = styled.div`
+  color: var(--sn-stylekit-paragraph-text-color);
+  font-size: var(--sn-stylekit-font-size-h2);
+  text-align: center;
+  width: 70%;
+`
+
+const BaseEmptyContainer = styled.div`
+  background-color: var(--sn-stylekit-border-color);
+  border-radius: 8px;
+  box-sizing: border-box;
+  height: 66px;
+  padding: 16px;
+  margin-bottom: 9px;
+`
+
+const EmptyContainer1 = styled(BaseEmptyContainer)`
+  opacity: 0.8;
+`
+
+const EmptyContainer2 = styled(BaseEmptyContainer)`
+  opacity: 0.6;
+`
+
+const EmptyContainer3 = styled(BaseEmptyContainer)`
+  opacity: 0.4;
+`
+
+const EmptyContainer4 = styled(BaseEmptyContainer)`
+  opacity: 0.2;
+`
 
 const CreateGroup: React.FC = () => {
   const inputRef = createRef<HTMLInputElement>()
@@ -63,18 +116,36 @@ const CreateGroup: React.FC = () => {
           <AddIcon />
         </WideButton>
       ) : (
-        <TextInput
-          testId="create-group-input"
-          value={group}
-          onBlur={handleBlur}
-          onChange={handleTextChange}
-          onKeyPress={handleKeyPress}
-          placeholder="Name your task group and press enter"
-          ref={inputRef}
-          spellCheck={spellCheckerEnabled}
-          textSize="big"
-          autoFocus
-        />
+        <>
+          <InputContainer>
+            <TextInput
+              testId="create-group-input"
+              value={group}
+              onBlur={handleBlur}
+              onChange={handleTextChange}
+              onKeyPress={handleKeyPress}
+              placeholder="Name your task group and press enter"
+              ref={inputRef}
+              spellCheck={spellCheckerEnabled}
+              textSize="big"
+              autoFocus
+            />
+          </InputContainer>
+          {taskGroupCount === 0 && (
+            <TutorialContainer>
+              <Tutorial>
+                <ArrowVector />
+                <TutorialText>
+                  Get started by naming your first task group
+                </TutorialText>
+              </Tutorial>
+              <EmptyContainer1 />
+              <EmptyContainer2 />
+              <EmptyContainer3 />
+              <EmptyContainer4 />
+            </TutorialContainer>
+          )}
+        </>
       )}
     </>
   )
