@@ -6,11 +6,13 @@ const workTasks = [
   {
     id: 'test-b-1',
     description: 'Test #1',
+    createdAt: new Date(),
   },
   {
     id: 'test-b-2',
     description: 'Test #2',
     completed: true,
+    createdAt: new Date(),
   },
 ]
 
@@ -18,11 +20,13 @@ const personalTasks = [
   {
     id: 'test-c-1',
     description: 'Test #3',
+    createdAt: new Date(),
   },
   {
     id: 'test-c-2',
     description: 'Test #4',
     completed: true,
+    createdAt: new Date(),
   },
 ]
 
@@ -30,10 +34,12 @@ const miscTasks = [
   {
     id: 'test-d-1',
     description: 'Test #5',
+    createdAt: new Date(),
   },
   {
     id: 'test-d-2',
     description: 'Test #6',
+    createdAt: new Date(),
   },
 ]
 
@@ -125,6 +131,7 @@ it('should render a summary of the remaining open task(s)', () => {
         {
           id: 'test-e-1',
           description: 'Test #7',
+          createdAt: new Date(),
         },
       ],
     },

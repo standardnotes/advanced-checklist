@@ -10,11 +10,13 @@ const defaultGroup = {
       id: 'test-1',
       description: 'Testing #1',
       completed: false,
+      createdAt: new Date(),
     },
     {
       id: 'test-2',
       description: 'Testing #2',
       completed: false,
+      createdAt: new Date(),
     },
   ],
 }
@@ -43,6 +45,7 @@ it('renders the completed tasks container', () => {
         id: 'test-3',
         description: 'Testing #3',
         completed: true,
+        createdAt: new Date(),
       },
     ],
   }

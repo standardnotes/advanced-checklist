@@ -109,7 +109,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
   useDidMount(() => {
     const timeoutId = setTimeout(() => {
       if (description !== task.description) {
-        dispatch(taskModified({ task: { ...task, description }, groupName }))
+        dispatch(
+          taskModified({ task: { id: task.id, description }, groupName })
+        )
       }
     }, 500)
 

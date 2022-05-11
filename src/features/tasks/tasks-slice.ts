@@ -2,11 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { arrayMoveImmutable } from '../../common/utils'
 
 export type TasksState = {
+  schemaVersion: string
   groups: GroupPayload[]
   initialized?: boolean
 }
 
 const initialState: TasksState = {
+  schemaVersion: '1.0.0',
   groups: [],
 }
 
@@ -14,12 +16,16 @@ export type TaskPayload = {
   id: string
   description: string
   completed?: boolean
+  createdAt: Date
+  updatedAt?: Date
+  completedAt?: Date
 }
 
 export type GroupPayload = {
   name: string
   collapsed?: boolean
   draft?: string
+  lastActive?: boolean
   tasks: TaskPayload[]
 }
 
@@ -29,43 +35,40 @@ const tasksSlice = createSlice({
   reducers: {
     taskAdded(
       state,
-      action: PayloadAction<{ task: TaskPayload; groupName: string }>
+      action: PayloadAction<{
+        task: { id: string; description: string }
+        groupName: string
+      }>
     ) {
       const { groupName, task } = action.payload
       const group = state.groups.find((item) => item.name === groupName)
       if (!group) {
-        state.groups.push({
-          name: groupName,
-          tasks: [
-            {
-              ...task,
-              completed: false,
-            },
-          ],
-        })
         return
       }
       delete group.draft
       group.tasks.unshift({
         ...task,
         completed: false,
+        createdAt: new Date(),
       })
     },
     taskModified(
       state,
-      action: PayloadAction<{ task: TaskPayload; groupName: string }>
+      action: PayloadAction<{
+        task: { id: string; description: string }
+        groupName: string
+      }>
     ) {
       const { groupName, task } = action.payload
       const group = state.groups.find((item) => item.name === groupName)
       if (!group) {
-        state.groups.push({
-          name: groupName,
-          tasks: [task],
-        })
         return
       }
       const currentTask = group.tasks.find((item) => item.id === task.id)
-      currentTask && (currentTask.description = task.description)
+      if (currentTask) {
+        currentTask.description = task.description
+        currentTask.updatedAt = new Date()
+      }
     },
     taskDeleted(
       state,
@@ -87,8 +90,16 @@ const tasksSlice = createSlice({
       if (!group) {
         return
       }
-      const task = group.tasks.find((task) => task.id === id)
-      task && (task.completed = !task.completed)
+      const currentTask = group.tasks.find((task) => task.id === id)
+      if (currentTask) {
+        currentTask.completed = !currentTask.completed
+        currentTask.updatedAt = new Date()
+        if (currentTask.completed) {
+          currentTask.completedAt = new Date()
+        } else {
+          delete currentTask.completedAt
+        }
+      }
     },
     openAllCompleted(state, action: PayloadAction<{ groupName: string }>) {
       const { groupName } = action.payload
@@ -96,7 +107,10 @@ const tasksSlice = createSlice({
       if (!group) {
         return
       }
-      group.tasks.forEach((task) => (task.completed = false))
+      group.tasks.forEach((task) => {
+        task.completed = false
+        delete task.completedAt
+      })
     },
     deleteAllCompleted(state, action: PayloadAction<{ groupName: string }>) {
       const { groupName } = action.payload
@@ -180,16 +194,18 @@ const tasksSlice = createSlice({
       }
       const groupB = state.groups.find((item) => item.name === mergeWith)
       if (!groupB) {
-        return
+        state.groups.push({
+          name: mergeWith,
+          tasks: [],
+        })
       }
       state.groups = state.groups
         .filter((item) => item.name !== groupName)
         .map((item) => {
-          const tasks = groupB.tasks.concat(groupA.tasks)
           if (item.name === mergeWith) {
             return {
-              ...item,
-              tasks,
+              name: mergeWith,
+              tasks: [...groupA.tasks, ...(groupB?.tasks ?? [])],
             }
           }
           return item
@@ -223,25 +239,37 @@ const tasksSlice = createSlice({
       }
       group.draft = draft
     },
+    tasksGroupLastActive(
+      state,
+      action: PayloadAction<{
+        groupName: string
+      }>
+    ) {
+      const { groupName } = action.payload
+      state.groups.forEach((item) => {
+        if (item.name === groupName) {
+          item.lastActive = true
+          return
+        }
+        item.lastActive && delete item.lastActive
+      })
+    },
     tasksLoaded(state, action: PayloadAction<string>) {
       if (!action.payload && !state.initialized) {
-        action.payload = '[]'
+        action.payload = '{}'
       }
 
       try {
+        const parsedState = JSON.parse(action.payload) as TasksState
         const newState: TasksState = {
-          groups: [],
-          initialized: true,
+          schemaVersion: parsedState.schemaVersion ?? '1.0.0',
+          groups: parsedState.groups ?? [],
         }
-        const groupsPayloads = JSON.parse(action.payload) as GroupPayload[]
-
-        groupsPayloads.forEach((group) => {
-          newState.groups.push(group)
-        })
 
         if (newState !== initialState) {
+          state.schemaVersion = newState.schemaVersion
           state.groups = newState.groups
-          state.initialized = newState.initialized
+          state.initialized = true
         }
       } catch (e) {
         return
@@ -265,5 +293,6 @@ export const {
   tasksGroupMerged,
   tasksGroupCollapsed,
   tasksGroupDraft,
+  tasksGroupLastActive,
 } = tasksSlice.actions
 export default tasksSlice.reducer

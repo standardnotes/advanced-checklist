@@ -14,6 +14,7 @@ const task: TaskPayload = {
   id: 'test-1',
   description: 'Testing #1',
   completed: false,
+  createdAt: new Date(),
 }
 
 it('renders a check box and textarea input', async () => {
@@ -85,7 +86,7 @@ test('changing the textarea input text should update the task description', asyn
   expect(dispatchedActions[0]).toMatchObject(
     taskModified({
       task: {
-        ...task,
+        id: task.id,
         description: newTaskDescription,
       },
       groupName,

@@ -5,7 +5,17 @@ import { testRender } from '../../testUtils'
 import { tasksGroupAdded } from './tasks-slice'
 import CreateGroup from './CreateGroup'
 
-const defaultTasksState = { tasks: { groups: [{ name: 'test', tasks: [] }] } }
+const defaultTasksState = {
+  tasks: {
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'test',
+        tasks: [],
+      },
+    ],
+  },
+}
 
 it('renders a button by default', () => {
   testRender(<CreateGroup />)
@@ -92,6 +102,21 @@ test('pressing enter should create a new group', () => {
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
   expect(dispatchedActions[0]).toMatchObject(tasksGroupAdded(group))
+
+  button = screen.getByTestId('create-group-button')
+
+  expect(inputBox).not.toBeInTheDocument()
+  expect(button).toBeInTheDocument()
+})
+
+test('the create new group button is shown if the input box loses focus', () => {
+  testRender(<CreateGroup />, {}, defaultTasksState)
+
+  let button = screen.getByTestId('create-group-button')
+  fireEvent.click(button)
+
+  const inputBox = screen.getByTestId('create-group-input')
+  fireEvent.blur(inputBox)
 
   button = screen.getByTestId('create-group-button')
 

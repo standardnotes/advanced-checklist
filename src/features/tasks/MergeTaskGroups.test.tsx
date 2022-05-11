@@ -11,6 +11,7 @@ it('renders the alert dialog when no groups are available to merge', () => {
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
+      schemaVersion: '1.0.0',
       groups: [
         {
           name: 'Test',
@@ -19,6 +20,7 @@ it('renders the alert dialog when no groups are available to merge', () => {
               id: 'some-id',
               description: 'A simple task',
               completed: true,
+              createdAt: new Date(),
             },
           ],
         },
@@ -49,6 +51,7 @@ it('renders the alert dialog when there are groups available to merge', () => {
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
+      schemaVersion: '1.0.0',
       groups: [
         {
           name: 'Test',
@@ -57,6 +60,7 @@ it('renders the alert dialog when there are groups available to merge', () => {
               id: 'some-id',
               description: 'A simple task',
               completed: true,
+              createdAt: new Date(),
             },
           ],
         },
@@ -67,6 +71,7 @@ it('renders the alert dialog when there are groups available to merge', () => {
               id: 'another-id',
               description: 'Another simple task',
               completed: false,
+              createdAt: new Date(),
             },
           ],
         },
@@ -77,6 +82,7 @@ it('renders the alert dialog when there are groups available to merge', () => {
               id: 'yet-another-id',
               description: 'Yet another simple task',
               completed: true,
+              createdAt: new Date(),
             },
           ],
         },
@@ -115,6 +121,7 @@ it('should close the dialog if no group is selected and the Merge button is clic
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
+      schemaVersion: '1.0.0',
       groups: [
         {
           name: 'Test',
@@ -123,6 +130,7 @@ it('should close the dialog if no group is selected and the Merge button is clic
               id: 'some-id',
               description: 'A simple task',
               completed: true,
+              createdAt: new Date(),
             },
           ],
         },
@@ -133,6 +141,7 @@ it('should close the dialog if no group is selected and the Merge button is clic
               id: 'another-id',
               description: 'Another simple task',
               completed: false,
+              createdAt: new Date(),
             },
           ],
         },
@@ -143,6 +152,7 @@ it('should close the dialog if no group is selected and the Merge button is clic
               id: 'yet-another-id',
               description: 'Yet another simple task',
               completed: true,
+              createdAt: new Date(),
             },
           ],
         },
@@ -173,6 +183,7 @@ it('should dispatch the action to merge groups', () => {
   const defaultGroup = 'Test'
   const defaultState: Partial<RootState> = {
     tasks: {
+      schemaVersion: '1.0.0',
       groups: [
         {
           name: 'Test',
@@ -181,6 +192,7 @@ it('should dispatch the action to merge groups', () => {
               id: 'some-id',
               description: 'A simple task',
               completed: true,
+              createdAt: new Date(),
             },
           ],
         },
@@ -191,6 +203,7 @@ it('should dispatch the action to merge groups', () => {
               id: 'another-id',
               description: 'Another simple task',
               completed: false,
+              createdAt: new Date(),
             },
           ],
         },
@@ -201,6 +214,7 @@ it('should dispatch the action to merge groups', () => {
               id: 'yet-another-id',
               description: 'Yet another simple task',
               completed: true,
+              createdAt: new Date(),
             },
           ],
         },

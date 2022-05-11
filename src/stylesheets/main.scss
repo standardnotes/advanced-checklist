@@ -49,6 +49,15 @@ html {
   .fill-info-color {
     fill: var(--sn-stylekit-info-color);
   }
+
+  .sn-icon-button {
+    border-width: 0;
+
+    &:hover {
+      background-color: inherit;
+      border-width: 1px;
+    }
+  }
 }
 
 :root {

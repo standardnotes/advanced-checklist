@@ -31,10 +31,7 @@ const TaskGroupOptions: React.FC<TaskGroupOptionsProps> = ({ groupName }) => {
   return (
     <>
       <Menu>
-        <MenuButton
-          data-testid="task-group-options"
-          className="sn-icon-button border-contrast"
-        >
+        <MenuButton data-testid="task-group-options" className="sn-icon-button">
           <VisuallyHidden>Options for '{groupName}' group</VisuallyHidden>
           <MoreIcon />
         </MenuButton>

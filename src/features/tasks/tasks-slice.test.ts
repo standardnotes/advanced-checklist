@@ -12,19 +12,21 @@ import reducer, {
   tasksGroupDeleted,
   tasksGroupMerged,
   tasksGroupCollapsed,
+  tasksGroupDraft,
+  tasksGroupLastActive,
 } from './tasks-slice'
-import type { TasksState, GroupPayload } from './tasks-slice'
+import type { TasksState } from './tasks-slice'
 
 it('should return the initial state', () => {
   return expect(
     reducer(undefined, {
       type: undefined,
     })
-  ).toEqual({ groups: [] })
+  ).toEqual({ schemaVersion: '1.0.0', groups: [] })
 })
 
-it('should handle a task being added', () => {
-  const previousState: TasksState = { groups: [] }
+it('should handle a task being added to a non-existing group', () => {
+  const previousState: TasksState = { schemaVersion: '1.0.0', groups: [] }
 
   expect(
     reducer(
@@ -35,50 +37,14 @@ it('should handle a task being added', () => {
       })
     )
   ).toEqual({
-    groups: [
-      {
-        name: 'Test',
-        tasks: [
-          {
-            id: 'some-id',
-            description: 'A simple task',
-            completed: false,
-          },
-        ],
-      },
-    ],
-  })
-})
-
-it('should set completed to false when adding a new task', () => {
-  const previousState: TasksState = { groups: [] }
-
-  expect(
-    reducer(
-      previousState,
-      taskAdded({
-        task: { id: 'some-id', description: 'A simple task', completed: true },
-        groupName: 'Test',
-      })
-    )
-  ).toEqual({
-    groups: [
-      {
-        name: 'Test',
-        tasks: [
-          {
-            id: 'some-id',
-            description: 'A simple task',
-            completed: false,
-          },
-        ],
-      },
-    ],
+    schemaVersion: '1.0.0',
+    groups: [],
   })
 })
 
 it('should handle a task being added to the existing tasks store', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -87,6 +53,7 @@ it('should handle a task being added to the existing tasks store', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -102,6 +69,7 @@ it('should handle a task being added to the existing tasks store', () => {
       })
     )
   ).toEqual({
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -110,11 +78,13 @@ it('should handle a task being added to the existing tasks store', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
           {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -124,6 +94,7 @@ it('should handle a task being added to the existing tasks store', () => {
 
 it('should handle an existing task being modified', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -132,6 +103,7 @@ it('should handle an existing task being modified', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -147,6 +119,7 @@ it('should handle an existing task being modified', () => {
       })
     )
   ).toEqual({
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -155,6 +128,8 @@ it('should handle an existing task being modified', () => {
             id: 'some-id',
             description: 'Task description changed',
             completed: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
           },
         ],
       },
@@ -164,6 +139,7 @@ it('should handle an existing task being modified', () => {
 
 it('should not modify tasks if an invalid id is provided', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -172,6 +148,7 @@ it('should not modify tasks if an invalid id is provided', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -187,6 +164,7 @@ it('should not modify tasks if an invalid id is provided', () => {
       })
     )
   ).toEqual({
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -195,6 +173,7 @@ it('should not modify tasks if an invalid id is provided', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -204,6 +183,7 @@ it('should not modify tasks if an invalid id is provided', () => {
 
 it('should keep completed field as-is, if task is modified', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -212,6 +192,7 @@ it('should keep completed field as-is, if task is modified', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -225,12 +206,12 @@ it('should keep completed field as-is, if task is modified', () => {
         task: {
           id: 'some-id',
           description: 'New description',
-          completed: true,
         },
         groupName: 'Test',
       })
     )
   ).toEqual({
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -239,6 +220,8 @@ it('should keep completed field as-is, if task is modified', () => {
             id: 'some-id',
             description: 'New description',
             completed: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
           },
         ],
       },
@@ -248,6 +231,7 @@ it('should keep completed field as-is, if task is modified', () => {
 
 it('should handle an existing task being toggled', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -256,6 +240,7 @@ it('should handle an existing task being toggled', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -265,6 +250,7 @@ it('should handle an existing task being toggled', () => {
   expect(
     reducer(previousState, taskToggled({ id: 'some-id', groupName: 'Test' }))
   ).toEqual({
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -273,6 +259,48 @@ it('should handle an existing task being toggled', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+            completedAt: expect.any(Date),
+          },
+        ],
+      },
+    ],
+  })
+})
+
+it('should handle an existing completed task being toggled', () => {
+  const previousState: TasksState = {
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: new Date(),
+          },
+        ],
+      },
+    ],
+  }
+
+  expect(
+    reducer(previousState, taskToggled({ id: 'some-id', groupName: 'Test' }))
+  ).toEqual({
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: false,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
           },
         ],
       },
@@ -282,6 +310,7 @@ it('should handle an existing task being toggled', () => {
 
 it('should handle an existing task being deleted', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -290,11 +319,13 @@ it('should handle an existing task being deleted', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -304,6 +335,7 @@ it('should handle an existing task being deleted', () => {
   expect(
     reducer(previousState, taskDeleted({ id: 'some-id', groupName: 'Test' }))
   ).toEqual({
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -312,6 +344,7 @@ it('should handle an existing task being deleted', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -321,6 +354,7 @@ it('should handle an existing task being deleted', () => {
 
 it('should handle opening all tasks that are marked as completed', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -329,16 +363,19 @@ it('should handle opening all tasks that are marked as completed', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -348,6 +385,7 @@ it('should handle opening all tasks that are marked as completed', () => {
   expect(
     reducer(previousState, openAllCompleted({ groupName: 'Test' }))
   ).toEqual({
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -356,16 +394,19 @@ it('should handle opening all tasks that are marked as completed', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -375,6 +416,7 @@ it('should handle opening all tasks that are marked as completed', () => {
 
 it('should handle clear all completed tasks', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -383,16 +425,19 @@ it('should handle clear all completed tasks', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -402,6 +447,7 @@ it('should handle clear all completed tasks', () => {
   expect(
     reducer(previousState, deleteAllCompleted({ groupName: 'Test' }))
   ).toEqual({
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -410,6 +456,7 @@ it('should handle clear all completed tasks', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -419,6 +466,7 @@ it('should handle clear all completed tasks', () => {
 
 it('should handle loading tasks into the tasks store, if an invalid payload is provided', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -427,6 +475,7 @@ it('should handle loading tasks into the tasks store, if an invalid payload is p
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -441,6 +490,7 @@ it('should handle loading tasks into the tasks store, if an invalid payload is p
 
 it('should initialize the storage with an empty object', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -449,6 +499,7 @@ it('should initialize the storage with an empty object', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -456,13 +507,15 @@ it('should initialize the storage with an empty object', () => {
   }
 
   expect(reducer(previousState, tasksLoaded(''))).toEqual({
-    initialized: true,
+    schemaVersion: '1.0.0',
     groups: [],
+    initialized: true,
   })
 })
 
 it('should not initialize the storage again with an empty object', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -471,6 +524,7 @@ it('should not initialize the storage again with an empty object', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -483,35 +537,12 @@ it('should not initialize the storage again with an empty object', () => {
 
 it('should handle loading tasks into the tasks store, with a valid payload', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [],
   }
 
-  const tasksPayload: GroupPayload[] = [
-    {
-      name: 'Test',
-      tasks: [
-        {
-          id: 'some-id',
-          description: 'A simple task',
-          completed: true,
-        },
-        {
-          id: 'another-id',
-          description: 'Another simple task',
-          completed: false,
-        },
-        {
-          id: 'yet-another-id',
-          description: 'Yet another simple task',
-          completed: true,
-        },
-      ],
-    },
-  ]
-
-  const serializedPayload = JSON.stringify(tasksPayload)
-  expect(reducer(previousState, tasksLoaded(serializedPayload))).toEqual({
-    initialized: true,
+  const tasksPayload: TasksState = {
+    schemaVersion: '2.0.0',
     groups: [
       {
         name: 'Test',
@@ -520,27 +551,62 @@ it('should handle loading tasks into the tasks store, with a valid payload', () 
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
     ],
+  }
+
+  const serializedPayload = JSON.stringify(tasksPayload)
+  expect(reducer(previousState, tasksLoaded(serializedPayload))).toEqual({
+    schemaVersion: '2.0.0',
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: expect.any(String),
+          },
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+            createdAt: expect.any(String),
+          },
+          {
+            id: 'yet-another-id',
+            description: 'Yet another simple task',
+            completed: true,
+            createdAt: expect.any(String),
+          },
+        ],
+      },
+    ],
+    initialized: true,
   })
 })
 
 it('should handle adding a new task group', () => {
-  const previousState: TasksState = { groups: [] }
+  const previousState: TasksState = { schemaVersion: '1.0.0', groups: [] }
 
   expect(reducer(previousState, tasksGroupAdded('New group'))).toEqual({
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'New group',
@@ -552,6 +618,7 @@ it('should handle adding a new task group', () => {
 
 it('should handle adding an existing task group', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Existing group',
@@ -560,6 +627,7 @@ it('should handle adding an existing task group', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -573,6 +641,7 @@ it('should handle adding an existing task group', () => {
 
 it('should handle reordering tasks from the same section', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -581,16 +650,19 @@ it('should handle reordering tasks from the same section', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -608,6 +680,7 @@ it('should handle reordering tasks from the same section', () => {
       })
     )
   ).toEqual({
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -616,16 +689,19 @@ it('should handle reordering tasks from the same section', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
           {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -635,6 +711,7 @@ it('should handle reordering tasks from the same section', () => {
 
 it('should handle reordering tasks from different sections', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -643,16 +720,19 @@ it('should handle reordering tasks from different sections', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -670,6 +750,7 @@ it('should handle reordering tasks from different sections', () => {
       })
     )
   ).toEqual({
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -678,16 +759,19 @@ it('should handle reordering tasks from different sections', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
           {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -696,7 +780,10 @@ it('should handle reordering tasks from different sections', () => {
 })
 
 it('should handle reordering task groups', () => {
+  const defaultCreatedAt = new Date()
+
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -705,6 +792,7 @@ it('should handle reordering task groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -715,6 +803,7 @@ it('should handle reordering task groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -725,6 +814,7 @@ it('should handle reordering task groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -740,6 +830,7 @@ it('should handle reordering task groups', () => {
   )
 
   const expectedState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Testing',
@@ -748,6 +839,7 @@ it('should handle reordering task groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -758,6 +850,7 @@ it('should handle reordering task groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -768,6 +861,7 @@ it('should handle reordering task groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: defaultCreatedAt,
           },
         ],
       },
@@ -779,6 +873,7 @@ it('should handle reordering task groups', () => {
 
 it('should handle deleting groups', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -787,6 +882,7 @@ it('should handle deleting groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -797,6 +893,7 @@ it('should handle deleting groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -807,6 +904,7 @@ it('should handle deleting groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -819,6 +917,7 @@ it('should handle deleting groups', () => {
   )
 
   const expectedState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -827,6 +926,7 @@ it('should handle deleting groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -837,6 +937,7 @@ it('should handle deleting groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -848,6 +949,7 @@ it('should handle deleting groups', () => {
 
 it('should not merge the same group', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -856,6 +958,7 @@ it('should not merge the same group', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -866,6 +969,7 @@ it('should not merge the same group', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -876,6 +980,7 @@ it('should not merge the same group', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -892,6 +997,7 @@ it('should not merge the same group', () => {
 
 it('should handle merging groups', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -900,6 +1006,7 @@ it('should handle merging groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -910,6 +1017,7 @@ it('should handle merging groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -920,6 +1028,7 @@ it('should handle merging groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -932,6 +1041,7 @@ it('should handle merging groups', () => {
   )
 
   const expectedState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -940,6 +1050,7 @@ it('should handle merging groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -947,14 +1058,81 @@ it('should handle merging groups', () => {
         name: 'Tests',
         tasks: [
           {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+            createdAt: expect.any(Date),
+          },
+          {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
+        ],
+      },
+    ],
+  }
+
+  expect(currentState).toEqual(expectedState)
+})
+
+it('should handle merging to a group that does not exist (renaming)', () => {
+  const previousState: TasksState = {
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: new Date(),
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        tasks: [
           {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
+          },
+        ],
+      },
+    ],
+  }
+
+  const currentState = reducer(
+    previousState,
+    tasksGroupMerged({ groupName: 'Testing', mergeWith: 'Tested' })
+  )
+
+  const expectedState = {
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: expect.any(Date),
+          },
+        ],
+      },
+      {
+        name: 'Tested',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -966,6 +1144,7 @@ it('should handle merging groups', () => {
 
 it('should handle collapsing groups', () => {
   const previousState: TasksState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -974,6 +1153,7 @@ it('should handle collapsing groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -984,6 +1164,7 @@ it('should handle collapsing groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: new Date(),
           },
         ],
       },
@@ -994,6 +1175,7 @@ it('should handle collapsing groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: new Date(),
           },
         ],
       },
@@ -1006,6 +1188,7 @@ it('should handle collapsing groups', () => {
   )
 
   const expectedState = {
+    schemaVersion: '1.0.0',
     groups: [
       {
         name: 'Test',
@@ -1014,6 +1197,7 @@ it('should handle collapsing groups', () => {
             id: 'some-id',
             description: 'A simple task',
             completed: true,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -1025,6 +1209,7 @@ it('should handle collapsing groups', () => {
             id: 'another-id',
             description: 'Another simple task',
             completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
@@ -1035,6 +1220,162 @@ it('should handle collapsing groups', () => {
             id: 'yet-another-id',
             description: 'Yet another simple task',
             completed: true,
+            createdAt: expect.any(Date),
+          },
+        ],
+      },
+    ],
+  }
+
+  expect(currentState).toEqual(expectedState)
+})
+
+it('should handle saving task draft for groups', () => {
+  const previousState: TasksState = {
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: new Date(),
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+            createdAt: new Date(),
+          },
+        ],
+      },
+      {
+        name: 'Tests',
+        tasks: [
+          {
+            id: 'yet-another-id',
+            description: 'Yet another simple task',
+            completed: true,
+            createdAt: new Date(),
+          },
+        ],
+      },
+    ],
+  }
+
+  const currentState = reducer(
+    previousState,
+    tasksGroupDraft({ groupName: 'Tests', draft: 'Remember to ...' })
+  )
+
+  const expectedState = {
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: expect.any(Date),
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+            createdAt: expect.any(Date),
+          },
+        ],
+      },
+      {
+        name: 'Tests',
+        draft: 'Remember to ...',
+        tasks: [
+          {
+            id: 'yet-another-id',
+            description: 'Yet another simple task',
+            completed: true,
+            createdAt: expect.any(Date),
+          },
+        ],
+      },
+    ],
+  }
+
+  expect(currentState).toEqual(expectedState)
+})
+
+it('should handle setting a group as last active', () => {
+  const previousState: TasksState = {
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'Test',
+        lastActive: true,
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: new Date(),
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+            createdAt: new Date(),
+          },
+        ],
+      },
+    ],
+  }
+
+  const currentState = reducer(
+    previousState,
+    tasksGroupLastActive({ groupName: 'Testing' })
+  )
+
+  const expectedState = {
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: expect.any(Date),
+          },
+        ],
+      },
+      {
+        name: 'Testing',
+        lastActive: true,
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+            createdAt: expect.any(Date),
           },
         ],
       },
