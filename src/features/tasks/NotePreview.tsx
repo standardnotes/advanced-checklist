@@ -39,12 +39,12 @@ const GroupSummary: React.FC<GroupSummaryProps> = ({ groupedTasks }) => {
           ).length
 
           return (
-            <div key={`task-${index}`} className="mb-1">
+            <p key={`task-${index}`} className="mb-1">
               {truncateText(group.name, MAX_GROUP_DESCRIPTION_LENGTH)}
               <span className="px-2 neutral">
                 {totalCompletedTasks}/{totalTasks}
               </span>
-            </div>
+            </p>
           )
         })}
       </div>
