@@ -72,6 +72,13 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
     setCollapsed(!collapsed)
   }
 
+  function handleClick() {
+    if (!collapsed) {
+      return
+    }
+    setCollapsed(false)
+  }
+
   useEffect(() => {
     !group.collapsed && setCollapsed(isDragging)
   }, [group.collapsed, isDragging, setCollapsed])
@@ -79,7 +86,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
   return (
     <TaskGroupContainer ref={innerRef} style={style}>
       <div className="flex items-center justify-between h-8 mt-1 mb-1">
-        <div className="flex flex-grow items-center">
+        <div className="flex flex-grow items-center" onClick={handleClick}>
           {canEdit && (
             <div className="mr-3" {...props}>
               <ReorderIcon highlight={isDragging} />
