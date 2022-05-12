@@ -1,4 +1,5 @@
 import {
+  getPercentage,
   getTaskArrayFromGroupedTasks,
   groupTasksByCompletedStatus,
   truncateText,
@@ -9,7 +10,7 @@ const GROUPS_PREVIEW_LIMIT = 3
 const MAX_GROUP_DESCRIPTION_LENGTH = 30
 
 const Title: React.FC = ({ children }) => {
-  return <p className="mt-2 w-full font-medium">{children}</p>
+  return <p className="ml-2 w-full font-medium">{children}</p>
 }
 
 type GroupSummaryProps = {
@@ -64,12 +65,20 @@ type NotePreviewProps = {
 const NotePreview: React.FC<NotePreviewProps> = ({ groupedTasks }) => {
   const allTasks: TaskPayload[] = getTaskArrayFromGroupedTasks(groupedTasks)
   const { completedTasks } = groupTasksByCompletedStatus(allTasks)
+  const percentage = getPercentage(allTasks.length, completedTasks.length)
+  const roundedPercentage = Math.floor(percentage / 10) * 10
 
   return (
     <>
-      <Title>
-        {completedTasks.length}/{allTasks.length} tasks completed
-      </Title>
+      <div className="flex flex-grow items-center mb-3">
+        <svg className="sk-circular-progress" viewBox="0 0 18 18">
+          <circle className="background" />
+          <circle className={`progress p-${roundedPercentage}`} />
+        </svg>
+        <Title>
+          {completedTasks.length}/{allTasks.length} tasks completed
+        </Title>
+      </div>
       <GroupSummary groupedTasks={groupedTasks} />
     </>
   )
