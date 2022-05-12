@@ -144,13 +144,19 @@ const tasksSlice = createSlice({
         withTaskIndex
       )
     },
-    tasksGroupAdded(state, action: PayloadAction<string>) {
-      const group = state.groups.find((item) => item.name === action.payload)
+    tasksGroupAdded(
+      state,
+      action: PayloadAction<{
+        groupName: string
+      }>
+    ) {
+      const { groupName } = action.payload
+      const group = state.groups.find((item) => item.name === groupName)
       if (group) {
         return
       }
       state.groups.push({
-        name: action.payload,
+        name: groupName,
         tasks: [],
       })
     },
