@@ -605,7 +605,9 @@ it('should handle loading tasks into the tasks store, with a valid payload', () 
 it('should handle adding a new task group', () => {
   const previousState: TasksState = { schemaVersion: '1.0.0', groups: [] }
 
-  expect(reducer(previousState, tasksGroupAdded('New group'))).toEqual({
+  expect(
+    reducer(previousState, tasksGroupAdded({ groupName: 'New group' }))
+  ).toEqual({
     schemaVersion: '1.0.0',
     groups: [
       {
@@ -634,9 +636,9 @@ it('should handle adding an existing task group', () => {
     ],
   }
 
-  expect(reducer(previousState, tasksGroupAdded('Existing group'))).toEqual(
-    previousState
-  )
+  expect(
+    reducer(previousState, tasksGroupAdded({ groupName: 'Existing group' }))
+  ).toEqual(previousState)
 })
 
 it('should handle reordering tasks from the same section', () => {

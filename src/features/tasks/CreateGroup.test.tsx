@@ -85,7 +85,7 @@ test('pressing enter when input box is empty, should not create a new group', ()
 })
 
 test('pressing enter should create a new group', () => {
-  const group = 'My group name'
+  const groupName = 'My group name'
   const { mockStore } = testRender(<CreateGroup />, {}, defaultTasksState)
 
   let button = screen.getByTestId('create-group-button')
@@ -96,12 +96,12 @@ test('pressing enter should create a new group', () => {
     key: 'Enter',
     code: 'Enter',
     charCode: 13,
-    target: { value: group },
+    target: { value: groupName },
   })
 
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
-  expect(dispatchedActions[0]).toMatchObject(tasksGroupAdded(group))
+  expect(dispatchedActions[0]).toMatchObject(tasksGroupAdded({ groupName }))
 
   button = screen.getByTestId('create-group-button')
 

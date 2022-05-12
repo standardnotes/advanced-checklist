@@ -102,9 +102,9 @@ const CreateGroup: React.FC = () => {
 
   function handleKeyPress(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
-      const rawString = (event.target as HTMLInputElement).value
-      if (rawString.length > 0) {
-        dispatch(tasksGroupAdded(rawString))
+      const groupName = (event.target as HTMLInputElement).value
+      if (groupName.length > 0) {
+        dispatch(tasksGroupAdded({ groupName }))
       }
 
       setIsCreateMode(false)

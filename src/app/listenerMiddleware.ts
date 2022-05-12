@@ -5,6 +5,7 @@ import {
   taskAdded,
   taskDeleted,
   taskModified,
+  tasksGroupAdded,
   tasksGroupCollapsed,
   tasksGroupDeleted,
   tasksGroupLastActive,
@@ -28,6 +29,7 @@ const actionsWithGroup = isAnyOf(
   openAllCompleted,
   deleteAllCompleted,
   tasksReordered,
+  tasksGroupAdded,
   tasksGroupDeleted,
   tasksGroupMerged,
   tasksGroupCollapsed
