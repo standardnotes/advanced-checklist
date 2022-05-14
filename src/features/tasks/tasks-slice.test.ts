@@ -1386,3 +1386,23 @@ it('should handle setting a group as last active', () => {
 
   expect(currentState).toEqual(expectedState)
 })
+
+it('should detect and load legacy content', () => {
+  const payload = '- [ ] Foo bar'
+  expect(reducer(undefined, tasksLoaded(payload))).toMatchObject<TasksState>({
+    schemaVersion: '1.0.0',
+    initialized: false,
+    groups: [],
+    legacyContent: {
+      name: 'Default group',
+      tasks: [
+        {
+          id: expect.any(String),
+          description: 'Foo bar',
+          completed: false,
+          createdAt: expect.any(Date),
+        },
+      ],
+    },
+  })
+})

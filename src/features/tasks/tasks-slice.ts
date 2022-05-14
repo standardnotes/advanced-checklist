@@ -1,10 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { arrayMoveImmutable } from '../../common/utils'
+import {
+  arrayMoveImmutable,
+  isJsonString,
+  parseMarkdownTasks,
+} from '../../common/utils'
 
 export type TasksState = {
   schemaVersion: string
   groups: GroupPayload[]
   initialized?: boolean
+  legacyContent?: GroupPayload
+  lastError?: string
 }
 
 const initialState: TasksState = {
@@ -260,13 +266,44 @@ const tasksSlice = createSlice({
         item.lastActive && delete item.lastActive
       })
     },
-    tasksLoaded(state, action: PayloadAction<string>) {
-      if (!action.payload && !state.initialized) {
-        action.payload = '{}'
+    tasksLegacyContentMigrated(
+      state,
+      { payload }: PayloadAction<{ continue: boolean }>
+    ) {
+      if (!state.legacyContent) {
+        return
+      }
+
+      if (payload.continue) {
+        state.initialized = true
+        state.groups.push(state.legacyContent)
+        delete state.lastError
+      } else {
+        state.initialized = false
+        state.groups = []
+        state.lastError =
+          'The legacy content migration has been canceled by the user. Please reload this note to try again or switch to the Basic Checklist editor.'
+      }
+
+      delete state.legacyContent
+    },
+    tasksLoaded(state, { payload }: PayloadAction<string>) {
+      if (!payload && !state.initialized) {
+        payload = '{}'
       }
 
       try {
-        const parsedState = JSON.parse(action.payload) as TasksState
+        const isJson = isJsonString(payload)
+        if (!isJson) {
+          const legacyContent = parseMarkdownTasks(payload)
+          if (legacyContent) {
+            state.legacyContent = legacyContent
+            state.initialized = false
+            return
+          }
+        }
+
+        const parsedState = JSON.parse(payload) as TasksState
         const newState: TasksState = {
           schemaVersion: parsedState.schemaVersion ?? '1.0.0',
           groups: parsedState.groups ?? [],
@@ -276,6 +313,7 @@ const tasksSlice = createSlice({
           state.schemaVersion = newState.schemaVersion
           state.groups = newState.groups
           state.initialized = true
+          delete state.lastError
         }
       } catch (e) {
         return
@@ -292,6 +330,7 @@ export const {
   openAllCompleted,
   deleteAllCompleted,
   tasksLoaded,
+  tasksLegacyContentMigrated,
   tasksGroupAdded,
   tasksReordered,
   tasksGroupReordered,

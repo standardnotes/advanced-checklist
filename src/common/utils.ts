@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import { GroupPayload, TaskPayload } from '../features/tasks/tasks-slice'
 
 export function arrayMoveMutable(
@@ -66,4 +67,59 @@ export function getPlainPreview(groupedTasks: GroupPayload[]) {
   const { openTasks } = groupTasksByCompletedStatus(allTasks)
 
   return `${openTasks.length}/${allTasks.length} tasks completed`
+}
+
+function createTaskFromLine(rawTask: string): TaskPayload | undefined {
+  const IS_COMPLETED = /^- \[x\] /i
+  const OPEN_PREFIX = '- [ ] '
+
+  const description = rawTask.replace(OPEN_PREFIX, '').replace(IS_COMPLETED, '')
+
+  if (description.length === 0) {
+    return
+  }
+
+  return {
+    id: uuidv4(),
+    description,
+    completed: IS_COMPLETED.test(rawTask),
+    createdAt: new Date(),
+  }
+}
+
+export function parseMarkdownTasks(payload?: string): GroupPayload | undefined {
+  if (!payload) {
+    return
+  }
+
+  const IS_LEGACY_FORMAT = /^- \[[x ]\] .*/gim
+  if (!IS_LEGACY_FORMAT.test(payload)) {
+    return
+  }
+
+  const lines = payload.split('\n')
+  const tasks: TaskPayload[] = []
+
+  lines
+    .filter((line) => line.replace(/ /g, '').length > 0)
+    .map((line) => createTaskFromLine(line))
+    .forEach((item) => item && tasks.push(item))
+
+  if (tasks.length === 0) {
+    return
+  }
+
+  return {
+    name: 'Default group',
+    tasks,
+  }
+}
+
+export function isJsonString(rawString: string) {
+  try {
+    JSON.parse(rawString)
+  } catch (e) {
+    return false
+  }
+  return true
 }
