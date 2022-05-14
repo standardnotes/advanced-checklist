@@ -282,7 +282,8 @@ const tasksSlice = createSlice({
         state.initialized = false
         state.groups = []
         state.lastError =
-          'The legacy content migration has been canceled by the user. Please reload this note to try again or switch to the Basic Checklist editor.'
+          'The legacy content migration has been canceled by the user. ' +
+          'Please reload this note to try again or switch to the Basic Checklist editor.'
       }
 
       delete state.legacyContent
