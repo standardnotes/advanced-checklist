@@ -37,9 +37,9 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
   const [taskDraft, setTaskDraft] = useState<string>(group.draft ?? '')
 
   function onTextChange(event: ChangeEvent<HTMLInputElement>) {
-    const rawString = event.target.value
-    dispatch(tasksGroupDraft({ groupName, draft: rawString }))
-    setTaskDraft(rawString)
+    const draft = event.target.value
+    dispatch(tasksGroupDraft({ groupName, draft }))
+    setTaskDraft(draft)
   }
 
   function handleKeyPress(event: KeyboardEvent<HTMLInputElement>) {

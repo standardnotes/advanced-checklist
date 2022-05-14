@@ -7,6 +7,7 @@ import {
   truncateText,
   getPlainPreview,
   getTaskArrayFromGroupedTasks,
+  parseMarkdownTasks,
 } from './utils'
 
 describe('arrayMoveMutable', () => {
@@ -231,5 +232,49 @@ describe('getPlainPreview', () => {
     expect(getPlainPreview([{ name: 'Test', tasks: [] }])).toBe(
       '0/0 tasks completed'
     )
+  })
+})
+
+describe('parseMarkdownTasks', () => {
+  it('should not return tasks if payload is not in correct format', () => {
+    expect(parseMarkdownTasks('')).toBeUndefined()
+    expect(parseMarkdownTasks(' ')).toBeUndefined()
+    expect(parseMarkdownTasks('this is just a piece of text')).toBeUndefined()
+    expect(parseMarkdownTasks(undefined)).toBeUndefined()
+  })
+
+  it('should not return tasks without descriptions', () => {
+    const payload = '- [ ] '
+    expect(parseMarkdownTasks(payload)).toBeUndefined()
+  })
+
+  it('should return tasks from a payload with correct format', () => {
+    const payload = `- [ ] Foo
+- [x] Bar
+- [ ] Foobar`
+
+    expect(parseMarkdownTasks(payload)).toMatchObject<GroupPayload>({
+      name: 'Default group',
+      tasks: [
+        {
+          id: expect.any(String),
+          description: 'Foo',
+          completed: false,
+          createdAt: expect.any(Date),
+        },
+        {
+          id: expect.any(String),
+          description: 'Bar',
+          completed: true,
+          createdAt: expect.any(Date),
+        },
+        {
+          id: expect.any(String),
+          description: 'Foobar',
+          completed: false,
+          createdAt: expect.any(Date),
+        },
+      ],
+    })
   })
 })
