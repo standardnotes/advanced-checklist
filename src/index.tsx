@@ -95,7 +95,7 @@ const TaskEditor: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    const unsubscribe = store.subscribe(() => saveNote())
+    const unsubscribe = store.subscribe(() => initialized && saveNote())
     return unsubscribe
   })
 

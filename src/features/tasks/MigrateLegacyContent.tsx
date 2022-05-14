@@ -21,7 +21,7 @@ const MigrateLegacyContent: React.FC = () => {
 
   return (
     <AlertDialog
-      data-testid="rename-task-group-dialog"
+      data-testid="migrate-legacy-content-dialog"
       leastDestructiveRef={cancelRef}
     >
       <div className="sk-modal-content">
