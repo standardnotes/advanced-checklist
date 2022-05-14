@@ -15,6 +15,8 @@ import {
   setSpellCheckerEnabled,
 } from './features/settings/settings-slice'
 import { tasksLoaded } from './features/tasks/tasks-slice'
+import InvalidContentError from './features/tasks/InvalidContentError'
+import MigrateLegacyContent from './features/tasks/MigrateLegacyContent'
 import NotePreview from './features/tasks/NotePreview'
 import TaskGroupList from './features/tasks/TaskGroupList'
 
@@ -24,8 +26,9 @@ const TaskEditor: React.FC = () => {
   const note = useRef<any>()
   const editorKit = useRef<EditorKit>()
 
-  const initialized = !!useAppSelector((state) => state.tasks.initialized)
+  const initialized = useAppSelector((state) => state.tasks.initialized)
   const groupedTasks = useAppSelector((state) => state.tasks.groups)
+  const legacyContent = useAppSelector((state) => state.tasks.legacyContent)
 
   const dispatch = useAppDispatch()
 
@@ -65,6 +68,7 @@ const TaskEditor: React.FC = () => {
   }, [configureEditorKit])
 
   const saveNote = useCallback(() => {
+    const { initialized } = store.getState().tasks
     const currentNote = note.current
     if (!currentNote || !initialized) {
       return
@@ -88,15 +92,19 @@ const TaskEditor: React.FC = () => {
         <NotePreview groupedTasks={groups} />
       )
     })
-  }, [initialized])
+  }, [])
 
   useEffect(() => {
     const unsubscribe = store.subscribe(() => saveNote())
     return unsubscribe
   })
 
+  if (legacyContent) {
+    return <MigrateLegacyContent />
+  }
+
   if (!initialized) {
-    return <></>
+    return <InvalidContentError />
   }
 
   return (
