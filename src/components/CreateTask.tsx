@@ -69,6 +69,7 @@ class CreateTask extends Component<Props, State> {
         className="create-task-input"
         dir="auto"
         onChange={this.onTextChange}
+        enterKeyHint={'go'}
         onKeyPress={this.handleKeyPress}
         placeholder={showTutorial ? 'Type in your task, then press Enter.' : ''}
         ref={(ref) => (this.inputElement = ref)}
