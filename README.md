@@ -1,4 +1,4 @@
-# task-editor
+# advanced-task-editor
 
 A great way to manage short-term and long-term to-do's. You can mark tasks as completed, change their order, and edit the text naturally in place.
 
