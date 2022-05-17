@@ -33,6 +33,14 @@ type TextInputProps = {
   autoFocus?: boolean
   dir?: 'ltr' | 'rtl' | 'auto'
   disabled?: boolean
+  enterKeyHint?:
+    | 'enter'
+    | 'done'
+    | 'go'
+    | 'next'
+    | 'previous'
+    | 'search'
+    | 'send'
   placeholder?: string
   spellCheck?: boolean
   testId?: string
@@ -49,6 +57,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       autoFocus,
       dir = 'auto',
       disabled,
+      enterKeyHint,
       placeholder,
       spellCheck,
       testId,
@@ -66,6 +75,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         data-testid={testId}
         dir={dir}
         disabled={disabled}
+        enterKeyHint={enterKeyHint}
         onBlur={onBlur}
         onChange={onChange}
         onKeyPress={onKeyPress}

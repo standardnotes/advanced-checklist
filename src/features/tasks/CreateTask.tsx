@@ -66,6 +66,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
       <TextInput
         testId="create-task-input"
         disabled={!canEdit}
+        enterKeyHint={'go'}
         onChange={onTextChange}
         onKeyPress={handleKeyPress}
         placeholder={'Type a task and press enter'}
