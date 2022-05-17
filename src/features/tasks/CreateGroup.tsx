@@ -128,6 +128,7 @@ const CreateGroup: React.FC = () => {
             <TextInput
               testId="create-group-input"
               value={group}
+              enterKeyHint={'go'}
               onBlur={handleBlur}
               onChange={handleTextChange}
               onKeyPress={handleKeyPress}
