@@ -7,7 +7,7 @@ import { ConfirmDialog } from '../../common/components'
 import { openAllCompleted, deleteAllCompleted } from './tasks-slice'
 
 const ActionButton = styled.button`
-  background-color: var(--sn-stylekit-secondary-background-color);
+  background-color: var(--sn-stylekit-contrast-background-color);
   border-radius: 4px;
   border-style: none;
   color: var(--sn-stylekit-paragraph-text-color);
