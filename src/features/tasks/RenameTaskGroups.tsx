@@ -24,7 +24,7 @@ const RenameTaskGroups: React.FC<RenameTaskGroupsProps> = ({
 
   const dispatch = useAppDispatch()
 
-  const [renameTo, setRenameTo] = useState<string>('')
+  const [renameTo, setRenameTo] = useState<string>(groupName)
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const newName = event.target.value
