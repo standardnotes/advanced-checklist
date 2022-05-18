@@ -50,9 +50,9 @@ const GroupSummary: React.FC<GroupSummaryProps> = ({ groupedTasks }) => {
         })}
       </div>
       {remainingGroups > 0 && (
-        <div className="sk-label">
+        <p>
           And {remainingGroups} other {groupNoun}
-        </div>
+        </p>
       )}
     </>
   )
