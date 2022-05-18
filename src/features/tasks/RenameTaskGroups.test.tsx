@@ -36,7 +36,7 @@ it('renders the alert dialog with an input box', () => {
 
   const alertDialog = screen.getByTestId('rename-task-group-dialog')
   expect(alertDialog).toBeInTheDocument()
-  expect(alertDialog).toHaveTextContent(`Renaming the group '${defaultGroup}':`)
+  expect(alertDialog).toHaveTextContent(`Renaming group '${defaultGroup}':`)
 
   const inputBox = screen.getByTestId('new-group-name-input')
   expect(inputBox).toBeInTheDocument()

@@ -65,7 +65,7 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
           confirmButtonCb={() => dispatch(openAllCompleted({ groupName }))}
           cancelButtonCb={() => setShowReopenDialog(false)}
         >
-          Are you sure you want to reopen completed tasks on the '
+          Are you sure you want to reopen completed tasks in the '
           <strong>{groupName}</strong>' group?
         </ConfirmDialog>
       )}
@@ -76,7 +76,7 @@ const CompletedTasksActions: React.FC<CompletedTasksActionsProps> = ({
           confirmButtonCb={() => dispatch(deleteAllCompleted({ groupName }))}
           cancelButtonCb={() => setShowDeleteDialog(false)}
         >
-          Are you sure you want to delete completed tasks on the '
+          Are you sure you want to delete completed tasks in the '
           <strong>{groupName}</strong>' group?
         </ConfirmDialog>
       )}

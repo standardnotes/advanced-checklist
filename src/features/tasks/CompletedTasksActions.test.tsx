@@ -46,7 +46,7 @@ it('should dispatch openAllCompleted action', () => {
   const confirmDialog = screen.getByTestId('reopen-all-tasks-dialog')
   expect(confirmDialog).toBeInTheDocument()
   expect(confirmDialog).toHaveTextContent(
-    `Are you sure you want to reopen completed tasks on the '${group}' group?`
+    `Are you sure you want to reopen completed tasks in the '${group}' group?`
   )
 
   const confirmButton = screen.getByTestId('confirm-dialog-button')
@@ -68,7 +68,7 @@ it('should dispatch deleteCompleted action', () => {
   const confirmDialog = screen.getByTestId('delete-completed-tasks-dialog')
   expect(confirmDialog).toBeInTheDocument()
   expect(confirmDialog).toHaveTextContent(
-    `Are you sure you want to delete completed tasks on the '${group}' group?`
+    `Are you sure you want to delete completed tasks in the '${group}' group?`
   )
 
   const confirmButton = screen.getByTestId('confirm-dialog-button')

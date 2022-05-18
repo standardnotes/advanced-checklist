@@ -54,7 +54,7 @@ const RenameTaskGroups: React.FC<RenameTaskGroupsProps> = ({
             <div className="sk-panel-content">
               <div className="sk-panel-section">
                 <AlertDialogLabel className="sk-h3 sk-panel-section-title">
-                  Renaming the group '<strong>{groupName}</strong>':
+                  Renaming group '<strong>{groupName}</strong>':
                 </AlertDialogLabel>
 
                 <AlertDialogDescription>
@@ -63,7 +63,7 @@ const RenameTaskGroups: React.FC<RenameTaskGroupsProps> = ({
                     autoFocus
                     onChange={handleChange}
                     onKeyPress={handleKeyPress}
-                    placeholder="Type the new group name"
+                    placeholder="Enter new group name"
                     value={renameTo}
                   />
                 </AlertDialogDescription>
