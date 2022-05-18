@@ -1326,7 +1326,6 @@ it('should handle setting a group as last active', () => {
     groups: [
       {
         name: 'Test',
-        lastActive: true,
         tasks: [
           {
             id: 'some-id',
@@ -1355,7 +1354,7 @@ it('should handle setting a group as last active', () => {
     tasksGroupLastActive({ groupName: 'Testing' })
   )
 
-  const expectedState = {
+  expect(currentState).toMatchObject({
     schemaVersion: '1.0.0',
     groups: [
       {
@@ -1371,7 +1370,7 @@ it('should handle setting a group as last active', () => {
       },
       {
         name: 'Testing',
-        lastActive: true,
+        lastActive: expect.any(Date),
         tasks: [
           {
             id: 'another-id',
@@ -1382,9 +1381,7 @@ it('should handle setting a group as last active', () => {
         ],
       },
     ],
-  }
-
-  expect(currentState).toEqual(expectedState)
+  })
 })
 
 it('should detect and load legacy content', () => {

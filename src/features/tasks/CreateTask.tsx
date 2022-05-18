@@ -7,6 +7,7 @@ import { GroupPayload, taskAdded, tasksGroupDraft } from './tasks-slice'
 
 import { TextInput } from '../../common/components'
 import { DottedCircleIcon } from '../../common/components/icons'
+import { isLastActiveGroup } from '../../common/utils'
 
 const Container = styled.div`
   align-items: center;
@@ -32,6 +33,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
     (state) => state.settings.spellCheckerEnabled
   )
   const canEdit = useAppSelector((state) => state.settings.canEdit)
+  const allGroups = useAppSelector((state) => state.tasks.groups)
 
   const groupName = group.name
   const [taskDraft, setTaskDraft] = useState<string>(group.draft ?? '')
@@ -60,6 +62,8 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
     return <></>
   }
 
+  const isLastActive = isLastActiveGroup(allGroups, groupName)
+
   return (
     <Container>
       <DottedCircleIcon />
@@ -73,7 +77,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({ group }) => {
         ref={inputRef}
         spellCheck={spellCheckerEnabled}
         value={taskDraft}
-        autoFocus={group.lastActive}
+        autoFocus={isLastActive}
       />
     </Container>
   )

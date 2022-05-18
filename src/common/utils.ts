@@ -123,3 +123,24 @@ export function isJsonString(rawString: string) {
   }
   return true
 }
+
+export function isLastActiveGroup(
+  allGroups: GroupPayload[],
+  groupName: string
+): boolean {
+  if (allGroups.length === 0) {
+    return true
+  }
+
+  const lastActiveGroup = allGroups.reduce((prev, current) => {
+    if (!prev.lastActive) {
+      return current
+    }
+    if (!current.lastActive) {
+      return prev
+    }
+    return prev.lastActive > current.lastActive ? prev : current
+  })
+
+  return lastActiveGroup.name === groupName
+}

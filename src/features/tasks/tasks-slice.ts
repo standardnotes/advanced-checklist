@@ -31,7 +31,7 @@ export type GroupPayload = {
   name: string
   collapsed?: boolean
   draft?: string
-  lastActive?: boolean
+  lastActive?: Date
   tasks: TaskPayload[]
 }
 
@@ -258,13 +258,11 @@ const tasksSlice = createSlice({
       }>
     ) {
       const { groupName } = action.payload
-      state.groups.forEach((item) => {
-        if (item.name === groupName) {
-          item.lastActive = true
-          return
-        }
-        item.lastActive && delete item.lastActive
-      })
+      const group = state.groups.find((item) => item.name === groupName)
+      if (!group) {
+        return
+      }
+      group.lastActive = new Date()
     },
     tasksLegacyContentMigrated(
       state,
