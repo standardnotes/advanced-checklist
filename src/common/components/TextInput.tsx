@@ -8,7 +8,6 @@ type StyledInputProps = {
 const StyledInput = styled.input<StyledInputProps>`
   background-color: unset;
   border: none;
-  color: var(--sn-stylekit-paragraph-text-color);
   font-size: ${({ textSize }) =>
     textSize === 'big' ? '1.125rem' : 'var(--sn-stylekit-font-size-h3)'};
   font-weight: ${({ textSize }) => (textSize === 'big' ? '500' : '400')};
