@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
@@ -42,15 +42,19 @@ const CollapsableContainer = styled.div<CollapsableContainerProps>`
 type TaskGroupProps = {
   group: GroupPayload
   isDragging: boolean
-  innerRef?: (element?: HTMLElement | null | undefined) => any
   style?: React.CSSProperties
+  innerRef?: (element?: HTMLElement | null | undefined) => any
+  onDragStart?: React.DragEventHandler<any>
+  onTransitionEnd?: React.TransitionEventHandler<any>
 }
 
 const TaskGroup: React.FC<TaskGroupProps> = ({
   group,
   isDragging,
-  innerRef,
   style,
+  innerRef,
+  onDragStart,
+  onTransitionEnd,
   ...props
 }) => {
   const dispatch = useAppDispatch()
@@ -79,12 +83,13 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
     setCollapsed(false)
   }
 
-  useEffect(() => {
-    !group.collapsed && setCollapsed(isDragging)
-  }, [group.collapsed, isDragging, setCollapsed])
-
   return (
-    <TaskGroupContainer ref={innerRef} style={style}>
+    <TaskGroupContainer
+      ref={innerRef}
+      style={style}
+      onDragStart={onDragStart}
+      onTransitionEnd={onTransitionEnd}
+    >
       <div className="flex items-center justify-between h-8 mt-1 mb-1">
         <div className="flex flex-grow items-center" onClick={handleClick}>
           {canEdit && (

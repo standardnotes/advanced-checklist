@@ -63,19 +63,16 @@ const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
                       const { onTransitionEnd, ...restDraggableProps } =
                         draggableProps
                       return (
-                        <div
+                        <TaskGroup
+                          key={identifier}
+                          group={group}
+                          isDragging={isDragging}
+                          innerRef={innerRef}
                           onTransitionEnd={onTransitionEnd}
                           onDragStart={dragHandleProps?.onDragStart}
-                        >
-                          <TaskGroup
-                            key={identifier}
-                            group={group}
-                            innerRef={innerRef}
-                            isDragging={isDragging}
-                            {...dragHandleProps}
-                            {...restDraggableProps}
-                          />
-                        </div>
+                          {...dragHandleProps}
+                          {...restDraggableProps}
+                        />
                       )
                     }}
                   </Draggable>
