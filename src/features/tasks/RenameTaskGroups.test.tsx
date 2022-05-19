@@ -3,7 +3,7 @@ import { RootState } from '../../app/store'
 import { testRender } from '../../testUtils'
 
 import RenameTaskGroups from './RenameTaskGroups'
-import { tasksGroupMerged } from './tasks-slice'
+import { tasksGroupRenamed } from './tasks-slice'
 
 const handleClose = jest.fn()
 
@@ -105,7 +105,7 @@ it('should dispatch the action to merge groups', () => {
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
   expect(dispatchedActions[0]).toMatchObject(
-    tasksGroupMerged({ groupName: defaultGroup, mergeWith: newGroupName })
+    tasksGroupRenamed({ groupName: defaultGroup, newName: newGroupName })
   )
   expect(handleClose).toHaveBeenCalledTimes(1)
 })
@@ -165,7 +165,7 @@ it('should dispatch the action to merge groups on Enter press', () => {
   const dispatchedActions = mockStore.getActions()
   expect(dispatchedActions).toHaveLength(1)
   expect(dispatchedActions[0]).toMatchObject(
-    tasksGroupMerged({ groupName: defaultGroup, mergeWith: newGroupName })
+    tasksGroupRenamed({ groupName: defaultGroup, newName: newGroupName })
   )
   expect(handleClose).toHaveBeenCalledTimes(1)
 })

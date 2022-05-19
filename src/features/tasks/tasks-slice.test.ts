@@ -14,6 +14,7 @@ import reducer, {
   tasksGroupCollapsed,
   tasksGroupDraft,
   tasksGroupLastActive,
+  tasksGroupRenamed,
 } from './tasks-slice'
 import type { TasksState } from './tasks-slice'
 
@@ -1002,7 +1003,7 @@ it('should handle merging groups', () => {
     schemaVersion: '1.0.0',
     groups: [
       {
-        name: 'Test',
+        name: 'Test group #1',
         tasks: [
           {
             id: 'some-id',
@@ -1013,7 +1014,7 @@ it('should handle merging groups', () => {
         ],
       },
       {
-        name: 'Testing',
+        name: 'Test group #2',
         tasks: [
           {
             id: 'another-id',
@@ -1024,7 +1025,7 @@ it('should handle merging groups', () => {
         ],
       },
       {
-        name: 'Tests',
+        name: 'Test group #3',
         tasks: [
           {
             id: 'yet-another-id',
@@ -1039,14 +1040,14 @@ it('should handle merging groups', () => {
 
   const currentState = reducer(
     previousState,
-    tasksGroupMerged({ groupName: 'Testing', mergeWith: 'Tests' })
+    tasksGroupMerged({ groupName: 'Test group #3', mergeWith: 'Test group #2' })
   )
 
-  const expectedState = {
+  expect(currentState).toMatchObject({
     schemaVersion: '1.0.0',
     groups: [
       {
-        name: 'Test',
+        name: 'Test group #1',
         tasks: [
           {
             id: 'some-id',
@@ -1057,7 +1058,7 @@ it('should handle merging groups', () => {
         ],
       },
       {
-        name: 'Tests',
+        name: 'Test group #2',
         tasks: [
           {
             id: 'another-id',
@@ -1074,12 +1075,10 @@ it('should handle merging groups', () => {
         ],
       },
     ],
-  }
-
-  expect(currentState).toEqual(expectedState)
+  })
 })
 
-it('should handle merging to a group that does not exist (renaming)', () => {
+it('should handle renaming a group', () => {
   const previousState: TasksState = {
     schemaVersion: '1.0.0',
     groups: [
@@ -1110,10 +1109,10 @@ it('should handle merging to a group that does not exist (renaming)', () => {
 
   const currentState = reducer(
     previousState,
-    tasksGroupMerged({ groupName: 'Testing', mergeWith: 'Tested' })
+    tasksGroupRenamed({ groupName: 'Testing', newName: 'Tested' })
   )
 
-  const expectedState = {
+  expect(currentState).toEqual({
     schemaVersion: '1.0.0',
     groups: [
       {
@@ -1139,9 +1138,92 @@ it('should handle merging to a group that does not exist (renaming)', () => {
         ],
       },
     ],
+  })
+})
+
+it("should rename a group and preserve it's current order", () => {
+  const previousState: TasksState = {
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: '1st group',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: new Date(),
+          },
+        ],
+      },
+      {
+        name: '2nd group',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+            createdAt: new Date(),
+          },
+        ],
+      },
+      {
+        name: '3rd group',
+        tasks: [
+          {
+            id: 'yet-another-id',
+            description: 'Yet another simple task',
+            completed: false,
+            createdAt: new Date(),
+          },
+        ],
+      },
+    ],
   }
 
-  expect(currentState).toEqual(expectedState)
+  const currentState = reducer(
+    previousState,
+    tasksGroupRenamed({ groupName: '2nd group', newName: 'Middle group' })
+  )
+
+  expect(currentState).toMatchObject({
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: '1st group',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: expect.any(Date),
+          },
+        ],
+      },
+      {
+        name: 'Middle group',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'Another simple task',
+            completed: false,
+            createdAt: expect.any(Date),
+          },
+        ],
+      },
+      {
+        name: '3rd group',
+        tasks: [
+          {
+            id: 'yet-another-id',
+            description: 'Yet another simple task',
+            completed: false,
+            createdAt: expect.any(Date),
+          },
+        ],
+      },
+    ],
+  })
 })
 
 it('should handle collapsing groups', () => {
