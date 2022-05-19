@@ -206,22 +206,28 @@ const tasksSlice = createSlice({
       }
       const groupB = state.groups.find((item) => item.name === mergeWith)
       if (!groupB) {
-        state.groups.push({
-          name: mergeWith,
-          tasks: [],
-        })
+        return
       }
-      state.groups = state.groups
-        .filter((item) => item.name !== groupName)
-        .map((item) => {
-          if (item.name === mergeWith) {
-            return {
-              name: mergeWith,
-              tasks: [...groupA.tasks, ...(groupB?.tasks ?? [])],
-            }
-          }
-          return item
-        })
+      groupA.name = mergeWith
+      groupA.tasks = [...(groupB.tasks ?? []), ...groupA.tasks]
+      state.groups = state.groups.filter((group) => group !== groupB)
+    },
+    tasksGroupRenamed(
+      state,
+      action: PayloadAction<{
+        groupName: string
+        newName: string
+      }>
+    ) {
+      const { groupName, newName } = action.payload
+      if (groupName === newName) {
+        return
+      }
+      const groupA = state.groups.find((item) => item.name === groupName)
+      if (!groupA) {
+        return
+      }
+      groupA.name = newName
     },
     tasksGroupCollapsed(
       state,
@@ -335,6 +341,7 @@ export const {
   tasksGroupReordered,
   tasksGroupDeleted,
   tasksGroupMerged,
+  tasksGroupRenamed,
   tasksGroupCollapsed,
   tasksGroupDraft,
   tasksGroupLastActive,

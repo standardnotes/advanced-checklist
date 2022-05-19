@@ -8,7 +8,7 @@ import {
 } from '@reach/alert-dialog'
 
 import { useAppDispatch } from '../../app/hooks'
-import { tasksGroupMerged } from './tasks-slice'
+import { tasksGroupRenamed } from './tasks-slice'
 import { TextInput } from '../../common/components'
 
 type RenameTaskGroupsProps = {
@@ -39,7 +39,7 @@ const RenameTaskGroups: React.FC<RenameTaskGroupsProps> = ({
   }
 
   function handleRenameGroup() {
-    dispatch(tasksGroupMerged({ groupName, mergeWith: renameTo }))
+    dispatch(tasksGroupRenamed({ groupName, newName: renameTo }))
     handleClose()
   }
 
