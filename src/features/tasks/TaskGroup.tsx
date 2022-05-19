@@ -88,7 +88,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
       <div className="flex items-center justify-between h-8 mt-1 mb-1">
         <div className="flex flex-grow items-center" onClick={handleClick}>
           {canEdit && (
-            <div className="mr-3" {...props}>
+            <div className="mr-3 pt-1px" {...props}>
               <ReorderIcon highlight={isDragging} />
             </div>
           )}
