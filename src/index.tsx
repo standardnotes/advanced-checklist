@@ -99,6 +99,23 @@ const TaskEditor: React.FC = () => {
     return unsubscribe
   })
 
+  /**
+   * Prevents dragging and dropping files
+   */
+  useEffect(() => {
+    function rejectDragAndDrop(event: DragEvent) {
+      event && event.preventDefault()
+    }
+
+    window.addEventListener('drop', rejectDragAndDrop)
+    window.addEventListener('dragover', rejectDragAndDrop)
+
+    return () => {
+      window.removeEventListener('drop', rejectDragAndDrop)
+      window.removeEventListener('dragover', rejectDragAndDrop)
+    }
+  }, [])
+
   if (legacyContent) {
     return <MigrateLegacyContent />
   }
