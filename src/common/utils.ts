@@ -110,7 +110,7 @@ export function parseMarkdownTasks(payload?: string): GroupPayload | undefined {
   }
 
   return {
-    name: 'Default group',
+    name: 'Checklist',
     tasks,
   }
 }
