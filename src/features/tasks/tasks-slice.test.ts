@@ -1473,7 +1473,7 @@ it('should detect and load legacy content', () => {
     initialized: false,
     groups: [],
     legacyContent: {
-      name: 'Default group',
+      name: 'Checklist',
       tasks: [
         {
           id: expect.any(String),

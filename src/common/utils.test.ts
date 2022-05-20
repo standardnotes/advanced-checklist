@@ -227,7 +227,7 @@ describe('getPlainPreview', () => {
       },
     ]
 
-    expect(getPlainPreview(groupedTasks)).toBe('3/5 tasks completed')
+    expect(getPlainPreview(groupedTasks)).toBe('2/5 tasks completed')
     expect(getPlainPreview([])).toBe('0/0 tasks completed')
     expect(getPlainPreview([{ name: 'Test', tasks: [] }])).toBe(
       '0/0 tasks completed'
@@ -254,7 +254,7 @@ describe('parseMarkdownTasks', () => {
 - [ ] Foobar`
 
     expect(parseMarkdownTasks(payload)).toMatchObject<GroupPayload>({
-      name: 'Default group',
+      name: 'Checklist',
       tasks: [
         {
           id: expect.any(String),
