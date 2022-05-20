@@ -64,9 +64,9 @@ export function truncateText(text: string, limit: number = 50) {
 
 export function getPlainPreview(groupedTasks: GroupPayload[]) {
   const allTasks = getTaskArrayFromGroupedTasks(groupedTasks)
-  const { openTasks } = groupTasksByCompletedStatus(allTasks)
+  const { completedTasks } = groupTasksByCompletedStatus(allTasks)
 
-  return `${openTasks.length}/${allTasks.length} tasks completed`
+  return `${completedTasks.length}/${allTasks.length} tasks completed`
 }
 
 function createTaskFromLine(rawTask: string): TaskPayload | undefined {
