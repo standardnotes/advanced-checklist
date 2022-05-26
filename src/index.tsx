@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom'
 import { renderToString } from 'react-dom/server'
 import { Provider } from 'react-redux'
 import EditorKit, { EditorKitDelegate } from '@standardnotes/editor-kit'
+import styled from 'styled-components'
 
 import { store } from './app/store'
 import { useAppDispatch, useAppSelector } from './app/hooks'
@@ -21,6 +22,18 @@ import NotePreview from './features/tasks/NotePreview'
 import TaskGroupList from './features/tasks/TaskGroupList'
 
 import { getPlainPreview } from './common/utils'
+
+const SpecialContainer = styled.div`
+  margin: 18px;
+  position: relative;
+`
+
+const CenteredContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+`
 
 const TaskEditor: React.FC = () => {
   const note = useRef<any>()
@@ -124,10 +137,18 @@ const TaskEditor: React.FC = () => {
     return <InvalidContentError />
   }
 
+  if (groupedTasks.length === 0) {
+    return <CreateGroup />
+  }
+
   return (
     <>
       <TaskGroupList groupedTasks={groupedTasks} />
-      <CreateGroup />
+      <SpecialContainer>
+        <CenteredContainer>
+          <CreateGroup />
+        </CenteredContainer>
+      </SpecialContainer>
     </>
   )
 }

@@ -70,6 +70,7 @@ const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
                           innerRef={innerRef}
                           onTransitionEnd={onTransitionEnd}
                           onDragStart={dragHandleProps?.onDragStart}
+                          isLast={groupedTasks.length - 1 === index}
                           {...dragHandleProps}
                           {...restDraggableProps}
                         />
