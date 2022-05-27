@@ -48,11 +48,10 @@ const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {groupedTasks.map((group, index) => {
-                const identifier = `${index}-${group.name}`
                 return (
                   <Draggable
-                    key={identifier}
-                    draggableId={identifier}
+                    key={`draggable-${group.name}`}
+                    draggableId={`draggable-${group.name}`}
                     index={index}
                     isDragDisabled={!canEdit}
                   >
@@ -64,7 +63,7 @@ const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
                         draggableProps
                       return (
                         <TaskGroup
-                          key={identifier}
+                          key={`group-${group.name}`}
                           group={group}
                           isDragging={isDragging}
                           innerRef={innerRef}
