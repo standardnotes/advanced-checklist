@@ -134,7 +134,7 @@ $transition-duration: 0.8s;
   }
 
   animation: fadeOut ease $transition-duration;
-  animation-delay: $transition-duration * 1.1;
+  animation-delay: $transition-duration * 1.5;
   animation-fill-mode: forwards;
 }
 

@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import NotePreview from './NotePreview'
 import { GroupPayload } from './tasks-slice'
 
@@ -51,15 +51,19 @@ it('should render without tasks', () => {
   const header = screen.getByText('0/0 completed')
   expect(header).toBeVisible()
 
-  // const progressBar = screen.getByRole('progressbar') as HTMLProgressElement
-  // expect(progressBar.max).toBe(100)
-  // expect(progressBar.value).toBe(0)
+  const progressBar = screen.getByTestId('circular-progress-bar')
+  expect(progressBar).toBeVisible()
 
-  const taskList = screen.queryAllByRole('list')
-  expect(taskList).toHaveLength(0)
+  // eslint-disable-next-line testing-library/no-node-access
+  const progressBarBackground = progressBar.firstChild
+  expect(progressBarBackground).toHaveClass('background')
 
-  const taskListElements = screen.queryAllByRole('listitem')
-  expect(taskListElements).toHaveLength(0)
+  // eslint-disable-next-line testing-library/no-node-access
+  const progressBarStroke = progressBar.lastChild
+  expect(progressBarStroke).toHaveClass('progress p-0')
+
+  const groupList = screen.queryAllByTestId('group-summary')
+  expect(groupList).toHaveLength(0)
 })
 
 it('should render with tasks', () => {
@@ -79,39 +83,22 @@ it('should render with tasks', () => {
   const header = screen.getByText('2/4 completed')
   expect(header).toBeVisible()
 
-  // const progressBar = screen.getByRole('progressbar') as HTMLProgressElement
-  // expect(progressBar.max).toBe(100)
-  // expect(progressBar.value).toBe(50)
+  const progressBar = screen.getByTestId('circular-progress-bar')
+  expect(progressBar).toBeVisible()
 
-  const taskList = screen.getByRole('list')
-  const taskListElements = within(taskList).getAllByRole('listitem')
+  // eslint-disable-next-line testing-library/no-node-access
+  const progressBarBackground = progressBar.firstChild
+  expect(progressBarBackground).toHaveClass('background')
 
-  expect(taskListElements).toHaveLength(2)
+  // eslint-disable-next-line testing-library/no-node-access
+  const progressBarStroke = progressBar.lastChild
+  expect(progressBarStroke).toHaveClass('progress p-50')
+
+  const groupList = screen.getAllByTestId('group-summary')
+  expect(groupList).toHaveLength(2)
 })
 
-it('should render a summary of the remaining open task', () => {
-  const groupedTasks = [
-    {
-      name: 'Work',
-      tasks: workTasks,
-    },
-    {
-      name: 'Personal',
-      tasks: personalTasks,
-    },
-    {
-      name: 'Misc',
-      tasks: miscTasks,
-    },
-  ]
-
-  render(<NotePreview groupedTasks={groupedTasks} />)
-
-  const remainingTaskSummary = screen.getByText('And 1 other group')
-  expect(remainingTaskSummary).toBeVisible()
-})
-
-it('should render a summary of the remaining open task(s)', () => {
+it('should render a summary of the remaining group(s)', () => {
   const groupedTasks = [
     {
       name: 'Work',
@@ -139,6 +126,7 @@ it('should render a summary of the remaining open task(s)', () => {
 
   render(<NotePreview groupedTasks={groupedTasks} />)
 
-  const remainingTaskSummary = screen.getByText('And 2 other groups')
-  expect(remainingTaskSummary).toBeVisible()
+  const remainingGroups = screen.getByTestId('groups-remaining')
+  expect(remainingGroups).toHaveTextContent('And 1 other group')
+  expect(remainingGroups).toBeVisible()
 })

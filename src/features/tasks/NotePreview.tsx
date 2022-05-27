@@ -14,12 +14,12 @@ const Title: React.FC = ({ children }) => {
 }
 
 type GroupSummaryProps = {
-  groupedTasks: GroupPayload[]
+  groups: GroupPayload[]
 }
 
-const GroupSummary: React.FC<GroupSummaryProps> = ({ groupedTasks }) => {
-  const totalGroups = groupedTasks.length
-  const groupsToPreview = groupedTasks.slice(
+const GroupSummary: React.FC<GroupSummaryProps> = ({ groups }) => {
+  const totalGroups = groups.length
+  const groupsToPreview = groups.slice(
     0,
     Math.min(totalGroups, GROUPS_PREVIEW_LIMIT)
   )
@@ -40,7 +40,11 @@ const GroupSummary: React.FC<GroupSummaryProps> = ({ groupedTasks }) => {
           ).length
 
           return (
-            <p key={`group-${group.name}`} className="mb-1">
+            <p
+              data-testid="group-summary"
+              key={`group-${group.name}`}
+              className="mb-1"
+            >
               {truncateText(group.name, MAX_GROUP_DESCRIPTION_LENGTH)}
               <span className="px-2 neutral">
                 {totalCompletedTasks}/{totalTasks}
@@ -50,7 +54,7 @@ const GroupSummary: React.FC<GroupSummaryProps> = ({ groupedTasks }) => {
         })}
       </div>
       {remainingGroups > 0 && (
-        <p>
+        <p data-testid="groups-remaining">
           And {remainingGroups} other {groupNoun}
         </p>
       )}
@@ -71,7 +75,11 @@ const NotePreview: React.FC<NotePreviewProps> = ({ groupedTasks }) => {
   return (
     <>
       <div className="flex flex-grow items-center mb-3">
-        <svg className="sk-circular-progress" viewBox="0 0 18 18">
+        <svg
+          data-testid="circular-progress-bar"
+          className="sk-circular-progress"
+          viewBox="0 0 18 18"
+        >
           <circle className="background" />
           <circle className={`progress p-${roundedPercentage}`} />
         </svg>
@@ -79,7 +87,7 @@ const NotePreview: React.FC<NotePreviewProps> = ({ groupedTasks }) => {
           {completedTasks.length}/{allTasks.length} tasks completed
         </Title>
       </div>
-      <GroupSummary groupedTasks={groupedTasks} />
+      <GroupSummary groups={groupedTasks} />
     </>
   )
 }

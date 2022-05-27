@@ -17,6 +17,12 @@ import { useAppDispatch, useAppSelector, useDidMount } from '../../app/hooks'
 
 import { CheckBoxInput, TextAreaInput } from '../../common/components'
 
+/**
+ * A delay in the dispatch function.
+ * Necessary to allow for transitions to occur.
+ */
+const STORE_DISPATCH_DELAY_MS = 1_700
+
 const Container = styled.div<{ completed?: boolean }>`
   align-content: center;
   align-items: center;
@@ -80,7 +86,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
 
     setTimeout(() => {
       dispatch(taskToggled({ id: task.id, groupName }))
-    }, 1300)
+    }, STORE_DISPATCH_DELAY_MS)
   }
 
   function onTextChange(event: ChangeEvent<HTMLTextAreaElement>) {
