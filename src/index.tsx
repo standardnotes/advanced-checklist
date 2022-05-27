@@ -25,13 +25,13 @@ import { getPlainPreview } from './common/utils'
 import { CheckBoxElementsDefs } from './common/components/svg'
 
 const SpecialContainer = styled.div`
-  margin: 18px;
   position: relative;
 `
 
 const CenteredContainer = styled.div`
   display: flex;
   justify-content: center;
+  margin-top: 15px;
   position: relative;
   width: 100%;
 `
