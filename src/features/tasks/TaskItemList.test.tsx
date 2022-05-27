@@ -27,7 +27,7 @@ it('renders the open tasks container', async () => {
   const openTasksContainer = screen.getByTestId('open-tasks-container')
 
   expect(openTasksContainer).toBeInTheDocument()
-  expect(openTasksContainer).toHaveTextContent('Open tasks')
+  expect(openTasksContainer).toHaveTextContent('open tasks')
 
   const taskItems = within(openTasksContainer).getAllByTestId('task-item')
   expect(taskItems).toHaveLength(2)
@@ -57,7 +57,7 @@ it('renders the completed tasks container', () => {
   )
 
   expect(completedTasksContainer).toBeInTheDocument()
-  expect(completedTasksContainer).toHaveTextContent('Completed tasks')
+  expect(completedTasksContainer).toHaveTextContent('completed tasks')
 
   const taskItems = within(completedTasksContainer).getAllByTestId('task-item')
   expect(taskItems).toHaveLength(1)

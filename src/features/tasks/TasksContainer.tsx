@@ -24,12 +24,12 @@ const InnerTasksContainer = styled.div<{
   }
 
   ${({ type, items }) =>
-    type === 'Completed' && items > 0 ? 'margin-bottom: 28px' : ''};
+    type === 'completed' && items > 0 ? 'margin-bottom: 28px' : ''};
 `
 
 const OuterContainer = styled.div<{ type: ContainerType; items: number }>`
   ${({ type, items }) =>
-    type === 'Open' && items > 0 ? 'margin-bottom: 18px' : ''};
+    type === 'open' && items > 0 ? 'margin-bottom: 18px' : ''};
 `
 
 const SubTitleContainer = styled.div`
@@ -45,10 +45,6 @@ const Wrapper = styled.div`
   color: var(--sn-stylekit-foreground-color);
 `
 
-const SubTitleForContainer: React.FC<{ type: ContainerType }> = ({ type }) => {
-  return <SubTitle>{type} tasks</SubTitle>
-}
-
 const getItemStyle = (
   isDragging: boolean,
   draggableStyle?: DraggingStyle | NotDraggingStyle
@@ -60,7 +56,7 @@ const getItemStyle = (
   }),
 })
 
-type ContainerType = 'Open' | 'Completed'
+type ContainerType = 'open' | 'completed'
 
 type TasksContainerProps = {
   groupName: string
@@ -77,7 +73,7 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
   children,
 }) => {
   const canEdit = useAppSelector((state) => state.settings.canEdit)
-  const droppableId = `${type.toLowerCase()}-tasks-droppable`
+  const droppableId = `${type}-tasks-droppable`
 
   return (
     <OuterContainer data-testid={testId} type={type} items={tasks.length}>
@@ -85,7 +81,7 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
         {(provided) => (
           <Wrapper>
             <SubTitleContainer>
-              <SubTitleForContainer type={type} />
+              <SubTitle>{type} tasks</SubTitle>
             </SubTitleContainer>
             <InnerTasksContainer
               {...provided.droppableProps}
@@ -109,6 +105,7 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
                       const { style, ...restDraggableProps } = draggableProps
                       return (
                         <div
+                          className={`${type}-tasks-container`}
                           style={getItemStyle(isDragging, style)}
                           {...restDraggableProps}
                         >

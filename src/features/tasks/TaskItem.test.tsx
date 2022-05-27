@@ -25,12 +25,16 @@ it('renders a check box and textarea input', async () => {
 })
 
 test('clicking the check box should toggle the task as open/completed', () => {
+  jest.useFakeTimers()
+
   const { mockStore } = testRender(
     <TaskItem groupName={groupName} task={task} />
   )
 
   const checkBox = screen.getByTestId('check-box-input')
   fireEvent.click(checkBox)
+
+  jest.runAllTimers()
 
   let dispatchedActions = mockStore.getActions()
 
@@ -45,6 +49,8 @@ test('clicking the check box should toggle the task as open/completed', () => {
   fireEvent.click(checkBox)
 
   dispatchedActions = mockStore.getActions()
+
+  jest.runAllTimers()
 
   expect(dispatchedActions).toHaveLength(2)
   expect(dispatchedActions[1]).toMatchObject(

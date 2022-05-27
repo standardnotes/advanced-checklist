@@ -22,6 +22,7 @@ import NotePreview from './features/tasks/NotePreview'
 import TaskGroupList from './features/tasks/TaskGroupList'
 
 import { getPlainPreview } from './common/utils'
+import { CheckBoxElementsDefs } from './common/components/svg'
 
 const SpecialContainer = styled.div`
   margin: 18px;
@@ -143,6 +144,7 @@ const TaskEditor: React.FC = () => {
 
   return (
     <>
+      <CheckBoxElementsDefs />
       <TaskGroupList groupedTasks={groupedTasks} />
       <SpecialContainer>
         <CenteredContainer>

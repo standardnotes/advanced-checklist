@@ -48,14 +48,14 @@ const TaskItemList: React.FC<TaskItemListProps> = ({ group }) => {
       <DragDropContext onDragEnd={onDragEnd}>
         <TasksContainer
           testId="open-tasks-container"
-          type="Open"
+          type="open"
           tasks={openTasks}
           groupName={group.name}
         />
 
         <TasksContainer
           testId="completed-tasks-container"
-          type="Completed"
+          type="completed"
           tasks={completedTasks}
           groupName={group.name}
         >
