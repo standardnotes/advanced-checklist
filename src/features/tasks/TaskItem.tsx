@@ -17,11 +17,7 @@ import { useAppDispatch, useAppSelector, useDidMount } from '../../app/hooks'
 
 import { CheckBoxInput, TextAreaInput } from '../../common/components'
 
-type ItemContainerProps = {
-  completed?: boolean
-}
-
-const Container = styled.div<ItemContainerProps>`
+const Container = styled.div<{ completed?: boolean }>`
   align-content: center;
   align-items: center;
   display: flex;
@@ -30,9 +26,12 @@ const Container = styled.div<ItemContainerProps>`
   ${({ completed }) =>
     completed &&
     `
-    text-decoration: line-through;
-    opacity: 0.6;
+    color: var(--sn-stylekit-info-color);
+    opacity: 0.7;
   `}
+
+  min-width: 10%;
+  max-width: 85%;
 `
 
 export type TaskItemProps = {
@@ -56,6 +55,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
     (state) => state.settings.spellCheckerEnabled
   )
 
+  const [completed, setCompleted] = useState(!!task.completed)
   const [description, setDescription] = useState(task.description)
 
   function resizeTextArea(textarea: HTMLTextAreaElement | null): void {
@@ -76,7 +76,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
   })
 
   function toggleCheckboxChange() {
-    dispatch(taskToggled({ id: task.id, groupName }))
+    setCompleted(!completed)
+
+    setTimeout(() => {
+      dispatch(taskToggled({ id: task.id, groupName }))
+    }, 1300)
   }
 
   function onTextChange(event: ChangeEvent<HTMLTextAreaElement>) {
@@ -121,19 +125,21 @@ const TaskItem: React.FC<TaskItemProps> = ({
   return (
     <Container
       data-testid="task-item"
-      completed={task.completed}
+      className={`task-item ${completed ? 'completed' : 'open'}`}
+      completed={completed}
       ref={innerRef}
       {...props}
     >
       <CheckBoxInput
         testId="check-box-input"
-        checked={task.completed}
+        checked={completed}
         disabled={!canEdit}
         onChange={toggleCheckboxChange}
       />
       <TextAreaInput
         testId="text-area-input"
-        disabled={!canEdit || !!task.completed}
+        className={`${completed ? 'strike-through' : ''}`}
+        disabled={!canEdit || !!completed}
         onChange={onTextChange}
         onKeyPress={onKeyPress}
         onKeyUp={onKeyUp}

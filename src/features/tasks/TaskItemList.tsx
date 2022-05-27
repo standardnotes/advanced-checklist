@@ -7,6 +7,11 @@ import { GroupPayload, tasksReordered } from './tasks-slice'
 
 import TasksContainer from './TasksContainer'
 import CompletedTasksActions from './CompletedTasksActions'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  position: relative;
+`
 
 type TaskItemListProps = {
   group: GroupPayload
@@ -39,18 +44,18 @@ const TaskItemList: React.FC<TaskItemListProps> = ({ group }) => {
   }
 
   return (
-    <div data-testid="task-list">
+    <Container data-testid="task-list">
       <DragDropContext onDragEnd={onDragEnd}>
         <TasksContainer
           testId="open-tasks-container"
-          type="Open"
+          type="open"
           tasks={openTasks}
           groupName={group.name}
         />
 
         <TasksContainer
           testId="completed-tasks-container"
-          type="Completed"
+          type="completed"
           tasks={completedTasks}
           groupName={group.name}
         >
@@ -59,7 +64,7 @@ const TaskItemList: React.FC<TaskItemListProps> = ({ group }) => {
           )}
         </TasksContainer>
       </DragDropContext>
-    </div>
+    </Container>
   )
 }
 

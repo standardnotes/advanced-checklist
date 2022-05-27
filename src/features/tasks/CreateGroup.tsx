@@ -14,6 +14,12 @@ import { TextInput, WideButton } from '../../common/components'
 import { AddIcon } from '../../common/components/icons'
 import { ArrowVector } from '../../common/components/vectors'
 
+const FloatingContainer = styled.div`
+  bottom: 8px;
+  position: fixed;
+  width: 94%;
+`
+
 const InputContainer = styled.div`
   background-color: var(--sn-stylekit-background-color);
   border: 1px solid var(--sn-stylekit-border-color);
@@ -21,6 +27,7 @@ const InputContainer = styled.div`
   box-sizing: border-box;
   padding: 16px;
   margin-bottom: 9px;
+  width: 100%;
 `
 
 const TutorialContainer = styled.div`
@@ -119,9 +126,11 @@ const CreateGroup: React.FC = () => {
   return (
     <>
       {!isCreateMode && taskGroupCount > 0 ? (
-        <WideButton data-testid="create-group-button" onClick={toggleMode}>
-          <AddIcon />
-        </WideButton>
+        <FloatingContainer>
+          <WideButton data-testid="create-group-button" onClick={toggleMode}>
+            <AddIcon />
+          </WideButton>
+        </FloatingContainer>
       ) : (
         <>
           <InputContainer>

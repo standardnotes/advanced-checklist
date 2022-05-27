@@ -16,6 +16,7 @@ const StyledTextArea = styled.textarea`
 
 type TextAreaInputProps = {
   value: string
+  className?: string
   dir?: 'ltr' | 'rtl' | 'auto'
   disabled?: boolean
   spellCheck?: boolean
@@ -32,6 +33,7 @@ export const TextAreaInput = forwardRef<
   (
     {
       value,
+      className,
       dir = 'auto',
       disabled,
       spellCheck,
@@ -44,6 +46,7 @@ export const TextAreaInput = forwardRef<
   ) => {
     return (
       <StyledTextArea
+        className={className}
         data-testid={testId}
         dir={dir}
         disabled={disabled}

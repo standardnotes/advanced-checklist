@@ -22,13 +22,13 @@ import {
   ChevronUpIcon,
 } from '../../common/components/icons'
 
-const TaskGroupContainer = styled.div`
+const TaskGroupContainer = styled.div<{ isLast?: boolean }>`
   background-color: var(--sn-stylekit-background-color);
   border: 1px solid var(--sn-stylekit-border-color);
   border-radius: 8px;
   box-sizing: border-box;
   padding: 16px;
-  margin-bottom: 9px;
+  margin-bottom: ${({ isLast }) => (!isLast ? '9px' : '0px')};
 `
 
 type CollapsableContainerProps = {
@@ -42,6 +42,7 @@ const CollapsableContainer = styled.div<CollapsableContainerProps>`
 type TaskGroupProps = {
   group: GroupPayload
   isDragging: boolean
+  isLast?: boolean
   style?: React.CSSProperties
   innerRef?: (element?: HTMLElement | null | undefined) => any
   onDragStart?: React.DragEventHandler<any>
@@ -51,6 +52,7 @@ type TaskGroupProps = {
 const TaskGroup: React.FC<TaskGroupProps> = ({
   group,
   isDragging,
+  isLast,
   style,
   innerRef,
   onDragStart,
@@ -89,6 +91,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({
       style={style}
       onDragStart={onDragStart}
       onTransitionEnd={onTransitionEnd}
+      isLast={isLast}
     >
       <div className="flex items-center justify-between h-8 mt-1 mb-1">
         <div className="flex flex-grow items-center" onClick={handleClick}>
