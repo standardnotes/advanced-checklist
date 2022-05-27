@@ -90,11 +90,10 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
               items={tasks.length}
             >
               {tasks.map((task, index) => {
-                const identifier = `${index}-${task.id}`
                 return (
                   <Draggable
-                    key={identifier}
-                    draggableId={identifier}
+                    key={`draggable-${task.id}`}
+                    draggableId={`draggable-${task.id}`}
                     index={index}
                     isDragDisabled={!canEdit}
                   >
@@ -105,12 +104,13 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
                       const { style, ...restDraggableProps } = draggableProps
                       return (
                         <div
+                          key={`task-container-${task.id}`}
                           className={`${type}-tasks-container`}
                           style={getItemStyle(isDragging, style)}
                           {...restDraggableProps}
                         >
                           <TaskItem
-                            key={identifier}
+                            key={`task-${task.id}`}
                             task={task}
                             groupName={groupName}
                             innerRef={innerRef}
