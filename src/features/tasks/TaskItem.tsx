@@ -18,10 +18,16 @@ import { useAppDispatch, useAppSelector, useDidMount } from '../../app/hooks'
 import { CheckBoxInput, TextAreaInput } from '../../common/components'
 
 /**
- * A delay in the dispatch function.
+ * A delay in the dispatch function, when a task is opened.
  * Necessary to allow for transitions to occur.
  */
-const STORE_DISPATCH_DELAY_MS = 1_700
+const DISPATCH_OPENED_DELAY_MS = 1_650
+
+/**
+ * A delay in the dispatch function, when a task is completed.
+ * Necessary to allow for transitions to occur.
+ */
+const DISPATCH_COMPLETED_DELAY_MS = 1_850
 
 const Container = styled.div<{ completed?: boolean }>`
   align-content: center;
@@ -82,11 +88,16 @@ const TaskItem: React.FC<TaskItemProps> = ({
   })
 
   function toggleCheckboxChange() {
-    setCompleted(!completed)
+    const newCompletedState = !completed
+    setCompleted(newCompletedState)
+
+    const dispatchDelay = newCompletedState
+      ? DISPATCH_COMPLETED_DELAY_MS
+      : DISPATCH_OPENED_DELAY_MS
 
     setTimeout(() => {
       dispatch(taskToggled({ id: task.id, groupName }))
-    }, STORE_DISPATCH_DELAY_MS)
+    }, dispatchDelay)
   }
 
   function onTextChange(event: ChangeEvent<HTMLTextAreaElement>) {
