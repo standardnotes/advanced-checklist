@@ -1,4 +1,4 @@
-$transition-duration: 0.8s;
+$transition-duration: 750ms;
 
 .checkbox-container {
   display: block;
@@ -67,19 +67,6 @@ $transition-duration: 0.8s;
   stroke: var(--sn-stylekit-neutral-color);
   transform-origin: 13.5px 12.5px;
   transform: scale(0.4) rotate(0deg);
-
-  @keyframes explode {
-    30% {
-      stroke-opacity: 1;
-      stroke-width: 3;
-      transform: scale(0.8) rotate(40deg);
-    }
-    100% {
-      stroke-opacity: 0;
-      stroke-width: 0;
-      transform: scale(1.1) rotate(60deg);
-    }
-  }
 }
 
 .checkbox-square {
@@ -101,7 +88,37 @@ $transition-duration: 0.8s;
   animation-duration: $transition-duration * 0.7;
 }
 
+.checkbox-state:not(:checked) {
+  ~ .checkbox-button .checkbox-square {
+    transition-delay: 0s;
+    transition-duration: $transition-duration * 0.9;
+  }
+
+  ~ .checkbox-button .checkbox-mark {
+    transition-delay: 0s;
+    transition-duration: 0s;
+  }
+
+  ~ .checkbox-button .checkbox-circle {
+    transition-delay: 0s;
+    transition-duration: 0s;
+  }
+}
+
 .checkbox-state:checked {
+  @keyframes explode {
+    30% {
+      stroke-opacity: 1;
+      stroke-width: 3;
+      transform: scale(0.8) rotate(40deg);
+    }
+    100% {
+      stroke-opacity: 0;
+      stroke-width: 0;
+      transform: scale(1.1) rotate(60deg);
+    }
+  }
+
   ~ .checkbox-button .checkbox-square {
     stroke-dashoffset: 56.1053;
     stroke: var(--sn-stylekit-info-color);
@@ -120,37 +137,48 @@ $transition-duration: 0.8s;
   }
 }
 
-.open-tasks-container .task-item.completed,
-.task-item.open {
-  @keyframes fadeOut {
-    0% {
-      opacity: 1;
-      max-height: 25px;
-    }
-    100% {
-      opacity: 0;
-      max-height: 0;
-    }
+@keyframes fadeOut {
+  100% {
+    opacity: 0;
+    max-height: 0;
   }
+  0% {
+    opacity: 1;
+    max-height: 25px;
+  }
+}
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    max-height: 0;
+  }
+  100% {
+    opacity: 1;
+    max-height: 25px;
+  }
+}
+
+.open-task-container .task-item.completed {
   animation: fadeOut ease $transition-duration;
-  animation-delay: $transition-duration * 1.5;
+  animation-delay: $transition-duration * 1.9;
   animation-fill-mode: forwards;
 }
 
-.completed-tasks-container .task-item.completed,
-.task-item.open {
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-      max-height: 0;
-    }
-    100% {
-      opacity: 1;
-      max-height: 25px;
-    }
-  }
+.completed-task-container .task-item.open {
+  animation: fadeOut ease $transition-duration;
+  animation-delay: $transition-duration;
+  animation-fill-mode: forwards;
+}
 
+.completed-task-container .task-item.completed {
   animation: fadeIn ease $transition-duration;
+  animation-delay: 0s;
+  animation-fill-mode: forwards;
+}
+
+.open-task-container .task-item.open {
+  animation: fadeIn ease $transition-duration * 0.8;
+  animation-delay: 0s;
   animation-fill-mode: forwards;
 }

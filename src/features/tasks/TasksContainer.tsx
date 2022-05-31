@@ -105,7 +105,7 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
                       return (
                         <div
                           key={`task-container-${task.id}`}
-                          className={`${type}-tasks-container`}
+                          className={`${type}-task-container`}
                           style={getItemStyle(isDragging, style)}
                           {...restDraggableProps}
                         >
