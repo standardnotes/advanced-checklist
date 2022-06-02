@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const WideButton = styled.button`
   align-items: center;
-  background-color: var(--sn-stylekit-secondary-background-color);
+  background-color: var(--sn-stylekit-background-color);
   border-radius: 8px;
   border: 1px solid var(--sn-stylekit-border-color);
   box-sizing: border-box;
