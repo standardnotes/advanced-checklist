@@ -24,16 +24,27 @@ import TaskGroupList from './features/tasks/TaskGroupList'
 import { getPlainPreview } from './common/utils'
 import { CheckBoxElementsDefs } from './common/components/svg'
 
-const SpecialContainer = styled.div`
-  position: relative;
+const MainContainer = styled.div`
+  margin: 16px;
+  padding-bottom: 60px;
+`
+
+const FloatingContainer = styled.div`
+  background-color: var(--sn-stylekit-secondary-background-color);
+  border-top: 1px solid var(--sn-stylekit-border-color);
+  bottom: 0;
+  display: flex;
+  position: fixed;
+  width: 100%;
 `
 
 const CenteredContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 15px;
+  margin: 0px;
+  padding: 12px 16px;
   position: relative;
-  width: 100%;
+  width: 98%;
 `
 
 const TaskEditor: React.FC = () => {
@@ -131,26 +142,40 @@ const TaskEditor: React.FC = () => {
   }, [])
 
   if (legacyContent) {
-    return <MigrateLegacyContent />
+    return (
+      <MainContainer>
+        <MigrateLegacyContent />
+      </MainContainer>
+    )
   }
 
   if (!initialized) {
-    return <InvalidContentError />
+    return (
+      <MainContainer>
+        <InvalidContentError />
+      </MainContainer>
+    )
   }
 
   if (groupedTasks.length === 0) {
-    return <CreateGroup />
+    return (
+      <MainContainer>
+        <CreateGroup />
+      </MainContainer>
+    )
   }
 
   return (
     <>
       <CheckBoxElementsDefs />
-      <TaskGroupList groupedTasks={groupedTasks} />
-      <SpecialContainer>
+      <MainContainer>
+        <TaskGroupList groupedTasks={groupedTasks} />
+      </MainContainer>
+      <FloatingContainer>
         <CenteredContainer>
           <CreateGroup />
         </CenteredContainer>
-      </SpecialContainer>
+      </FloatingContainer>
     </>
   )
 }
