@@ -1,3 +1,5 @@
+import './TextInput.scss'
+
 import { ChangeEvent, FocusEvent, forwardRef, KeyboardEvent } from 'react'
 import styled from 'styled-components'
 

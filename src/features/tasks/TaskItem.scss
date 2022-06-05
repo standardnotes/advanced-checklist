@@ -1,0 +1,60 @@
+$transition-duration: 750ms;
+
+@keyframes fadeOut {
+  100% {
+    opacity: 0;
+    max-height: 0;
+  }
+  0% {
+    opacity: 1;
+    max-height: 25px;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    max-height: 0;
+  }
+  100% {
+    opacity: 1;
+    max-height: 25px;
+  }
+}
+
+@keyframes explode {
+  30% {
+    stroke: var(--sn-stylekit-info-color);
+    stroke-opacity: 1;
+    stroke-width: 3;
+    transform: scale(0.8) rotate(40deg);
+  }
+  100% {
+    stroke: var(--sn-stylekit-neutral-color);
+    stroke-opacity: 0;
+    stroke-width: 0;
+    transform: scale(1.1) rotate(60deg);
+  }
+}
+
+.task-item.fade-out {
+  animation: fadeOut ease $transition-duration;
+  animation-delay: $transition-duration;
+  animation-fill-mode: forwards;
+}
+
+.task-item.fade-in {
+  animation: fadeIn ease $transition-duration;
+  animation-delay: 0s;
+  animation-fill-mode: forwards;
+}
+
+.task-item.explode {
+  .checkbox-state {
+    ~ .checkbox-button .checkbox-circle {
+      animation: explode ease $transition-duration;
+      animation-delay: $transition-duration;
+      animation-fill-mode: forwards;
+    }
+  }
+}

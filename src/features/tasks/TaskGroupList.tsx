@@ -7,17 +7,15 @@ import {
 } from 'react-beautiful-dnd'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { tasksGroupReordered } from './tasks-slice'
+
 import TaskGroup from './TaskGroup'
-import { GroupPayload, tasksGroupReordered } from './tasks-slice'
 
-type TaskGroupListProps = {
-  groupedTasks: GroupPayload[]
-}
-
-const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
+const TaskGroupList: React.FC = () => {
   const dispatch = useAppDispatch()
 
   const canEdit = useAppSelector((state) => state.settings.canEdit)
+  const groupedTasks = useAppSelector((state) => state.tasks.groups)
 
   function onDragEnd(result: DropResult) {
     const droppedOutsideList = !result.destination
@@ -39,51 +37,49 @@ const TaskGroupList: React.FC<TaskGroupListProps> = ({ groupedTasks }) => {
   }
 
   return (
-    <div data-testid="task-group-list">
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable
-          droppableId={'droppable-task-group-list'}
-          isDropDisabled={!canEdit}
-        >
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {groupedTasks.map((group, index) => {
-                return (
-                  <Draggable
-                    key={`draggable-${group.name}`}
-                    draggableId={`draggable-${group.name}`}
-                    index={index}
-                    isDragDisabled={!canEdit}
-                  >
-                    {(
-                      { innerRef, draggableProps, dragHandleProps },
-                      { isDragging }
-                    ) => {
-                      const { onTransitionEnd, ...restDraggableProps } =
-                        draggableProps
-                      return (
-                        <TaskGroup
-                          key={`group-${group.name}`}
-                          group={group}
-                          isDragging={isDragging}
-                          innerRef={innerRef}
-                          onTransitionEnd={onTransitionEnd}
-                          onDragStart={dragHandleProps?.onDragStart}
-                          isLast={groupedTasks.length - 1 === index}
-                          {...dragHandleProps}
-                          {...restDraggableProps}
-                        />
-                      )
-                    }}
-                  </Draggable>
-                )
-              })}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </div>
+    <DragDropContext data-testid="task-group-list" onDragEnd={onDragEnd}>
+      <Droppable
+        droppableId={'droppable-task-group-list'}
+        isDropDisabled={!canEdit}
+      >
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            {groupedTasks.map((group, index) => {
+              return (
+                <Draggable
+                  key={`draggable-${group.name}`}
+                  draggableId={`draggable-${group.name}`}
+                  index={index}
+                  isDragDisabled={!canEdit}
+                >
+                  {(
+                    { innerRef, draggableProps, dragHandleProps },
+                    { isDragging }
+                  ) => {
+                    const { onTransitionEnd, ...restDraggableProps } =
+                      draggableProps
+                    return (
+                      <TaskGroup
+                        key={`group-${group.name}`}
+                        group={group}
+                        isDragging={isDragging}
+                        innerRef={innerRef}
+                        onTransitionEnd={onTransitionEnd}
+                        onDragStart={dragHandleProps?.onDragStart}
+                        isLast={groupedTasks.length - 1 === index}
+                        {...dragHandleProps}
+                        {...restDraggableProps}
+                      />
+                    )
+                  }}
+                </Draggable>
+              )
+            })}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   )
 }
 

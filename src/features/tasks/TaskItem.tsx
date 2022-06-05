@@ -1,3 +1,5 @@
+import './TaskItem.scss'
+
 import {
   ChangeEvent,
   createRef,
@@ -21,13 +23,13 @@ import { CheckBoxInput, TextAreaInput } from '../../common/components'
  * A delay in the dispatch function, when a task is opened.
  * Necessary to allow for transitions to occur.
  */
-const DISPATCH_OPENED_DELAY_MS = 1_650
+const DISPATCH_OPENED_DELAY_MS = 1_300
 
 /**
  * A delay in the dispatch function, when a task is completed.
  * Necessary to allow for transitions to occur.
  */
-const DISPATCH_COMPLETED_DELAY_MS = 1_850
+const DISPATCH_COMPLETED_DELAY_MS = 1_450
 
 const Container = styled.div<{ completed?: boolean }>`
   align-content: center;
@@ -39,7 +41,6 @@ const Container = styled.div<{ completed?: boolean }>`
     completed &&
     `
     color: var(--sn-stylekit-info-color);
-    opacity: 0.7;
   `}
 
   min-width: 10%;
@@ -53,8 +54,8 @@ export type TaskItemProps = {
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
-  groupName,
   task,
+  groupName,
   innerRef,
   ...props
 }) => {
@@ -142,7 +143,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
   return (
     <Container
       data-testid="task-item"
-      className={`task-item ${completed ? 'completed' : 'open'}`}
       completed={completed}
       ref={innerRef}
       {...props}
@@ -155,7 +155,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
       />
       <TextAreaInput
         testId="text-area-input"
-        className={`${completed ? 'strike-through' : ''}`}
         disabled={!canEdit || !!completed}
         onChange={onTextChange}
         onKeyPress={onKeyPress}

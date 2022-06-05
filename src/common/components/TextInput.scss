@@ -1,0 +1,17 @@
+$transition-duration: 750ms;
+
+.strike-through {
+  @keyframes strike {
+    from {
+      text-decoration: line-through 1px solid transparent;
+    }
+    to {
+      text-decoration: line-through 1px solid var(--sn-stylekit-info-color);
+    }
+  }
+
+  animation-duration: $transition-duration;
+  animation-fill-mode: forwards;
+  animation-name: strike;
+  animation-timing-function: linear;
+}
