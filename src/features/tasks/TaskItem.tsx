@@ -29,7 +29,7 @@ const DISPATCH_OPENED_DELAY_MS = 1_250
  * A delay in the dispatch function, when a task is completed.
  * Necessary to allow for transitions to occur.
  */
-const DISPATCH_COMPLETED_DELAY_MS = 1_400
+const DISPATCH_COMPLETED_DELAY_MS = 1_850
 
 const Container = styled.div<{ completed?: boolean }>`
   align-content: center;
