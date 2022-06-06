@@ -131,6 +131,9 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
                       onExited={(node: HTMLElement) => {
                         node.classList.remove('fade-out')
                       }}
+                      addEndListener={(node, done) => {
+                        done()
+                      }}
                       mountOnEnter
                       unmountOnExit
                     >
