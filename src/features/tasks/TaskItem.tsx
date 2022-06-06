@@ -23,13 +23,13 @@ import { CheckBoxInput, TextAreaInput } from '../../common/components'
  * A delay in the dispatch function, when a task is opened.
  * Necessary to allow for transitions to occur.
  */
-const DISPATCH_OPENED_DELAY_MS = 1_300
+const DISPATCH_OPENED_DELAY_MS = 1_250
 
 /**
  * A delay in the dispatch function, when a task is completed.
  * Necessary to allow for transitions to occur.
  */
-const DISPATCH_COMPLETED_DELAY_MS = 1_450
+const DISPATCH_COMPLETED_DELAY_MS = 1_400
 
 const Container = styled.div<{ completed?: boolean }>`
   align-content: center;

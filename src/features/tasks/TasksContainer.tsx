@@ -102,9 +102,7 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
                       classNames={{
                         enter: 'fade-in',
                         enterActive: 'fade-in',
-                        enterDone: task.completed
-                          ? 'fade-in explode'
-                          : 'fade-in',
+                        enterDone: 'fade-in',
                         exit: 'fade-out',
                         exitActive: 'fade-out',
                         exitDone: 'fade-out',
@@ -112,6 +110,26 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
                       timeout={{
                         enter: 1_500,
                         exit: 1_250,
+                      }}
+                      onEnter={(node: HTMLElement) => {
+                        node.classList.remove('explode')
+                      }}
+                      onEntered={(node: HTMLElement) => {
+                        node.classList.remove('fade-in')
+
+                        const completed = !!task.completed
+                        completed && node.classList.add('explode')
+
+                        node.addEventListener(
+                          'animationend',
+                          () => {
+                            node.classList.remove('explode')
+                          },
+                          false
+                        )
+                      }}
+                      onExited={(node: HTMLElement) => {
+                        node.classList.remove('fade-out')
                       }}
                       mountOnEnter
                       unmountOnExit

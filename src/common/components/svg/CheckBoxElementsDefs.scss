@@ -83,8 +83,25 @@ $transition-duration: 750ms;
     stroke: var(--sn-stylekit-info-color);
     transition-delay: $transition-duration * 0.6;
   }
+}
 
-  ~ .checkbox-button .checkbox-circle {
+@keyframes explode {
+  30% {
+    stroke: var(--sn-stylekit-info-color);
+    stroke-opacity: 1;
+    stroke-width: 3;
+    transform: scale(0.8) rotate(40deg);
+  }
+  100% {
+    stroke: var(--sn-stylekit-neutral-color);
+    stroke-opacity: 0;
+    stroke-width: 0;
+    transform: scale(1.1) rotate(60deg);
+  }
+}
+
+.explode {
+  .checkbox-circle {
     animation: explode ease $transition-duration;
     animation-delay: $transition-duration;
     animation-fill-mode: forwards;
