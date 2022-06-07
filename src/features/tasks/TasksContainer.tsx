@@ -1,3 +1,5 @@
+import './TasksContainer.scss'
+
 import React from 'react'
 import {
   Draggable,
@@ -87,9 +89,10 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
             </SubTitleContainer>
             <InnerTasksContainer
               {...provided.droppableProps}
+              className={`${type}-tasks-container`}
+              items={tasks.length}
               ref={provided.innerRef}
               type={type}
-              items={tasks.length}
             >
               <TransitionGroup
                 component={null}

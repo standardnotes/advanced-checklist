@@ -16,6 +16,6 @@ $transition-duration: 750ms;
   animation-timing-function: linear;
 }
 
-.crossed-out {
-  text-decoration: line-through 1px solid var(--sn-stylekit-info-color);
+.no-text-decoration {
+  text-decoration: none !important;
 }

@@ -88,9 +88,13 @@ const TaskItem: React.FC<TaskItemProps> = ({
     resizeTextArea(textAreaRef.current)
   })
 
-  function toggleCheckboxChange() {
+  function onCheckBoxToggle() {
     const newCompletedState = !completed
     setCompleted(newCompletedState)
+
+    newCompletedState
+      ? textAreaRef.current!.classList.add('cross-out')
+      : textAreaRef.current!.classList.add('no-text-decoration')
 
     const dispatchDelay = newCompletedState
       ? DISPATCH_COMPLETED_DELAY_MS
@@ -151,10 +155,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
         testId="check-box-input"
         checked={completed}
         disabled={!canEdit}
-        onChange={toggleCheckboxChange}
+        onChange={onCheckBoxToggle}
       />
       <TextAreaInput
         testId="text-area-input"
+        className="text-area-input"
         disabled={!canEdit || !!completed}
         onChange={onTextChange}
         onKeyPress={onKeyPress}
