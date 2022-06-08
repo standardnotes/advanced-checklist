@@ -71,10 +71,11 @@ const tasksSlice = createSlice({
         return
       }
       const currentTask = group.tasks.find((item) => item.id === task.id)
-      if (currentTask) {
-        currentTask.description = task.description
-        currentTask.updatedAt = new Date()
+      if (!currentTask) {
+        return
       }
+      currentTask.description = task.description
+      currentTask.updatedAt = new Date()
     },
     taskDeleted(
       state,
