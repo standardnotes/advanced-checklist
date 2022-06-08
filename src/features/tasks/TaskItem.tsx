@@ -1,3 +1,5 @@
+import './TaskItem.scss'
+
 import {
   ChangeEvent,
   createRef,
@@ -21,7 +23,7 @@ import { CheckBoxInput, TextAreaInput } from '../../common/components'
  * A delay in the dispatch function, when a task is opened.
  * Necessary to allow for transitions to occur.
  */
-const DISPATCH_OPENED_DELAY_MS = 1_650
+const DISPATCH_OPENED_DELAY_MS = 1_250
 
 /**
  * A delay in the dispatch function, when a task is completed.
@@ -39,7 +41,6 @@ const Container = styled.div<{ completed?: boolean }>`
     completed &&
     `
     color: var(--sn-stylekit-info-color);
-    opacity: 0.7;
   `}
 
   min-width: 10%;
@@ -53,8 +54,8 @@ export type TaskItemProps = {
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
-  groupName,
   task,
+  groupName,
   innerRef,
   ...props
 }) => {
@@ -87,9 +88,13 @@ const TaskItem: React.FC<TaskItemProps> = ({
     resizeTextArea(textAreaRef.current)
   })
 
-  function toggleCheckboxChange() {
+  function onCheckBoxToggle() {
     const newCompletedState = !completed
     setCompleted(newCompletedState)
+
+    newCompletedState
+      ? textAreaRef.current!.classList.add('cross-out')
+      : textAreaRef.current!.classList.add('no-text-decoration')
 
     const dispatchDelay = newCompletedState
       ? DISPATCH_COMPLETED_DELAY_MS
@@ -142,7 +147,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
   return (
     <Container
       data-testid="task-item"
-      className={`task-item ${completed ? 'completed' : 'open'}`}
       completed={completed}
       ref={innerRef}
       {...props}
@@ -151,11 +155,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
         testId="check-box-input"
         checked={completed}
         disabled={!canEdit}
-        onChange={toggleCheckboxChange}
+        onChange={onCheckBoxToggle}
       />
       <TextAreaInput
         testId="text-area-input"
-        className={`${completed ? 'strike-through' : ''}`}
+        className="text-area-input"
         disabled={!canEdit || !!completed}
         onChange={onTextChange}
         onKeyPress={onKeyPress}

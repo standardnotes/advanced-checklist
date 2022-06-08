@@ -35,23 +35,6 @@ $transition-duration: 750ms;
   width: 22px;
 }
 
-.strike-through {
-  @keyframes strike {
-    from {
-      text-decoration-color: transparent;
-    }
-    to {
-      text-decoration-color: auto;
-    }
-  }
-
-  animation-duration: $transition-duration * 0.5;
-  animation-fill-mode: forwards;
-  animation-name: strike;
-  animation-timing-function: linear;
-  text-decoration: line-through;
-}
-
 .checkbox-square,
 .checkbox-mark {
   cursor: pointer;
@@ -88,37 +71,7 @@ $transition-duration: 750ms;
   animation-duration: $transition-duration * 0.7;
 }
 
-.checkbox-state:not(:checked) {
-  ~ .checkbox-button .checkbox-square {
-    transition-delay: 0s;
-    transition-duration: $transition-duration * 0.9;
-  }
-
-  ~ .checkbox-button .checkbox-mark {
-    transition-delay: 0s;
-    transition-duration: 0s;
-  }
-
-  ~ .checkbox-button .checkbox-circle {
-    transition-delay: 0s;
-    transition-duration: 0s;
-  }
-}
-
 .checkbox-state:checked {
-  @keyframes explode {
-    30% {
-      stroke-opacity: 1;
-      stroke-width: 3;
-      transform: scale(0.8) rotate(40deg);
-    }
-    100% {
-      stroke-opacity: 0;
-      stroke-width: 0;
-      transform: scale(1.1) rotate(60deg);
-    }
-  }
-
   ~ .checkbox-button .checkbox-square {
     stroke-dashoffset: 56.1053;
     stroke: var(--sn-stylekit-info-color);
@@ -130,55 +83,27 @@ $transition-duration: 750ms;
     stroke: var(--sn-stylekit-info-color);
     transition-delay: $transition-duration * 0.6;
   }
+}
 
-  ~ .checkbox-button .checkbox-circle {
-    animation-name: explode;
+@keyframes explode {
+  30% {
     stroke: var(--sn-stylekit-info-color);
-  }
-}
-
-@keyframes fadeOut {
-  100% {
-    opacity: 0;
-    max-height: 0;
-  }
-  0% {
-    opacity: 1;
-    max-height: 25px;
-  }
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    max-height: 0;
+    stroke-opacity: 1;
+    stroke-width: 3;
+    transform: scale(0.8) rotate(40deg);
   }
   100% {
-    opacity: 1;
-    max-height: 25px;
+    stroke: var(--sn-stylekit-neutral-color);
+    stroke-opacity: 0;
+    stroke-width: 0;
+    transform: scale(1.1) rotate(60deg);
   }
 }
 
-.open-task-container .task-item.completed {
-  animation: fadeOut ease $transition-duration;
-  animation-delay: $transition-duration * 1.9;
-  animation-fill-mode: forwards;
-}
-
-.completed-task-container .task-item.open {
-  animation: fadeOut ease $transition-duration;
-  animation-delay: $transition-duration;
-  animation-fill-mode: forwards;
-}
-
-.completed-task-container .task-item.completed {
-  animation: fadeIn ease $transition-duration;
-  animation-delay: 0s;
-  animation-fill-mode: forwards;
-}
-
-.open-task-container .task-item.open {
-  animation: fadeIn ease $transition-duration * 0.8;
-  animation-delay: 0s;
-  animation-fill-mode: forwards;
+.explode {
+  .checkbox-circle {
+    animation: explode ease $transition-duration;
+    animation-delay: $transition-duration;
+    animation-fill-mode: forwards;
+  }
 }

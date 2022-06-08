@@ -169,7 +169,7 @@ const TaskEditor: React.FC = () => {
     <>
       <CheckBoxElementsDefs />
       <MainContainer>
-        <TaskGroupList groupedTasks={groupedTasks} />
+        <TaskGroupList />
       </MainContainer>
       <FloatingContainer>
         <CenteredContainer>

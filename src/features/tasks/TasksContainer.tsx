@@ -1,3 +1,6 @@
+import './TasksContainer.scss'
+
+import React from 'react'
 import {
   Draggable,
   DraggingStyle,
@@ -5,12 +8,13 @@ import {
   NotDraggingStyle,
 } from 'react-beautiful-dnd'
 import styled from 'styled-components'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 import { useAppSelector } from '../../app/hooks'
-import { TaskPayload } from './tasks-slice'
-import TaskItem from './TaskItem'
-
 import { SubTitle } from '../../common/components'
+import { TaskPayload } from './tasks-slice'
+
+import TaskItem from './TaskItem'
 
 const InnerTasksContainer = styled.div<{
   type: ContainerType
@@ -85,43 +89,90 @@ const TasksContainer: React.FC<TasksContainerProps> = ({
             </SubTitleContainer>
             <InnerTasksContainer
               {...provided.droppableProps}
+              className={`${type}-tasks-container`}
+              items={tasks.length}
               ref={provided.innerRef}
               type={type}
-              items={tasks.length}
             >
-              {tasks.map((task, index) => {
-                return (
-                  <Draggable
-                    key={`draggable-${task.id}`}
-                    draggableId={`draggable-${task.id}`}
-                    index={index}
-                    isDragDisabled={!canEdit}
-                  >
-                    {(
-                      { innerRef, draggableProps, dragHandleProps },
-                      { isDragging }
-                    ) => {
-                      const { style, ...restDraggableProps } = draggableProps
-                      return (
-                        <div
-                          key={`task-container-${task.id}`}
-                          className={`${type}-task-container`}
-                          style={getItemStyle(isDragging, style)}
-                          {...restDraggableProps}
-                        >
-                          <TaskItem
-                            key={`task-${task.id}`}
-                            task={task}
-                            groupName={groupName}
-                            innerRef={innerRef}
-                            {...dragHandleProps}
-                          />
-                        </div>
-                      )
-                    }}
-                  </Draggable>
-                )
-              })}
+              <TransitionGroup
+                component={null}
+                childFactory={(child) => React.cloneElement(child)}
+              >
+                {tasks.map((task, index) => {
+                  return (
+                    <CSSTransition
+                      key={`${task.id}-${!!task.completed}`}
+                      classNames={{
+                        enter: 'fade-in',
+                        enterActive: 'fade-in',
+                        enterDone: 'fade-in',
+                        exit: 'fade-out',
+                        exitActive: 'fade-out',
+                        exitDone: 'fade-out',
+                      }}
+                      timeout={{
+                        enter: 1_500,
+                        exit: 1_250,
+                      }}
+                      onEnter={(node: HTMLElement) => {
+                        node.classList.remove('explode')
+                      }}
+                      onEntered={(node: HTMLElement) => {
+                        node.classList.remove('fade-in')
+
+                        const completed = !!task.completed
+                        completed && node.classList.add('explode')
+
+                        node.addEventListener(
+                          'animationend',
+                          () => {
+                            node.classList.remove('explode')
+                          },
+                          false
+                        )
+                      }}
+                      onExited={(node: HTMLElement) => {
+                        node.classList.remove('fade-out')
+                      }}
+                      addEndListener={(node, done) => {
+                        done()
+                      }}
+                      mountOnEnter
+                      unmountOnExit
+                    >
+                      <Draggable
+                        key={`draggable-${task.id}`}
+                        draggableId={`draggable-${task.id}`}
+                        index={index}
+                        isDragDisabled={!canEdit}
+                      >
+                        {(
+                          { innerRef, draggableProps, dragHandleProps },
+                          { isDragging }
+                        ) => {
+                          const { style, ...restDraggableProps } =
+                            draggableProps
+                          return (
+                            <div
+                              className="task-item"
+                              style={getItemStyle(isDragging, style)}
+                              {...restDraggableProps}
+                            >
+                              <TaskItem
+                                key={`task-item-${task.id}`}
+                                task={task}
+                                groupName={groupName}
+                                innerRef={innerRef}
+                                {...dragHandleProps}
+                              />
+                            </div>
+                          )
+                        }}
+                      </Draggable>
+                    </CSSTransition>
+                  )
+                })}
+              </TransitionGroup>
               {provided.placeholder}
             </InnerTasksContainer>
             {children}

@@ -103,6 +103,10 @@ reach-portal {
     @extend .mr-2;
   }
 
+  div[data-selected][data-reach-menu-item] {
+    background-color: var(--sn-stylekit-contrast-background-color);
+  }
+
   div[data-reach-dialog-overlay] {
     align-items: center;
     background: none;

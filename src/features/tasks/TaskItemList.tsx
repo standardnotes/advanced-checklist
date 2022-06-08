@@ -1,5 +1,6 @@
 import React from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import styled from 'styled-components'
 
 import { useAppDispatch } from '../../app/hooks'
 import { groupTasksByCompletedStatus } from '../../common/utils'
@@ -7,7 +8,6 @@ import { GroupPayload, tasksReordered } from './tasks-slice'
 
 import TasksContainer from './TasksContainer'
 import CompletedTasksActions from './CompletedTasksActions'
-import styled from 'styled-components'
 
 const Container = styled.div`
   position: relative;

@@ -270,6 +270,70 @@ it('should handle an existing task being toggled', () => {
   })
 })
 
+test('toggled tasks should be on top of the list', () => {
+  const previousState: TasksState = {
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: false,
+            createdAt: new Date(),
+          },
+          {
+            id: 'another-id',
+            description: 'A simple task',
+            completed: false,
+            createdAt: new Date(),
+          },
+          {
+            id: 'extra-id',
+            description: 'A simple task',
+            completed: false,
+            createdAt: new Date(),
+          },
+        ],
+      },
+    ],
+  }
+
+  expect(
+    reducer(previousState, taskToggled({ id: 'another-id', groupName: 'Test' }))
+  ).toEqual({
+    schemaVersion: '1.0.0',
+    groups: [
+      {
+        name: 'Test',
+        tasks: [
+          {
+            id: 'another-id',
+            description: 'A simple task',
+            completed: true,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
+            completedAt: expect.any(Date),
+          },
+          {
+            id: 'some-id',
+            description: 'A simple task',
+            completed: false,
+            createdAt: expect.any(Date),
+          },
+          {
+            id: 'extra-id',
+            description: 'A simple task',
+            completed: false,
+            createdAt: expect.any(Date),
+          },
+        ],
+      },
+    ],
+  })
+})
+
 it('should handle an existing completed task being toggled', () => {
   const previousState: TasksState = {
     schemaVersion: '1.0.0',
