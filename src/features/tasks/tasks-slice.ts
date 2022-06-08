@@ -327,7 +327,9 @@ const tasksSlice = createSlice({
           state.initialized = true
           delete state.lastError
         }
-      } catch (e) {
+      } catch (error: any) {
+        state.initialized = false
+        state.lastError = `An error has occurred while parsing the note's content: ${error}`
         return
       }
     },
