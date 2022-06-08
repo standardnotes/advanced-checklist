@@ -1,6 +1,6 @@
 {
-  "name": "@standardnotes/task-editor",
-  "version": "1.4.0",
+  "name": "@standardnotes/advanced-task-editor",
+  "version": "1.0.0",
   "description": "A great way to manage short-term and long-term to-do's. You can mark tasks as completed, change their order, and edit the text naturally in place.",
   "keywords": [
     "Standard Notes",
