@@ -97,15 +97,21 @@ const tasksSlice = createSlice({
         return
       }
       const currentTask = group.tasks.find((task) => task.id === id)
-      if (currentTask) {
-        currentTask.completed = !currentTask.completed
-        currentTask.updatedAt = new Date()
-        if (currentTask.completed) {
-          currentTask.completedAt = new Date()
-        } else {
-          delete currentTask.completedAt
-        }
+      if (!currentTask) {
+        return
       }
+      currentTask.completed = !currentTask.completed
+      currentTask.updatedAt = new Date()
+      if (currentTask.completed) {
+        currentTask.completedAt = new Date()
+      } else {
+        delete currentTask.completedAt
+      }
+      /**
+       * Puts the recently toggled task on top
+       */
+      const tasks = group.tasks.filter((task) => task.id !== id)
+      group.tasks = [currentTask, ...tasks]
     },
     openAllCompleted(state, action: PayloadAction<{ groupName: string }>) {
       const { groupName } = action.payload
