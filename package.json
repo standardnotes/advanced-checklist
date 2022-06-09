@@ -6,7 +6,11 @@
     "Standard Notes",
     "Standard Notes Extensions"
   ],
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
