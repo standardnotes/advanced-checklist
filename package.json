@@ -1,7 +1,7 @@
 {
-  "name": "@standardnotes/advanced-task-editor",
-  "version": "1.0.0",
-  "description": "A great way to manage short-term and long-term to-do's. You can mark tasks as completed, change their order, and edit the text naturally in place.",
+  "name": "@standardnotes/advanced-checklist",
+  "version": "0.0.1",
+  "description": "A task editor with grouping functionality.",
   "keywords": [
     "Standard Notes",
     "Standard Notes Extensions"
@@ -10,10 +10,10 @@
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://github.com/standardnotes/task-editor.git"
+    "url": "https://github.com/standardnotes/advanced-checklist.git"
   },
   "bugs": {
-    "url": "https://github.com/standardnotes/task-editor/issues"
+    "url": "https://github.com/standardnotes/advanced-checklist/issues"
   },
   "sn": {
     "main": "build/index.html"
