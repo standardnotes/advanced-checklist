@@ -1,4 +1,4 @@
-# advanced-task-editor
+# advanced-checklist
 
 A great way to manage short-term and long-term to-do's. You can mark tasks as completed, change their order, and edit the text naturally in place.
 
@@ -8,9 +8,9 @@ A great way to manage short-term and long-term to-do's. You can mark tasks as co
 
 The general instructions setting up an environment to develop Standard Notes extensions can be found [here](https://docs.standardnotes.org/extensions/local-setup). You can also follow these instructions:
 
-1. Fork the [repository](https://github.com/standardnotes/task-editor) on GitHub.
+1. Fork the [repository](https://github.com/standardnotes/advanced-checklist) on GitHub.
 1. [Clone](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) your fork of the repository.
-1. Run `cd task-editor` to enter the `task-editor` directory.
+1. Run `cd advanced-checklist` to enter the `advanced-checklist` directory.
 1. Run `yarn install` to install the dependencies on your machine as they are described in `yarn.lock`.
 
 ### Testing in the browser
