@@ -1,218 +1,157 @@
 @import '~@standardnotes/stylekit/dist/stylekit.css';
 
-:root {
-  --sn-stylekit-font-size-editor: 16px;
-  --sn-stylekit-monospace-font: SFMono-Regular, Consolas, Liberation Mono, Menlo,
-    'Ubuntu Mono', courier, monospace;
-}
-
-@media screen and (max-width: 650px) {
-  :root {
-    --sn-stylekit-font-size-editor: 18px;
-  }
-  h1 {
-    font-size: 1.75em; // is usually 2em
-  }
-}
-
 body,
 html {
-  background-color: transparent;
-  background-color: var(--sn-stylekit-background-color);
-  font-family: var(--sn-stylekit-sans-serif-font);
-  font-size: var(--sn-stylekit-base-font-size);
-  margin: 15px;
-  padding: 0;
+  background-color: var(--sn-stylekit-secondary-background-color);
+  padding: 0 !important;
 }
 
 * {
   // To prevent gray flash when focusing input on mobile Safari
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-family: var(--sn-stylekit-sans-serif-font);
 }
 
 .sn-component {
   display: flex;
   flex-direction: column;
-  font-size: var(--sn-stylekit-font-size-editor);
-  min-height: 100vh;
 
   @media screen and (max-width: 420px) {
     min-height: -webkit-fill-available;
   }
+
+  .ml-3 {
+    margin-left: 0.75rem;
+  }
+
+  .mr-3 {
+    margin-right: 0.75rem;
+  }
+
+  .sn-icon.sm {
+    height: 0.875rem;
+    width: 0.875rem;
+  }
+
+  .no-fill {
+    fill: none;
+  }
+
+  .stroke-info-color {
+    stroke: var(--sn-stylekit-info-color);
+  }
+
+  .stroke-neutral-color {
+    stroke: var(--sn-stylekit-neutral-color);
+  }
+
+  .fill-info-color {
+    fill: var(--sn-stylekit-info-color);
+  }
+
+  .sn-icon-button {
+    border-width: 0;
+
+    &:hover {
+      background-color: inherit;
+      border-width: 1px;
+    }
+  }
+
+  .pt-1px {
+    padding-top: 1px;
+  }
 }
 
-.task {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 8px;
+:root {
+  --reach-menu-button: 1;
+}
 
-  .drag-grip-container {
-    padding-right: 10px;
-    margin-top: 4px;
-    margin-left: 1px;
-    display: block;
-    position: relative;
-    cursor: pointer;
-    -webkit-user-select: none;
-    user-select: none;
-    font-size: 15px;
+reach-portal {
+  @import '~@standardnotes/stylekit/src/css/utils';
+  @import '~@standardnotes/stylekit/src/css/sn';
+
+  div[data-reach-menu-list] {
+    @extend .bg-default;
+    @extend .border-main;
+    @extend .rounded;
+    @extend .box-shadow;
+    @extend .min-w-55;
+    @extend .mt-2;
+    @extend .focus\:outline-none;
+    @extend .origin-top-right;
+    @extend .py-2;
+    @extend .slide-down-animation;
+    @extend .color-text;
+    @extend .w-auto;
   }
 
-  .checkbox-container {
-    padding-left: 20px;
-    margin-top: 6px;
-    margin-left: 1px;
-    display: block;
-    position: relative;
-    cursor: pointer;
-    font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-
-    input:checked ~ .checkmark:after {
-      display: block;
-    }
-
-    input:checked ~ .checkmark:after {
-      display: block;
-    }
-
-    /* On mouse-over, add a grey background color */
-    &:hover input ~ .checkmark {
-      border-color: var(--sn-stylekit-border-color);
-    }
-
-    /* When the checkbox is checked, add a blue background */
-    input:checked ~ .checkmark {
-      background-color: var(--sn-stylekit-info-color);
-      border-color: var(--sn-stylekit-info-color);
-    }
-
-    /* When the mouse is held on the box */
-    input:active ~ .checkmark {
-      background-color: var(--sn-stylekit-info-color);
-      // border-color: var(--sn-stylekit-info-contrast-color);
-    }
-
-    /* Show the checkmark when checked */
-    input:checked ~ .checkmark:after {
-      display: block;
-    }
-
-    /* Hide the browser's default checkbox */
-    input {
-      position: absolute;
-      opacity: 0;
-      cursor: pointer;
-      height: 0;
-      width: 0;
-    }
+  div[data-reach-menu-item] {
+    @extend .items-center;
+    @extend .cursor-pointer;
+    @extend .flex;
+    @extend .hover\:bg-highlight;
+    @extend .focus\:outline-none;
+    @extend .focus\:shadow-none;
+    @extend .px-2;
+    @extend .selected\:bg-color;
+    @extend .selected\:fg-color;
+    @extend .m-h-32;
   }
 
-  .checkbox {
-    margin-top: 7px;
+  div[data-reach-menu-item] > .sn-icon {
+    @extend .mr-2;
   }
 
-  .checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 10px;
-    width: 10px;
-    border-radius: 1px;
+  div[data-selected][data-reach-menu-item] {
     background-color: var(--sn-stylekit-contrast-background-color);
-    border: 1px solid var(--sn-stylekit-contrast-border-color);
-
-    &:after {
-      content: '';
-      position: absolute;
-      display: none;
-      left: 3px;
-      top: 1px;
-      width: 3px;
-      height: 6px;
-      border: solid white;
-      border-width: 0 1px 1px 0;
-      -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      transform: rotate(45deg);
-    }
   }
 
-  textarea.task-input-textarea {
-    font-family: sans-serif;
-    border: none;
-    width: 100%;
-    resize: none;
-    font-size: var(--sn-stylekit-font-size-editor);
-    color: var(--sn-stylekit-editor-foreground-color);
-    outline: none;
-    resize: none;
-    overflow: hidden;
-    background-color: transparent;
+  div[data-reach-dialog-overlay] {
+    align-items: center;
+    background: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: unset;
+    z-index: 1001;
   }
-}
 
-.task-dragging {
-  padding: 2px;
-  background-color: var(--sn-stylekit-contrast-background-color);
-  border: 1px dashed var(--sn-stylekit-border-color);
-}
+  div[data-reach-dialog-overlay]::before {
+    background-color: var(--sn-stylekit-contrast-background-color);
+    bottom: 0px;
+    content: '';
+    left: 0px;
+    opacity: 0.75;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+  }
 
-.completed {
-  text-decoration: line-through;
-  opacity: 0.6;
-}
+  div[data-reach-dialog-content] {
+    background: none;
+    flex-basis: 0;
+    margin: 0;
+    max-width: 600px;
+    min-width: 400px;
+    overflow: unset;
+    padding: 0;
+    position: relative;
+    width: auto;
+  }
 
-.link-button {
-  font-weight: bold;
-  font-size: 10px;
-  opacity: 0.3;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  display: inline;
-  margin: 10px 10px 0 0;
-  padding: 0;
-}
+  div[data-reach-dialog-content] .sk-modal-content,
+  div[data-reach-dialog-content] .sn-component,
+  div[data-reach-dialog-content] .sk-panel {
+    height: 100%;
+  }
 
-.link-button:hover {
-  opacity: 0.8;
-  text-decoration: underline;
-}
+  div[data-reach-alert-dialog-content] {
+    width: auto;
+  }
 
-.create-task-input {
-  width: 100%;
-  height: 30px;
-  outline: none;
-  padding: 0 6px 0 6px;
-  margin: 6px 0 6px 0;
-  font-size: var(--sn-stylekit-font-size-editor);
-  border: 1px solid var(--sn-stylekit-border-color);
-  border-radius: 2px;
-  background-color: var(--sn-stylekit-contrast-background-color);
-  color: var(--sn-stylekit-contrast-foreground-color);
-
-  /* Remove default shadow for iOS mobile */
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.tasks-container {
-  margin-bottom: 16px;
-}
-
-.tasks-container h3 {
-  margin-bottom: 10px;
-  font-size: 12px;
-  font-weight: normal;
-  opacity: 0.3;
-}
-
-.task-input {
-  display: flex;
-  flex-wrap: wrap;
+  fieldset {
+    border: 0;
+    padding-left: 0;
+  }
 }

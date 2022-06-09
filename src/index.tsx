@@ -1,261 +1,190 @@
-import './stylesheets/main.scss';
+import './stylesheets/main.scss'
 
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useCallback, useEffect, useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { renderToString } from 'react-dom/server'
+import { Provider } from 'react-redux'
+import EditorKit, { EditorKitDelegate } from '@standardnotes/editor-kit'
+import styled from 'styled-components'
 
-import CreateTask from './components/CreateTask';
-import TasksContainer from './components/TasksContainer';
+import { store } from './app/store'
+import { useAppDispatch, useAppSelector } from './app/hooks'
+import CreateGroup from './features/tasks/CreateGroup'
+import {
+  setCanEdit,
+  setIsRunningOnMobile,
+  setSpellCheckerEnabled,
+} from './features/settings/settings-slice'
+import { tasksLoaded } from './features/tasks/tasks-slice'
+import InvalidContentError from './features/tasks/InvalidContentError'
+import MigrateLegacyContent from './features/tasks/MigrateLegacyContent'
+import NotePreview from './features/tasks/NotePreview'
+import TaskGroupList from './features/tasks/TaskGroupList'
 
-import Task from './models/Task';
-import TaskManager from './models/TaskManager';
+import { getPlainPreview } from './common/utils'
+import { CheckBoxElementsDefs } from './common/components/svg'
 
-import EditorKit, { EditorKitDelegate } from '@standardnotes/editor-kit';
+const MainContainer = styled.div`
+  margin: 16px;
+  padding-bottom: 60px;
+`
 
-type Props = {};
-type State = {
-  editable: boolean;
-  spellCheckEnabled: boolean;
-  taskDraft: string;
-  openTasks: Task[];
-  completedTasks: Task[];
-};
+const FloatingContainer = styled.div`
+  background-color: var(--sn-stylekit-secondary-background-color);
+  border-top: 1px solid var(--sn-stylekit-border-color);
+  bottom: 0;
+  display: flex;
+  position: fixed;
+  width: 100%;
+`
 
-class TaskEditor extends Component<Props, State> {
-  private editorKit?: EditorKit;
-  private taskManager?: TaskManager;
-  private note?: any;
+const CenteredContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 0px;
+  padding: 12px 16px;
+  position: relative;
+  width: 98%;
+`
 
-  constructor(props: Props) {
-    super(props);
+const TaskEditor: React.FC = () => {
+  const note = useRef<any>()
+  const editorKit = useRef<EditorKit>()
 
-    this.state = {
-      editable: true,
-      spellCheckEnabled: true,
-      taskDraft: '',
-      openTasks: [],
-      completedTasks: [],
-    };
+  const initialized = useAppSelector((state) => state.tasks.initialized)
+  const groupedTasks = useAppSelector((state) => state.tasks.groups)
+  const legacyContent = useAppSelector((state) => state.tasks.legacyContent)
+
+  const dispatch = useAppDispatch()
+
+  function isRunningOnMobile(): boolean {
+    return editorKit.current!.isRunningInMobileApplication()
   }
 
-  componentDidMount() {
-    this.configureEditorKit();
-  }
-
-  get ready(): boolean {
-    return !!this.editorKit;
-  }
-
-  get showTutorial(): boolean {
-    return (
-      this.editorKit!.getComponentDataValueForKey('showTutorial') === undefined
-    );
-  }
-
-  get isRunningOnMobile(): boolean {
-    return this.editorKit!.isRunningInMobileApplication();
-  }
-
-  private configureEditorKit() {
+  const configureEditorKit = useCallback(() => {
     const editorKitDelegate: EditorKitDelegate = {
       setEditorRawText: (rawString: string) => {
-        this.taskManager = new TaskManager(rawString);
-        this.updateTasks();
+        dispatch(tasksLoaded(rawString))
       },
-      onNoteValueChange: async (note: any) => {
-        this.note = note;
+      onNoteValueChange: async (currentNote: any) => {
+        note.current = currentNote
 
         const editable =
-          !note.content.appData['org.standardnotes.sn'].locked ?? true;
-        const spellCheckEnabled = note.content.spellcheck;
+          !currentNote.content.appData['org.standardnotes.sn'].locked ?? true
+        const spellCheckEnabled = currentNote.content.spellcheck
 
-        this.setState({
-          editable,
-          spellCheckEnabled,
-          taskDraft: note.content.taskDraft,
-        });
+        dispatch(setCanEdit(editable))
+        dispatch(setSpellCheckerEnabled(spellCheckEnabled))
+        dispatch(setIsRunningOnMobile(isRunningOnMobile()))
       },
       onNoteLockToggle: (locked: boolean) => {
-        const editable = !locked;
-
-        this.setState({
-          editable,
-        });
+        dispatch(setCanEdit(!locked))
       },
-    };
+    }
 
-    this.editorKit = new EditorKit(editorKitDelegate, {
+    editorKit.current = new EditorKit(editorKitDelegate, {
       mode: 'json',
       supportsFileSafe: false,
-    });
-  }
+    })
+  }, [dispatch])
 
-  updateTasks() {
-    const { openTasks, completedTasks } = this.taskManager!.splitTasks();
+  useEffect(() => {
+    configureEditorKit()
+  }, [configureEditorKit])
 
-    this.setState({
-      openTasks,
-      completedTasks,
-    });
-  }
-
-  deleteTask = (task: Task) => {
-    this.taskManager!.deleteTask(task);
-    this.updateTasks();
-    this.save();
-  };
-
-  toggleTaskStatus = (task: Task) => {
-    task.toggleStatus();
-
-    if (!task.completed) {
-      this.taskManager!.moveTaskToTop(task);
+  const saveNote = useCallback(() => {
+    const { initialized } = store.getState().tasks
+    const currentNote = note.current
+    if (!currentNote || !initialized) {
+      return
     }
 
-    setTimeout(() => {
-      // Allow UI to show checkmark before transferring to other list.
-      this.updateTasks();
-      this.save();
-    }, 300);
-  };
-
-  createTask = (description: string) => {
-    if (description.length === 0) {
-      return;
+    const canEdit = store.getState().settings.canEdit
+    if (!canEdit) {
+      return
     }
 
-    const task = this.taskManager!.createTask({ description });
-    this.taskManager!.addTask(task);
-    this.updateTaskDraft('');
-    this.updateTasks();
-    this.save();
-  };
+    editorKit.current!.saveItemWithPresave(currentNote, () => {
+      const { schemaVersion, groups } = store.getState().tasks
+      currentNote.content.text = JSON.stringify(
+        { schemaVersion, groups },
+        null,
+        2
+      )
 
-  updateTaskDraft = (rawString: string, save: boolean = false) => {
-    this.setState({
-      taskDraft: rawString,
-    });
-    save && this.save();
-  };
+      currentNote.content.preview_plain = getPlainPreview(groups)
+      currentNote.content.preview_html = renderToString(
+        <NotePreview groupedTasks={groups} />
+      )
+    })
+  }, [])
 
-  onReOpenCompleted = () => {
-    if (window.confirm('Are you sure you want to reopen completed tasks?')) {
-      this.taskManager!.reOpenCompleted();
-      this.updateTasks();
-      this.save();
-    }
-  };
+  useEffect(() => {
+    const unsubscribe = store.subscribe(() => initialized && saveNote())
+    return unsubscribe
+  })
 
-  onDeleteCompleted = () => {
-    if (window.confirm('Are you sure you want to delete completed tasks?')) {
-      this.taskManager!.deleteCompleted();
-      this.updateTasks();
-      this.save();
-    }
-  };
-
-  reOrderTasks = (containerId: string, source: number, destination: number) => {
-    const isSourceOpen = containerId === 'open-tasks';
-    const isDestinationCompleted = containerId === 'completed-tasks';
-    const isDestinationOpen = !isDestinationCompleted;
-
-    const fromTask = this.taskManager!.taskAtIndex(isSourceOpen, source);
-    const toTask = this.taskManager!.taskAtIndex(
-      isDestinationOpen,
-      destination
-    );
-
-    this.taskManager!.changeTaskPosition(fromTask, toTask);
-    if (isDestinationCompleted) {
-      fromTask.markCompleted();
-    } else {
-      fromTask.markOpen();
+  /**
+   * Prevents dragging and dropping files
+   */
+  useEffect(() => {
+    function rejectDragAndDrop(event: DragEvent) {
+      event && event.preventDefault()
     }
 
-    this.updateTasks();
-    this.save();
-  };
+    window.addEventListener('drop', rejectDragAndDrop)
+    window.addEventListener('dragover', rejectDragAndDrop)
 
-  save = () => {
-    const note = this.note;
-
-    this.editorKit!.saveItemWithPresave(note, () => {
-      note.content.text = this.taskManager!.getStoreAsString();
-      note.content.taskDraft = this.state.taskDraft;
-      note.content.preview_html = this.taskManager!.buildHtmlPreview();
-      note.content.preview_plain = this.taskManager!.buildPlainPreview();
-    });
-
-    if (this.showTutorial) {
-      this.editorKit!.setComponentDataValueForKey('showTutorial', false);
+    return () => {
+      window.removeEventListener('drop', rejectDragAndDrop)
+      window.removeEventListener('dragover', rejectDragAndDrop)
     }
-  };
+  }, [])
 
-  render() {
-    const {
-      editable,
-      spellCheckEnabled,
-      openTasks,
-      completedTasks,
-      taskDraft,
-    } = this.state;
-
+  if (legacyContent) {
     return (
-      <>
-        {this.ready && (
-          <div className="task-input">
-            <CreateTask
-              isMobile={this.isRunningOnMobile}
-              onSubmit={this.createTask}
-              onUpdate={this.updateTaskDraft}
-              showTutorial={this.showTutorial}
-              spellCheckEnabled={spellCheckEnabled}
-              taskDraft={taskDraft}
-            />
-          </div>
-        )}
-
-        <TasksContainer
-          id="open-tasks"
-          description={'Open Tasks'}
-          tasks={openTasks}
-          canEdit={editable}
-          handleCheckboxChange={this.toggleTaskStatus}
-          handleDeleteTask={this.deleteTask}
-          handleTasksReOrder={this.reOrderTasks}
-          handleTextChange={this.save}
-          spellCheckEnabled={spellCheckEnabled}
-        />
-
-        <TasksContainer
-          id="completed-tasks"
-          description={'Completed Tasks'}
-          tasks={completedTasks}
-          canEdit={editable}
-          handleCheckboxChange={this.toggleTaskStatus}
-          handleDeleteTask={this.deleteTask}
-          handleTasksReOrder={this.reOrderTasks}
-          handleTextChange={this.save}
-          spellCheckEnabled={spellCheckEnabled}
-        >
-          {completedTasks.length > 0 && (
-            <div>
-              <button className="link-button" onClick={this.onReOpenCompleted}>
-                Reopen Completed
-              </button>
-              <button className="link-button" onClick={this.onDeleteCompleted}>
-                Delete Completed
-              </button>
-            </div>
-          )}
-        </TasksContainer>
-      </>
-    );
+      <MainContainer>
+        <MigrateLegacyContent />
+      </MainContainer>
+    )
   }
+
+  if (!initialized) {
+    return (
+      <MainContainer>
+        <InvalidContentError />
+      </MainContainer>
+    )
+  }
+
+  if (groupedTasks.length === 0) {
+    return (
+      <MainContainer>
+        <CreateGroup />
+      </MainContainer>
+    )
+  }
+
+  return (
+    <>
+      <CheckBoxElementsDefs />
+      <MainContainer>
+        <TaskGroupList />
+      </MainContainer>
+      <FloatingContainer>
+        <CenteredContainer>
+          <CreateGroup />
+        </CenteredContainer>
+      </FloatingContainer>
+    </>
+  )
 }
 
 ReactDOM.render(
   <React.StrictMode>
-    <TaskEditor />
+    <Provider store={store}>
+      <TaskEditor />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
-);
+)
